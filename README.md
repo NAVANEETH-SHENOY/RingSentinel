@@ -2,7 +2,7 @@
 
 A defense-only abuse-ring detection and analyst-review tool, built solo for the Razorpay AI Buildathon, Track 02 (AI Risk Manager).
 
-> **Status: Stage 00 (scaffold) complete.** No detection code exists yet. Sections marked "Planned" are filled in by the stage named next to them. Nothing in this README claims a result that has not been produced.
+> **Status: Stage 01 built (data, temporal split, baselines); awaiting the owner's run on the real data.** Graph, graph-feature detector, AI layer, API and UI do not exist yet. Sections marked "Planned" are filled in by the stage named next to them. Nothing in this README claims a result that has not been produced.
 
 ## Problem
 
@@ -34,11 +34,11 @@ Planned (written up with formulas as the stages land):
 
 ## Data
 
-Planned: Stage 01. Primary dataset: IBM synthetic AML transactions (Kaggle), variant HI-Small by default. Full citations, licence status, and the split between real and derived fields will be added only after they are checked on the source pages.
+Primary dataset: IBM synthetic AML transactions (Kaggle), variant HI-Small by default. Real columns, labelling method, the label gap, real-versus-derived fields, and licence and citation status are in `docs/DATA.md`. The licence is not yet verified, and the citation's page numbers and BibTeX are not yet verified.
 
 ## Evaluation
 
-Planned: Stage 03 (protocol, results table for all detectors on the temporal test split, cost model, ablations, robustness, honest limitations, at least one negative finding).
+Stage 01 produces validation-split baseline numbers only (velocity rule, tabular XGBoost; see `docs/STAGE_01.md`). The held-out test split is untouched. Planned: Stage 03 (protocol, results table for all detectors on the temporal test split, cost model, ablations, robustness, honest limitations, at least one negative finding).
 
 ## Setup, run and test (Windows, cmd)
 
@@ -55,7 +55,9 @@ ruff check .
 python scripts\check_docs.py
 ```
 
-Environment variables (names only): `RS_DATASET_VARIANT`, `RS_DATA_DIR`, `RS_SEED`. See `.env.example` for reserved future names.
+Stage 01 (after placing the two HI-Small files in `data\raw`): `python scripts\run_stage01.py`.
+
+Environment variables (names only): `RS_DATASET_VARIANT`, `RS_DATA_DIR`, `RS_SEED`, `RS_TRAIN_FRAC`, `RS_VAL_FRAC`. See `.env.example` for reserved future names.
 
 Deployment steps: Planned (Stage 09).
 

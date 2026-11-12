@@ -2,10 +2,23 @@
 
 One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 
-## Unreleased - Stage 01 (in progress)
+## v0.2.0 - Stage 01: data, temporal split and baselines (pending owner confirmation)
 
 ### Added
-- `scripts/inspect_schema.py`: assumption-free schema inspector for the raw transactions CSV and patterns file, with tests.
+- `scripts/inspect_schema.py`: assumption-free schema inspector for the raw files, with tests.
+- Ingestion (`backend/ringsentinel/ingest/`): header check, checksum manifest, patterns parser, chunked normalizer with pattern-derived labels and an INR amount.
+- `backend/ringsentinel/split.py`: leakage-free temporal split with ring assignment.
+- `backend/ringsentinel/models/baselines.py`: velocity rule and tabular XGBoost baselines.
+- `backend/ringsentinel/evaluation/metrics.py`: precision, recall, F1, PR-AUC, best-F1 threshold.
+- `scripts/run_stage01.py`: verify, ingest, split, baselines in one command.
+- `docs/DATA.md`, `data/raw/MANIFEST.json`, `config/fx_rates_inr.json` (placeholder rates).
+
+- `backend/ringsentinel/ingest/diagnose.py` and `scripts/diagnose_matching.py`: read-only diagnostic for pattern-to-CSV matching failures, with tests.
+
+### Changed
+- Corrected HI-Small download (adds the `Is Laundering` column): manifest checksums refreshed, `is_illicit` now comes from that column, label note in `baseline_metrics.json` now reads the real label source, stale "no label column" statements removed from code and docs, real-data header test accepts both layouts.
+- Settings gain split fractions and per-variant file paths; version 0.2.0.
+- Pinned numpy, pandas, pyarrow, scikit-learn and xgboost.
 
 ## v0.1.0 - Stage 00: environment and scaffold
 

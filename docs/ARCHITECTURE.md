@@ -1,6 +1,6 @@
 # Architecture
 
-Status at Stage 00: design only. Of the components below, only the configuration module exists. The status column says what is built.
+Status at Stage 01: the data side of the offline pipeline (C1 to C3, baseline detectors, metrics) exists. The status column says what is built.
 
 ## Principles
 
@@ -15,14 +15,14 @@ Status at Stage 00: design only. Of the components below, only the configuration
 
 | ID | Component | Responsibility | Status |
 | --- | --- | --- | --- |
-| C1 | Raw dataset store | Downloaded datasets (gitignored) plus a committed checksum manifest | Folder exists (`data/raw/.gitkeep`) |
-| C2 | Ingestor | Normalize raw files to one event table | Stage 01 [planned] |
-| C3 | Temporal splitter | Train, validation, test by time with no overlap | Stage 01 [planned] |
+| C1 | Raw dataset store | Downloaded datasets (gitignored) plus a committed checksum manifest | Built: `data/raw/MANIFEST.json`, `backend/ringsentinel/ingest/manifest.py` |
+| C2 | Ingestor | Normalize raw files to one event table | Built: `backend/ringsentinel/ingest/normalize.py` |
+| C3 | Temporal splitter | Train, validation, test by time with no overlap | Built: `backend/ringsentinel/split.py` |
 | C4 | Graph builder | Entity graph, hub pruning, IDF weights | Stage 02 [planned] |
 | C5 | Feature extractor | Node and community features | Stage 02 [planned] |
-| C6 | Detectors | Velocity rule, tabular XGBoost, graph-feature XGBoost, Isolation Forest | Stages 01 and 03 [planned] |
+| C6 | Detectors | Velocity rule, tabular XGBoost, graph-feature XGBoost, Isolation Forest | Baselines built: `backend/ringsentinel/models/baselines.py`; graph-feature XGBoost and Isolation Forest Stage 03 [planned] |
 | C7 | Ring extractor | Scores to candidate rings | Stage 03 [planned] |
-| C8 | Evaluation harness | Metrics, cost model, ablations, robustness, latency | Stages 01 and 03 [planned] |
+| C8 | Evaluation harness | Metrics, cost model, ablations, robustness, latency | Metrics built: `backend/ringsentinel/evaluation/metrics.py`; the rest Stage 03 [planned] |
 | C9 | AI layer | Investigator, verifier, devil's advocate | Stage 06 [planned] |
 | C10 | Snapshot exporter | Static JSON bundle with version metadata | Stage 04 [planned] |
 | C11 | Backend API | Serves snapshots, accepts analyst actions | Stage 04 [planned] |
@@ -74,5 +74,7 @@ Caption: the LLM explains evidence; it never changes a score or acts.
 - Every detector outputs a transaction-level score; ring-level metrics use one shared ring extractor.
 - Each time window uses a cumulative, past-only graph.
 - Ring-level recall is measured against pattern-based rings only; transaction-level metrics use all labels.
+- Labels come from the CSV `Is Laundering` column; ring truth comes from the patterns file and covers 3,209 of the 5,177 positives, so 1,968 positives belong to no known ring; see `docs/DATA.md`.
+- Test rows are removed before any baseline feature is computed or model is fitted.
 
 The full decision log is in `docs/PROJECT_EXPLAINER.md`.
