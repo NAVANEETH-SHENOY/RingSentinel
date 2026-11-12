@@ -1,0 +1,7 @@
+# RingSentinel backend dependencies (pinned). Stage 00 pins only what the scaffold uses.
+# Later stages add pandas, pyarrow, numpy, scipy, networkx, scikit-learn, xgboost,
+# fastapi, uvicorn, etc., each pinned in the stage that first needs it.
+pydantic==2.12.5
+python-dotenv==1.2.4
+pytest==9.0.3
+ruff==0.16.10

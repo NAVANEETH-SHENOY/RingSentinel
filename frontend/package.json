@@ -1,0 +1,12 @@
+{
+  "name": "ringsentinel-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "RingSentinel analyst UI. Shell only in Stage 00; Next.js and React are added and pinned in Stage 05.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node -e \"console.log('frontend: no tests until Stage 05')\""
+  }
+}

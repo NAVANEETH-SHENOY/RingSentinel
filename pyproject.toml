@@ -1,0 +1,12 @@
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+pythonpath = ["backend", "scripts"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = [".venv", "frontend", "data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
