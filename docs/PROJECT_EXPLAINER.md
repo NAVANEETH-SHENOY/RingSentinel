@@ -1,6 +1,6 @@
 # RingSentinel: zero-context project explainer
 
-Written for a reader (human or LLM) who has only the project zip. Current milestone: **Stage 00 (scaffold), tag v0.1.0**. Anything that does not exist yet is marked [planned]. If this file and the code disagree, the code wins; run `python scripts/check_docs.py` to catch stale paths.
+Written for a reader (human or LLM) who has only the project zip. Current milestone: **Stage 00 (scaffold), tag v0.1.0; Stage 01 part 1 (schema inspector) delivered, ingestor not yet written**. Anything that does not exist yet is marked [planned]. If this file and the code disagree, the code wins; run `python scripts/check_docs.py` to catch stale paths.
 
 ## 1. Plain-language summary
 
@@ -21,8 +21,8 @@ At Stage 00 none of that detection exists yet. What exists is the empty, tested 
 
 | Item | State |
 | --- | --- |
-| Milestone reached | M0 / Stage 00 |
-| Works | Settings and variant switch (`backend/ringsentinel/config.py`), docs consistency checker (`scripts/check_docs.py`), tests, lint, CI workflow file |
+| Milestone reached | M0 / Stage 00 done. M1 / Stage 01 in progress: part 1 (schema inspector) delivered; the ingestor, splitter and baselines wait for the real schema |
+| Works | Settings and variant switch (`backend/ringsentinel/config.py`), docs consistency checker (`scripts/check_docs.py`), assumption-free schema inspector (`scripts/inspect_schema.py`), tests, lint, CI workflow file |
 | Does not exist yet | Everything in data, graph, models, evaluation, AI layer, API, frontend, drift, replay, deployment |
 | Verified by execution | Tests, ruff and check_docs were run in the build environment (Linux, Python 3.13). They have not yet been run on the owner's Windows machine or on GitHub Actions |
 
@@ -44,6 +44,8 @@ At Stage 00 none of that detection exists yet. What exists is the empty, tested 
 | `backend/tests/test_config.py` | Variant switch, defaults, overrides, validation | pytest | `backend/ringsentinel/config.py` |
 | `backend/tests/test_check_docs.py` | Checker behaviour and this repo's own docs | pytest | `scripts/check_docs.py` |
 | `scripts/check_docs.py` | Fails if docs name a missing path or function | CLI, CI, tests | filesystem only |
+| `scripts/inspect_schema.py` | Prints real columns, value ranges, row count, SHA-256 of a raw transactions CSV and describes the patterns file; saves a report | CLI (owner runs it on the downloaded files) | standard library only |
+| `backend/tests/test_inspect_schema.py` | Tests the inspector on tiny synthetic files | pytest | `scripts/inspect_schema.py` |
 | `frontend/package.json` | Frontend shell, no dependencies yet | npm | none |
 | `data/raw/`, `data/processed/`, `data/snapshots/` | Data folders (raw and processed are gitignored) | Later stages | none |
 | `docs/ARCHITECTURE.md` | Components, principles, diagram | Humans | none |
@@ -68,6 +70,11 @@ Checking the docs:
 2. `find_problems()` reads README.md, HANDOVER.md and docs/*.md, extracts backticked tokens with `extract_tokens()`, and tests each with `check_token()`.
 3. It prints problems and exits 1, or prints OK and exits 0.
 
+Inspecting a raw file (Stage 01 part 1):
+1. Owner runs `python scripts/inspect_schema.py` with `--trans` and `--patterns` paths.
+2. `main()` calls `inspect_csv()` (one streaming pass; stats are tracked by column position) and `inspect_patterns()`.
+3. `format_report()` builds the text, which is printed and saved to `data/raw/schema_report.txt` [generated].
+
 The offline pipeline, serving a request, taking an analyst action and generating a case file are [planned].
 
 ## 6. Data contracts
@@ -91,6 +98,7 @@ Reserved for later stages and listed in `.env.example`: Kaggle credentials, anal
 | `backend/tests/test_smoke.py` | Package imports, version string | Broken install, wrong working directory, bad `pythonpath` in `pyproject.toml` |
 | `backend/tests/test_config.py` | Variant switch, per-variant output folders, blank-as-unset, validation | Medium and Small outputs could collide, or bad config accepted silently |
 | `backend/tests/test_check_docs.py` | Checker catches missing paths and functions, skips planned lines; this repo's docs are consistent | A doc names something that no longer exists, or the checker regressed |
+| `backend/tests/test_inspect_schema.py` | Inspector keeps repeated column names apart, counts empties, caps distinct values, flags ragged rows, makes no assumption about the patterns layout | Inspector would mislead the schema review that the ingestor depends on |
 
 Run: `pytest` from the repo root.
 

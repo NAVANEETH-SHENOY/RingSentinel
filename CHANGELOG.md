@@ -2,6 +2,11 @@
 
 One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 
+## Unreleased - Stage 01 (in progress)
+
+### Added
+- `scripts/inspect_schema.py`: assumption-free schema inspector for the raw transactions CSV and patterns file, with tests.
+
 ## v0.1.0 - Stage 00: environment and scaffold
 
 ### Added
