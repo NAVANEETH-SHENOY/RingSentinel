@@ -1,0 +1,17 @@
+{
+  "datasets": {
+    "HI-Small": {
+      "files": {
+        "HI-Small_Patterns.txt": {
+          "sha256": "7c5029d7ff0baaf01dba98d9ac2c51c98de288bc37317f4ee5edc44eeef3cb37",
+          "size_bytes": 328161
+        },
+        "HI-Small_Trans.csv": {
+          "sha256": "b19d39f515523373f991b689c07e11e7b0b95c17a2c27a87d91584ae16c5b040",
+          "size_bytes": 475664283
+        }
+      }
+    }
+  },
+  "schema_version": 1
+}
