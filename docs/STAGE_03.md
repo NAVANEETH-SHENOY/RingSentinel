@@ -45,7 +45,7 @@ python scripts\run_stage03.py --step ablate
 python scripts\run_stage03.py --step robustness
 ```
 
-`scripts/reproduce.py` runs all four steps, writes `docs/EVALUATION_RESULTS.md`, and compares the newly generated `data/processed/hi_small/metrics.json` with the previous run. It reports whether the metrics are identical. If they differ, it exits with code 2 and lists the differences.
+`scripts/reproduce.py` runs all four steps, writes `docs/EVALUATION_RESULTS.md`, and compares the newly generated `data/processed/hi_small/metrics.json` with the previous run. It reports whether the metrics are identical. If they differ, it exits with code 2 and lists the differences. [generated]
 
 To reuse existing scores and run only evaluation:
 
@@ -60,7 +60,7 @@ Stage 03 has now been executed on the HI-Small dataset on the owner's Windows en
 - Loaded **5,078,345 events**.
 - Test split contained **1,015,882 transfers**, including **1,798 positive transfers**.
 - The complete Stage 03 pipeline generated detector scores, evaluation metrics, ring results, ablation results, and robustness results.
-- A subsequent `scripts/reproduce.py` run reported that `data/processed/hi_small/metrics.json` was identical to the previous run.
+- A subsequent `scripts/reproduce.py` run reported that `data/processed/hi_small/metrics.json` was identical to the previous run. [generated]
 
 Exact peak memory and execution time were not formally recorded.
 
@@ -76,6 +76,7 @@ The following results were obtained from the real HI-Small run.
 | Isolation Forest | 0.0092 | 0.0052 | 0.0318 | 0.0289 | 0.0303 |
 
 **Important evaluation details:**
+
 - Validation PR-AUC is optimistic because validation data is used for early stopping.
 - Classification thresholds are selected using validation data, not test data.
 - Test precision, recall, and F1 are transaction-level metrics.
@@ -104,21 +105,21 @@ The graph-based XGBoost detector achieved the highest test PR-AUC and F1 among t
 
 ## Outputs
 
-All generated outputs are stored in `data/processed/hi_small/`.
+All generated outputs are stored in `data/processed/hi_small/`. [generated]
 
 | File | Content |
 |---|---|
-| `data/processed/hi_small/scores.parquet` | D7 validation and test rows with one score column per detector |
-| `data/processed/hi_small/models/` | Fitted XGBoost and Isolation Forest models |
-| `data/processed/hi_small/detect_report.json` | Fit information, top features by gain, validation PR-AUC, and Stage 01 reference numbers |
-| `data/processed/hi_small/metrics.json` | D9 transaction and ring metrics, operating points, cost, and sweep |
-| `data/processed/hi_small/rings.json` | D8 extracted test rings with members, scores, and top features |
-| `data/processed/hi_small/latency.json` | Time from a ring's first event to its first flagged transfer |
-| `data/processed/hi_small/ablations.json` | Hub-control and graph-feature ablation results |
-| `data/processed/hi_small/scores_ablation.parquet` | Scores for ablation experiments |
-| `data/processed/hi_small/features_nohub.parquet` | Features rebuilt without hub control |
-| `data/processed/hi_small/robustness.json` | Metric decay under edge dropout |
-| `data/processed/hi_small/results_table.md` | Detector comparison table |
+| `data/processed/hi_small/scores.parquet` | D7 validation and test rows with one score column per detector [generated] |
+| `data/processed/hi_small/models/` | Fitted XGBoost and Isolation Forest models [generated] |
+| `data/processed/hi_small/detect_report.json` | Fit information, top features by gain, validation PR-AUC, and Stage 01 reference numbers [generated] |
+| `data/processed/hi_small/metrics.json` | D9 transaction and ring metrics, operating points, cost, and sweep [generated] |
+| `data/processed/hi_small/rings.json` | D8 extracted test rings with members, scores, and top features [generated] |
+| `data/processed/hi_small/latency.json` | Time from a ring's first event to its first flagged transfer [generated] |
+| `data/processed/hi_small/ablations.json` | Hub-control and graph-feature ablation results [generated] |
+| `data/processed/hi_small/scores_ablation.parquet` | Scores for ablation experiments [generated] |
+| `data/processed/hi_small/features_nohub.parquet` | Features rebuilt without hub control [generated] |
+| `data/processed/hi_small/robustness.json` | Metric decay under edge dropout [generated] |
+| `data/processed/hi_small/results_table.md` | Detector comparison table [generated] |
 
 ## Tests
 

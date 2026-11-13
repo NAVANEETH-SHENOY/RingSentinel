@@ -82,7 +82,7 @@ IBM AML (Altman et al., NeurIPS 2023 Datasets and Benchmarks): authors, title an
 ## Pending from the owner before Stage 04 starts
 
 1. Apply the Stage 03 zip, `pip install -r requirements.txt`, run `pytest`, `ruff check .`, `python scripts\check_docs.py`; paste the outputs. Report any ruff import-order complaints.
-2. Run `python scripts\reproduce.py` twice on the real data; paste the console output of both runs and send `docs\EVALUATION_RESULTS.md`, `data\processed\hi_small\metrics.json` and `data/processed/hi_small/detect_report.json`. Report run time and peak memory if you notice them.
+2. Run `python scripts\reproduce.py` twice on the real data; paste the console output of both runs and send `docs\EVALUATION_RESULTS.md`, `data\processed\hi_small\metrics.json` and `data/processed/hi_small/detect_report.json`. Report run time and peak memory if you notice them.[generated]
 3. Git (Git Bash): branch `stage-03-detectors-evaluation`, commit, push, PR, merge, tag v0.4.0. Confirm Stage 02's tag v0.3.0 exists.
 4. Replace or accept the placeholder FX rates; confirm the buildathon deadline.
 
