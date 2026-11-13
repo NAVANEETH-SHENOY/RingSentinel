@@ -2,6 +2,20 @@
 
 One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 
+## v0.4.0 - Stage 03: detectors, ring extraction, evaluation (pending owner confirmation)
+
+### Added
+- `backend/ringsentinel/detect/`: tabular features and trailing 24-hour counts, design matrices from the Stage 02 window features, XGBoost and Isolation Forest fitting, and `SplitVault` (the test split is released once per detector).
+- `backend/ringsentinel/rings/extract.py`: ring extraction from flagged transfers.
+- `backend/ringsentinel/evaluate/`: metrics, Jaccard ring match, rupee cost model, per-detector report, cost sweep, latency.
+- `backend/ringsentinel/stage03.py`, `scripts/run_stage03.py`, `scripts/reproduce.py`.
+- `docs/EVALUATION.md` (protocol, rupee assumptions with justification, negative findings), `docs/STAGE_03.md`.
+- Tests for all of the above, including a leakage test that rewrites the test split and a power check that does the same to validation.
+
+### Changed
+- Settings: neg_sample_frac, review/false-positive cost, loss capture rate, ring tau and minimum size, and the Stage 03 output paths; `.env.example` lists the new names.
+- `requirements.txt`: pins `joblib==1.6.0` (already installed as a scikit-learn dependency; now imported directly). networkx is still not used or pinned.
+
 ## v0.3.0 - Stage 02: noise layer, graph with hub control, features (pending owner confirmation)
 
 ### Added
