@@ -2,6 +2,7 @@
 # Stage 00: pydantic, python-dotenv, pytest, ruff.
 # Stage 01: numpy, pandas, pyarrow, scikit-learn, xgboost (transitive packages such as scipy
 # are chosen by pip). Later stages add networkx, fastapi, uvicorn, etc., pinned when first needed.
+# Stage 02: scipy, python-igraph (Louvain). Pinned to versions with wheels for Python 3.11 to 3.13.
 pydantic==2.12.5
 python-dotenv==1.2.4
 numpy==2.3.5
@@ -11,3 +12,5 @@ scikit-learn==1.7.2
 xgboost==3.1.1
 pytest==9.0.3
 ruff==0.16.10
+igraph==1.0.0
+scipy==1.16.3

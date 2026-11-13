@@ -19,6 +19,10 @@ DEFAULT_VARIANT = "HI-Small"
 DEFAULT_SEED = 42
 DEFAULT_TRAIN_FRAC = 0.6
 DEFAULT_VAL_FRAC = 0.2
+DEFAULT_HUB_CAP = 50  # fallback only; Stage 02 tunes the cap on the validation window
+DEFAULT_ATTR_CAP = 50
+DEFAULT_COMMUNITY_CAP = 200
+DEFAULT_LOUVAIN_RESOLUTION = 1.0
 
 
 class Settings(BaseModel):
@@ -29,6 +33,12 @@ class Settings(BaseModel):
     seed: int = DEFAULT_SEED
     train_frac: float = DEFAULT_TRAIN_FRAC
     val_frac: float = DEFAULT_VAL_FRAC
+    # Stage 02. hub_cap None means: use the value tuned on validation (hub_cap_tuning.json),
+    # else DEFAULT_HUB_CAP.
+    hub_cap: int | None = None
+    attr_cap: int = DEFAULT_ATTR_CAP
+    community_cap: int = DEFAULT_COMMUNITY_CAP
+    louvain_resolution: float = DEFAULT_LOUVAIN_RESOLUTION
 
     @field_validator("dataset_variant")
     @classmethod
@@ -45,6 +55,12 @@ class Settings(BaseModel):
             raise ValueError("train_frac and val_frac must each be between 0 and 1.")
         if self.train_frac + self.val_frac >= 1:
             raise ValueError("train_frac + val_frac must be below 1 so a test split remains.")
+        if self.hub_cap is not None and self.hub_cap < 2:
+            raise ValueError("hub_cap must be at least 2.")
+        if self.attr_cap < 2 or self.community_cap < 2:
+            raise ValueError("attr_cap and community_cap must be at least 2.")
+        if self.louvain_resolution <= 0:
+            raise ValueError("louvain_resolution must be positive.")
         return self
 
     @property
@@ -100,6 +116,35 @@ class Settings(BaseModel):
     def baseline_metrics_path(self) -> Path:
         return self.processed_dir / "baseline_metrics.json"
 
+    # ---- Stage 02 outputs ----
+    @property
+    def noise_path(self) -> Path:
+        return self.processed_dir / "noise.parquet"
+
+    @property
+    def noise_report_path(self) -> Path:
+        return self.processed_dir / "noise_report.json"
+
+    @property
+    def hub_cap_tuning_path(self) -> Path:
+        return self.processed_dir / "hub_cap_tuning.json"
+
+    @property
+    def pruning_report_path(self) -> Path:
+        return self.processed_dir / "pruning_report.json"
+
+    @property
+    def community_report_path(self) -> Path:
+        return self.processed_dir / "community_report.json"
+
+    @property
+    def features_path(self) -> Path:
+        return self.processed_dir / "features.parquet"
+
+    @property
+    def ablation_path(self) -> Path:
+        return self.processed_dir / "ablation_giant_component.json"
+
     @property
     def snapshots_dir(self) -> Path:
         return self.data_dir / "snapshots"
@@ -133,4 +178,13 @@ def get_settings(load_env_file: bool = True) -> Settings:
     val_frac = os.environ.get("RS_VAL_FRAC", "").strip()
     if val_frac:
         values["val_frac"] = float(val_frac)
+    for env_name, field, cast in (
+        ("RS_HUB_CAP", "hub_cap", int),
+        ("RS_ATTR_CAP", "attr_cap", int),
+        ("RS_COMMUNITY_CAP", "community_cap", int),
+        ("RS_LOUVAIN_RESOLUTION", "louvain_resolution", float),
+    ):
+        raw = os.environ.get(env_name, "").strip()
+        if raw:
+            values[field] = cast(raw)
     return Settings(**values)
