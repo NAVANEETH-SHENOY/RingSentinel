@@ -1,6 +1,6 @@
 # Architecture
 
-Status at Stage 03: the data side (C1 to C3), the graph builder and feature extractor (C4, C5), the detectors, ring extractor and evaluation harness (C6 to C8) are built; Stage 03 has been tested on synthetic data only. The status column says what is built.
+Status at Stage 04: the data side (C1 to C3), the graph builder and feature extractor (C4, C5), the detectors, ring extractor and evaluation harness (C6 to C8), and the snapshot exporter, backend API and audit store (C10 to C12) are built. Stages 03 and 04 have been tested on synthetic or hand-made data only. The status column says what is built.
 
 ## Principles
 
@@ -24,9 +24,9 @@ Status at Stage 03: the data side (C1 to C3), the graph builder and feature extr
 | C7 | Ring extractor | Scores to candidate rings | Built: `backend/ringsentinel/rings/extract.py` |
 | C8 | Evaluation harness | Metrics, cost model, ablations, robustness, latency | Built: `backend/ringsentinel/evaluate/metrics.py`, `backend/ringsentinel/evaluate/ringmatch.py`, `backend/ringsentinel/evaluate/cost.py`, `backend/ringsentinel/evaluate/report.py`, orchestration `backend/ringsentinel/stage03.py`; Stage 01 metrics remain in `backend/ringsentinel/evaluation/metrics.py` |
 | C9 | AI layer | Investigator, verifier, devil's advocate | Stage 06 [planned] |
-| C10 | Snapshot exporter | Static JSON bundle with version metadata | Stage 04 [planned] |
-| C11 | Backend API | Serves snapshots, accepts analyst actions | Stage 04 [planned] |
-| C12 | Audit store | Append-only hash-chained log | Stage 04 [planned] |
+| C10 | Snapshot exporter | Static JSON bundle with version metadata | Built (Stage 04): `backend/ringsentinel/snapshots/export.py`, `backend/ringsentinel/snapshots/bundle.py`, `backend/ringsentinel/snapshots/schemas.py`, `scripts/export_snapshots.py` |
+| C11 | Backend API | Serves snapshots, accepts analyst actions | Built (Stage 04): `backend/app/main.py`, `backend/app/routes.py`, `backend/app/ratelimit.py`, `backend/app/config.py`, `backend/app/schemas.py`, `backend/app/store.py` |
+| C12 | Audit store | Append-only hash-chained log | Built (Stage 04): `backend/app/audit.py` (SQLite) |
 | C13 | Drift monitor | Population stability index per window | Stage 07 [planned] |
 | C14 | Replay engine | Time-ordered playback with latency | Stage 07 [planned] |
 | C15 | Frontend | Queue, case view, metrics, audit, replay | Stage 05 and Stage 07; shell only: `frontend/package.json` |
@@ -82,5 +82,25 @@ Caption: the LLM explains evidence; it never changes a score or acts.
 - Hub control = IDF edge weight `1/log2(1+d)` on the larger endpoint degree plus a degree cap. It trims the giant component but does not break it; Louvain splits what remains (igraph implementation).
 - Communities are context features, not ring candidates: on the real data they do not recover rings (Stage 02 negative finding). Ring extraction happens after scoring (D8, Stage 03).
 - Stage 03: every detector scores each transfer; a transfer uses the graph features of its sender and receiver from the window of its own split. Train fits, validation chooses every threshold, test is scored once per detector (`SplitVault`). Rings come from the flagged transfers (components, then Louvain above the cap); ring match is Jaccard, one-to-one, on pattern rings only. The net-value cost model counts a ring as caught on any illicit hit and charges for legitimate accounts inside flagged rings. Defaults are planning assumptions (INR 250 per review, INR 500 per wrongly included account); see `docs/EVALUATION.md`.
+
+- Stage 04: the bundle is six JSON files validated by JSON Schema and tied together by SHA-256 hashes; the API loads it into memory at start and refuses a bundle that fails any check. Drift, replay and the AI case file are exported as explicit placeholders until Stages 06 and 07. The queue is ranked by an expected-value heuristic that uses the uncalibrated model score. Analyst actions go to a hash-chained SQLite log with idempotency keys; a decided ring is closed.
+
+## API (Stage 04)
+
+All routes are under the prefix /api/v1. Read routes are open; the action route and the audit list need the X-Analyst-Token header.
+
+```
+GET  /health                      bundle id, git commit, counts, whether actions are enabled
+GET  /queue?status=&limit=&offset=   ranked rings with status
+GET  /cases/{ring_id}             one case: members, edges, top features, ai placeholder, status
+GET  /metrics                     Stage 03 metrics, cost sweep, ablations, robustness, latency
+GET  /drift                       placeholder until Stage 07
+GET  /replay                      placeholder until Stage 07
+POST /cases/{ring_id}/action      body: action, analyst, note, idempotency_key   (token)
+GET  /audit?limit=&offset=        newest first                                    (token)
+GET  /audit/verify                walks the hash chain
+```
+
+Status codes: 200 and 201 success (200 with replayed true for a repeated submission), 401 bad or missing token, 404 unknown ring, 409 key reuse for a different request or an action the ring's status does not allow, 422 invalid input, 429 rate limited (Retry-After header), 503 when no analyst token is configured. Request and response details, the audit log design and its limits: `docs/STAGE_04.md`.
 
 The full decision log is in `docs/PROJECT_EXPLAINER.md`.

@@ -2,6 +2,19 @@
 
 One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 
+## v0.5.0 - Stage 04: snapshots and backend (pending owner confirmation)
+
+### Added
+- `backend/ringsentinel/snapshots/`: JSON Schemas for the six bundle files, a loader that checks schemas, SHA-256 hashes and cross references, and the deterministic exporter (D12); `scripts/export_snapshots.py`.
+- `backend/app/`: FastAPI application factory, endpoints (health, queue, case, metrics, drift, replay, action, audit, audit verify), hash-chained SQLite audit log with idempotent actions and status rules, shared-token check, CORS, rate limiting, input validation (D13); `scripts/run_api.py`.
+- Tests: exporter, audit log, API contract, settings and limiter, and an end-to-end test through the synthetic pipeline.
+- `docs/STAGE_04.md`; API section in `docs/ARCHITECTURE.md`.
+
+### Changed
+- `requirements.txt`: adds `fastapi==0.162.5`, `uvicorn==0.54.0`, `httpx2==2.16.0` (tests only) and `jsonschema==4.26.0`.
+- `.env.example`: Stage 04 variable names (`RS_GIT_COMMIT`, `RS_SNAPSHOT_DIR`, `RS_ANALYST_TOKEN`, `RS_AUDIT_DB_URL`, `RS_CORS_ORIGINS`, rate limits).
+- Drift, replay and the AI case block are exported as explicit placeholders until Stages 06 and 07.
+
 ## v0.4.0 - Stage 03: detectors, ring extraction, evaluation (pending owner confirmation)
 
 ### Added
