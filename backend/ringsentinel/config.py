@@ -23,6 +23,13 @@ DEFAULT_HUB_CAP = 50  # fallback only; Stage 02 tunes the cap on the validation 
 DEFAULT_ATTR_CAP = 50
 DEFAULT_COMMUNITY_CAP = 200
 DEFAULT_LOUVAIN_RESOLUTION = 1.0
+# Stage 03 defaults (planning assumptions, see docs/EVALUATION.md)
+DEFAULT_NEG_SAMPLE_FRAC = 0.2
+DEFAULT_REVIEW_COST_INR = 250.0
+DEFAULT_FP_COST_INR = 500.0
+DEFAULT_LOSS_CAPTURE_RATE = 1.0
+DEFAULT_RING_TAU = 0.5
+DEFAULT_RING_MIN_SIZE = 3
 
 
 class Settings(BaseModel):
@@ -39,6 +46,15 @@ class Settings(BaseModel):
     attr_cap: int = DEFAULT_ATTR_CAP
     community_cap: int = DEFAULT_COMMUNITY_CAP
     louvain_resolution: float = DEFAULT_LOUVAIN_RESOLUTION
+    # Stage 03. Share of negative training rows kept when fitting (all positives are kept).
+    neg_sample_frac: float = DEFAULT_NEG_SAMPLE_FRAC
+    # Cost model (rupees). Planning assumptions, not measured values.
+    review_cost_inr: float = DEFAULT_REVIEW_COST_INR
+    fp_cost_inr: float = DEFAULT_FP_COST_INR
+    loss_capture_rate: float = DEFAULT_LOSS_CAPTURE_RATE
+    # Ring-level match: predicted ring is a true positive at Jaccard >= ring_tau.
+    ring_tau: float = DEFAULT_RING_TAU
+    ring_min_size: int = DEFAULT_RING_MIN_SIZE
 
     @field_validator("dataset_variant")
     @classmethod
@@ -61,6 +77,16 @@ class Settings(BaseModel):
             raise ValueError("attr_cap and community_cap must be at least 2.")
         if self.louvain_resolution <= 0:
             raise ValueError("louvain_resolution must be positive.")
+        if not 0 < self.neg_sample_frac <= 1:
+            raise ValueError("neg_sample_frac must be in (0, 1].")
+        if self.review_cost_inr < 0 or self.fp_cost_inr < 0:
+            raise ValueError("review_cost_inr and fp_cost_inr must not be negative.")
+        if not 0 < self.loss_capture_rate <= 1:
+            raise ValueError("loss_capture_rate must be in (0, 1].")
+        if not 0 < self.ring_tau <= 1:
+            raise ValueError("ring_tau must be in (0, 1].")
+        if self.ring_min_size < 2:
+            raise ValueError("ring_min_size must be at least 2.")
         return self
 
     @property
@@ -145,6 +171,51 @@ class Settings(BaseModel):
     def ablation_path(self) -> Path:
         return self.processed_dir / "ablation_giant_component.json"
 
+    # ---- Stage 03 outputs ----
+    @property
+    def models_dir(self) -> Path:
+        return self.processed_dir / "models"
+
+    @property
+    def scores_path(self) -> Path:
+        return self.processed_dir / "scores.parquet"
+
+    @property
+    def scores_ablation_path(self) -> Path:
+        return self.processed_dir / "scores_ablation.parquet"
+
+    @property
+    def features_nohub_path(self) -> Path:
+        return self.processed_dir / "features_nohub.parquet"
+
+    @property
+    def detect_report_path(self) -> Path:
+        return self.processed_dir / "detect_report.json"
+
+    @property
+    def metrics_path(self) -> Path:
+        return self.processed_dir / "metrics.json"
+
+    @property
+    def rings_path(self) -> Path:
+        return self.processed_dir / "rings.json"
+
+    @property
+    def ablations_path(self) -> Path:
+        return self.processed_dir / "ablations.json"
+
+    @property
+    def robustness_path(self) -> Path:
+        return self.processed_dir / "robustness.json"
+
+    @property
+    def latency_path(self) -> Path:
+        return self.processed_dir / "latency.json"
+
+    @property
+    def results_table_path(self) -> Path:
+        return self.processed_dir / "results_table.md"
+
     @property
     def snapshots_dir(self) -> Path:
         return self.data_dir / "snapshots"
@@ -183,6 +254,12 @@ def get_settings(load_env_file: bool = True) -> Settings:
         ("RS_ATTR_CAP", "attr_cap", int),
         ("RS_COMMUNITY_CAP", "community_cap", int),
         ("RS_LOUVAIN_RESOLUTION", "louvain_resolution", float),
+        ("RS_NEG_SAMPLE_FRAC", "neg_sample_frac", float),
+        ("RS_REVIEW_COST_INR", "review_cost_inr", float),
+        ("RS_FP_COST_INR", "fp_cost_inr", float),
+        ("RS_LOSS_CAPTURE_RATE", "loss_capture_rate", float),
+        ("RS_RING_TAU", "ring_tau", float),
+        ("RS_RING_MIN_SIZE", "ring_min_size", int),
     ):
         raw = os.environ.get(env_name, "").strip()
         if raw:
