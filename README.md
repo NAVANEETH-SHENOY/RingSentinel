@@ -2,7 +2,7 @@
 
 A defense-only abuse-ring detection and analyst-review tool, built solo for the Razorpay AI Buildathon, Track 02 (AI Risk Manager).
 
-> **Status: Stage 03 built (detectors, ring extraction, evaluation harness) and tested on synthetic data; it has not been run on the real data yet, so there are no results below.** Stage 01 is confirmed on the real data. The AI layer, API and UI do not exist yet. Sections marked "Planned" are filled in by the stage named next to them. Nothing in this README claims a result that has not been produced.
+> **Status: Stage 04 built (snapshot exporter and backend API with a hash-chained audit log) on top of Stage 03 (detectors, ring extraction, evaluation harness). Both are tested on synthetic or hand-made data only; Stage 03 has not been run on the real data yet, so there are no results below.** Stage 01 is confirmed on the real data. The AI layer and the UI do not exist yet. Sections marked "Planned" are filled in by the stage named next to them. Nothing in this README claims a result that has not been produced.
 
 ## Problem
 
@@ -24,7 +24,7 @@ An offline, deterministic pipeline produces static JSON snapshots; a thin API an
 
 ## Core logic
 
-Written up as the stages land. Items 1 to 4 are implemented (Stage 02); items 5 to 7 are implemented (Stage 03, not yet run on the real data); items 8 to 10 are planned.
+Written up as the stages land. Items 1 to 4 are implemented (Stage 02); items 5 to 7 are implemented (Stage 03, not yet run on the real data); item 9 is partly implemented (Stage 04); items 8 and 10 are planned.
 
 **1. Entity graph.** Nodes are accounts, identified by the account string. Edges are aggregated transfers (count, total INR amount, first and last time); self-transfers are counted but not linked. The IBM data has no device, IP or VPA information, so a synthetic, label-blind noise layer invents those attributes (marked derived) to test hub robustness. They are never presented as real data and never used as features.
 
@@ -59,7 +59,21 @@ NV = capture x (INR amount of illicit flagged transfers in caught rings)
 
 with planning-assumption defaults of INR 250 per review and INR 500 per wrongly included account (justification and a sensitivity sweep in `docs/EVALUATION.md`).
 
-Planned: AI layer with verifier, human in the loop with hash-chained audit, drift (Stages 06, 04 and 07).
+**9. Human in the loop (built in Stage 04, local only).** The review queue is ordered by an expected-value heuristic computed from the model score and the agreed rupee costs:
+
+```
+EV = score x capture x amount_inr - c_review - c_fp x n_members x (1 - score)
+```
+
+The score is not a calibrated probability, so this orders rings for review; it does not forecast rupees. An analyst confirms, dismisses or holds a ring through the API. Every action is appended to a log in which entry i stores the hash of entry i-1:
+
+```
+hash_i = SHA-256( canonical_json(seq, ts, ring, action, analyst, note, idempotency_key, request_digest, hash_{i-1}) )
+```
+
+so changing or deleting an earlier entry is detected when the chain is verified (it detects tampering; it does not prevent it, and cannot see entries cut off from the end unless the head hash is recorded elsewhere). Dismissals nudging the review threshold inside fixed bounds is planned for Stage 07.
+
+Planned: AI layer with verifier (Stage 06) and drift with the population stability index (Stage 07).
 
 ## Data
 
@@ -90,7 +104,9 @@ Stage 02 (after Stage 01): `python scripts\run_stage02.py`, then `python scripts
 
 Stage 03 (after Stage 02): `python scripts\run_stage03.py`, or `python scripts\reproduce.py` to run everything and write the results document.
 
-Environment variables (names only): `RS_DATASET_VARIANT`, `RS_DATA_DIR`, `RS_SEED`, `RS_TRAIN_FRAC`, `RS_VAL_FRAC`, `RS_HUB_CAP`, `RS_ATTR_CAP`, `RS_COMMUNITY_CAP`, `RS_LOUVAIN_RESOLUTION`, `RS_NEG_SAMPLE_FRAC`, `RS_REVIEW_COST_INR`, `RS_FP_COST_INR`, `RS_LOSS_CAPTURE_RATE`, `RS_RING_TAU`, `RS_RING_MIN_SIZE`. See `.env.example` for reserved future names.
+Stage 04 (after Stage 03): `python scripts\export_snapshots.py` writes the snapshot bundle; `python scripts\run_api.py` serves it at http://127.0.0.1:8000 (interactive docs at /api/docs). Put a token of at least 16 characters in `.env` as `RS_ANALYST_TOKEN` to allow analyst actions. Endpoints, status codes and the audit log design: `docs/STAGE_04.md`.
+
+Environment variables (names only): `RS_DATASET_VARIANT`, `RS_DATA_DIR`, `RS_SEED`, `RS_TRAIN_FRAC`, `RS_VAL_FRAC`, `RS_HUB_CAP`, `RS_ATTR_CAP`, `RS_COMMUNITY_CAP`, `RS_LOUVAIN_RESOLUTION`, `RS_NEG_SAMPLE_FRAC`, `RS_REVIEW_COST_INR`, `RS_FP_COST_INR`, `RS_LOSS_CAPTURE_RATE`, `RS_RING_TAU`, `RS_RING_MIN_SIZE`, `RS_GIT_COMMIT`, `RS_SNAPSHOT_DIR`, `RS_ANALYST_TOKEN`, `RS_AUDIT_DB_URL`, `RS_CORS_ORIGINS`, `RS_RATE_LIMIT_READ_PER_MIN`, `RS_RATE_LIMIT_WRITE_PER_MIN`. See `.env.example` for reserved future names.
 
 Deployment steps: Planned (Stage 09).
 
