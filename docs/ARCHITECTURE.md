@@ -1,6 +1,6 @@
 # Architecture
 
-Status at Stage 02: the data side (C1 to C3), the graph builder and feature extractor (C4, C5), baseline detectors and metrics exist. The status column says what is built.
+Status at Stage 03: the data side (C1 to C3), the graph builder and feature extractor (C4, C5), the detectors, ring extractor and evaluation harness (C6 to C8) are built; Stage 03 has been tested on synthetic data only. The status column says what is built.
 
 ## Principles
 
@@ -20,9 +20,9 @@ Status at Stage 02: the data side (C1 to C3), the graph builder and feature extr
 | C3 | Temporal splitter | Train, validation, test by time with no overlap | Built: `backend/ringsentinel/split.py` |
 | C4 | Graph builder | Entity graph, hub pruning, IDF weights, communities | Built: `backend/ringsentinel/graph/build.py`, `backend/ringsentinel/graph/hubs.py`, `backend/ringsentinel/graph/communities.py`; derived noise layer `backend/ringsentinel/noise.py` |
 | C5 | Feature extractor | Node and community features | Built: `backend/ringsentinel/features/node.py`, `backend/ringsentinel/features/community.py`, `backend/ringsentinel/features/build.py` |
-| C6 | Detectors | Velocity rule, tabular XGBoost, graph-feature XGBoost, Isolation Forest | Baselines built: `backend/ringsentinel/models/baselines.py`; graph-feature XGBoost and Isolation Forest Stage 03 [planned] |
-| C7 | Ring extractor | Scores to candidate rings | Stage 03 [planned] |
-| C8 | Evaluation harness | Metrics, cost model, ablations, robustness, latency | Metrics built: `backend/ringsentinel/evaluation/metrics.py`; the rest Stage 03 [planned] |
+| C6 | Detectors | Velocity rule, tabular XGBoost, graph-feature XGBoost, Isolation Forest | Built (Stage 03): `backend/ringsentinel/detect/tabular.py`, `backend/ringsentinel/detect/matrix.py`, `backend/ringsentinel/detect/models.py`, `backend/ringsentinel/detect/guard.py`; Stage 01 baselines remain in `backend/ringsentinel/models/baselines.py` |
+| C7 | Ring extractor | Scores to candidate rings | Built: `backend/ringsentinel/rings/extract.py` |
+| C8 | Evaluation harness | Metrics, cost model, ablations, robustness, latency | Built: `backend/ringsentinel/evaluate/metrics.py`, `backend/ringsentinel/evaluate/ringmatch.py`, `backend/ringsentinel/evaluate/cost.py`, `backend/ringsentinel/evaluate/report.py`, orchestration `backend/ringsentinel/stage03.py`; Stage 01 metrics remain in `backend/ringsentinel/evaluation/metrics.py` |
 | C9 | AI layer | Investigator, verifier, devil's advocate | Stage 06 [planned] |
 | C10 | Snapshot exporter | Static JSON bundle with version metadata | Stage 04 [planned] |
 | C11 | Backend API | Serves snapshots, accepts analyst actions | Stage 04 [planned] |
@@ -81,5 +81,6 @@ Caption: the LLM explains evidence; it never changes a score or acts.
 - The hub cap is tuned on the validation window only (smallest cap keeping 99 percent of validation ring accounts); `RS_HUB_CAP` overrides it.
 - Hub control = IDF edge weight `1/log2(1+d)` on the larger endpoint degree plus a degree cap. It trims the giant component but does not break it; Louvain splits what remains (igraph implementation).
 - Communities are context features, not ring candidates: on the real data they do not recover rings (Stage 02 negative finding). Ring extraction happens after scoring (D8, Stage 03).
+- Stage 03: every detector scores each transfer; a transfer uses the graph features of its sender and receiver from the window of its own split. Train fits, validation chooses every threshold, test is scored once per detector (`SplitVault`). Rings come from the flagged transfers (components, then Louvain above the cap); ring match is Jaccard, one-to-one, on pattern rings only. The net-value cost model counts a ring as caught on any illicit hit and charges for legitimate accounts inside flagged rings. Defaults are planning assumptions (INR 250 per review, INR 500 per wrongly included account); see `docs/EVALUATION.md`.
 
 The full decision log is in `docs/PROJECT_EXPLAINER.md`.
