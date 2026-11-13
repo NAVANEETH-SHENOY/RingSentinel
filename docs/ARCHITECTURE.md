@@ -1,6 +1,6 @@
 # Architecture
 
-Status at Stage 01: the data side of the offline pipeline (C1 to C3, baseline detectors, metrics) exists. The status column says what is built.
+Status at Stage 02: the data side (C1 to C3), the graph builder and feature extractor (C4, C5), baseline detectors and metrics exist. The status column says what is built.
 
 ## Principles
 
@@ -18,8 +18,8 @@ Status at Stage 01: the data side of the offline pipeline (C1 to C3, baseline de
 | C1 | Raw dataset store | Downloaded datasets (gitignored) plus a committed checksum manifest | Built: `data/raw/MANIFEST.json`, `backend/ringsentinel/ingest/manifest.py` |
 | C2 | Ingestor | Normalize raw files to one event table | Built: `backend/ringsentinel/ingest/normalize.py` |
 | C3 | Temporal splitter | Train, validation, test by time with no overlap | Built: `backend/ringsentinel/split.py` |
-| C4 | Graph builder | Entity graph, hub pruning, IDF weights | Stage 02 [planned] |
-| C5 | Feature extractor | Node and community features | Stage 02 [planned] |
+| C4 | Graph builder | Entity graph, hub pruning, IDF weights, communities | Built: `backend/ringsentinel/graph/build.py`, `backend/ringsentinel/graph/hubs.py`, `backend/ringsentinel/graph/communities.py`; derived noise layer `backend/ringsentinel/noise.py` |
+| C5 | Feature extractor | Node and community features | Built: `backend/ringsentinel/features/node.py`, `backend/ringsentinel/features/community.py`, `backend/ringsentinel/features/build.py` |
 | C6 | Detectors | Velocity rule, tabular XGBoost, graph-feature XGBoost, Isolation Forest | Baselines built: `backend/ringsentinel/models/baselines.py`; graph-feature XGBoost and Isolation Forest Stage 03 [planned] |
 | C7 | Ring extractor | Scores to candidate rings | Stage 03 [planned] |
 | C8 | Evaluation harness | Metrics, cost model, ablations, robustness, latency | Metrics built: `backend/ringsentinel/evaluation/metrics.py`; the rest Stage 03 [planned] |
@@ -76,5 +76,10 @@ Caption: the LLM explains evidence; it never changes a score or acts.
 - Ring-level recall is measured against pattern-based rings only; transaction-level metrics use all labels.
 - Labels come from the CSV `Is Laundering` column; ring truth comes from the patterns file and covers 3,209 of the 5,177 positives, so 1,968 positives belong to no known ring; see `docs/DATA.md`.
 - Test rows are removed before any baseline feature is computed or model is fitted.
+- Account identity is the account string alone (banks are not part of the node id).
+- Windows are cumulative: val = train + val events, test = all events. Feature rows are the accounts active in the window's own split.
+- The hub cap is tuned on the validation window only (smallest cap keeping 99 percent of validation ring accounts); `RS_HUB_CAP` overrides it.
+- Hub control = IDF edge weight `1/log2(1+d)` on the larger endpoint degree plus a degree cap. It trims the giant component but does not break it; Louvain splits what remains (igraph implementation).
+- Communities are context features, not ring candidates: on the real data they do not recover rings (Stage 02 negative finding). Ring extraction happens after scoring (D8, Stage 03).
 
 The full decision log is in `docs/PROJECT_EXPLAINER.md`.

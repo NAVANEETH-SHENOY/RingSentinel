@@ -82,4 +82,9 @@ The positive rate rises with time, so the test split is not the same distributio
 | is_illicit | Real: the dataset's own `Is Laundering` label (the data itself is synthetic) |
 | ring_id, ring_type | Derived from the patterns file as described above (only 3,209 of the 5,177 positives have one) |
 | split, ring_split | Derived from timestamps (Stage 01 split) |
-| Device, IP and VPA-style attributes | Do not exist yet. Stage 02 adds a label-blind synthetic noise layer, always marked derived |
+| derived_ip_id, derived_device_id, derived_vpa_handle_id | Derived and synthetic: invented per account by `backend/ringsentinel/noise.py` from account strings and the seed only (label-blind), used only to stress-test hub control, never as detection signal. Written to `noise.parquet` [generated] |
+| Feature columns (`features.parquet` [generated]) | Derived from the real transfer columns; no label is read |
+
+## Node identity
+
+The graph uses the account string alone as the node id. The ingest report shows only 8 account strings that appear under more than one bank, so merging them changes almost nothing; banks stay as attributes in the event table.

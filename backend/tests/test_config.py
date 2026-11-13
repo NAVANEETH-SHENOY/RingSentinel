@@ -9,7 +9,15 @@ from ringsentinel.config import PROJECT_ROOT, Settings, get_settings
 
 @pytest.fixture(autouse=True)
 def _clean_env(monkeypatch):
-    for name in ("RS_DATASET_VARIANT", "RS_DATA_DIR", "RS_SEED"):
+    for name in (
+        "RS_DATASET_VARIANT",
+        "RS_DATA_DIR",
+        "RS_SEED",
+        "RS_HUB_CAP",
+        "RS_ATTR_CAP",
+        "RS_COMMUNITY_CAP",
+        "RS_LOUVAIN_RESOLUTION",
+    ):
         monkeypatch.delenv(name, raising=False)
 
 
@@ -80,3 +88,23 @@ def test_file_paths_follow_the_variant():
     assert small.events_path.parent.name == "hi_small"
     assert medium.events_path.parent.name == "hi_medium"
     assert small.manifest_path == medium.manifest_path  # one manifest, one entry per variant
+
+
+def test_stage02_defaults_and_overrides(monkeypatch):
+    s = get_settings(load_env_file=False)
+    assert s.hub_cap is None and s.attr_cap == 50 and s.community_cap == 200
+    monkeypatch.setenv("RS_HUB_CAP", "20")
+    monkeypatch.setenv("RS_COMMUNITY_CAP", "100")
+    s = get_settings(load_env_file=False)
+    assert s.hub_cap == 20 and s.community_cap == 100
+    assert s.features_path.name == "features.parquet"
+    assert s.pruning_report_path.parent == s.processed_dir
+
+
+@pytest.mark.parametrize(
+    "field, value",
+    [("hub_cap", 1), ("attr_cap", 1), ("community_cap", 1), ("louvain_resolution", 0)],
+)
+def test_stage02_invalid_values_rejected(field, value):
+    with pytest.raises(ValidationError):
+        Settings(**{field: value})

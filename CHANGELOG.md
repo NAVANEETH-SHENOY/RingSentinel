@@ -2,7 +2,20 @@
 
 One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 
-## v0.2.0 - Stage 01: data, temporal split and baselines (pending owner confirmation)
+## v0.3.0 - Stage 02: noise layer, graph with hub control, features (pending owner confirmation)
+
+### Added
+- `backend/ringsentinel/noise.py`: label-blind derived device, IP and VPA-handle attributes with an independence report.
+- `backend/ringsentinel/graph/`: transfer graph builder, IDF weights and degree cap, pruning report, communities (components plus Louvain), giant-component ablation.
+- `backend/ringsentinel/features/`: node and community features; `backend/ringsentinel/stage02.py` orchestration.
+- `scripts/run_stage02.py`, `scripts/ablation_giant_component.py`.
+- Tests for all of the above (132 tests in total after this stage).
+
+### Changed
+- Settings: `hub_cap`, `attr_cap`, `community_cap`, `louvain_resolution` and the Stage 02 output paths.
+- `requirements.txt`: adds `igraph==1.0.0` and `scipy==1.16.3` (both have wheels for Python 3.11 to 3.13 on Windows and Linux). networkx is not used yet and is not pinned.
+
+## v0.2.0 - Stage 01: data, temporal split and baselines
 
 ### Added
 - `scripts/inspect_schema.py`: assumption-free schema inspector for the raw files, with tests.
