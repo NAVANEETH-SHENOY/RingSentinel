@@ -1,0 +1,21 @@
+{
+  "status": "APPROXIMATE PLACEHOLDER - not verified against any source. Replace with rates you trust before reporting rupee figures.",
+  "basis": "Rounded market levels around 1 September 2022, from the author's recollection; used only to put amounts from 15 currencies on one comparable scale.",
+  "inr_per_unit": {
+    "US Dollar": 79.8,
+    "Euro": 79.8,
+    "Swiss Franc": 81.5,
+    "Yuan": 11.5,
+    "Shekel": 23.4,
+    "Rupee": 1.0,
+    "UK Pound": 92.5,
+    "Ruble": 1.33,
+    "Yen": 0.573,
+    "Bitcoin": 1596000.0,
+    "Canadian Dollar": 61.0,
+    "Australian Dollar": 54.5,
+    "Mexican Peso": 3.97,
+    "Saudi Riyal": 21.3,
+    "Brazil Real": 15.5
+  }
+}

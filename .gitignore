@@ -24,7 +24,7 @@ data/processed/*
 !data/processed/.gitkeep
 
 # Trained models and caches
-models/
+/models/
 *.joblib
 
 # OS / editor

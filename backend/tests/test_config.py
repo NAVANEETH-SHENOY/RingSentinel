@@ -57,3 +57,26 @@ def test_data_dir_and_seed_override(monkeypatch, tmp_path):
     assert s.data_dir == Path(tmp_path)
     assert s.seed == 7
     assert s.snapshots_dir == Path(tmp_path) / "snapshots"
+
+
+def test_split_fractions_default_and_validation(monkeypatch):
+    s = get_settings(load_env_file=False)
+    assert (s.train_frac, s.val_frac) == (0.6, 0.2)
+    with pytest.raises(ValidationError):
+        Settings(train_frac=0.8, val_frac=0.3)  # leaves no test split
+    with pytest.raises(ValidationError):
+        Settings(train_frac=0.0)
+    monkeypatch.setenv("RS_TRAIN_FRAC", "0.5")
+    monkeypatch.setenv("RS_VAL_FRAC", "0.25")
+    s = get_settings(load_env_file=False)
+    assert (s.train_frac, s.val_frac) == (0.5, 0.25)
+
+
+def test_file_paths_follow_the_variant():
+    small = Settings(dataset_variant="HI-Small")
+    medium = Settings(dataset_variant="HI-Medium")
+    assert small.trans_path.name == "HI-Small_Trans.csv"
+    assert medium.patterns_path.name == "HI-Medium_Patterns.txt"
+    assert small.events_path.parent.name == "hi_small"
+    assert medium.events_path.parent.name == "hi_medium"
+    assert small.manifest_path == medium.manifest_path  # one manifest, one entry per variant
