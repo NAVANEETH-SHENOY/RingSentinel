@@ -1,6 +1,6 @@
 # Stage 01: data, temporal split and baselines
 
-Tag: v0.2.0 (after the owner confirms the tests and the real-data run). Branch: `stage-01-data-baselines`.
+Tag: v0.2.0 (tests and the real-data run confirmed by the owner). Branch: `stage-01-data-baselines`.
 
 ## What was built
 
