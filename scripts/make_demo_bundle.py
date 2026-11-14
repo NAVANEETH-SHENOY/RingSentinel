@@ -9,6 +9,7 @@ Usage (repo root, cmd):  python scripts\make_demo_bundle.py [--out DIR] [--check
 
 import argparse
 import hashlib
+import math
 import random
 import sys
 from pathlib import Path
@@ -124,7 +125,7 @@ def _ring_records(rng: random.Random) -> list[dict]:
         }
     )
     for r in records:
-        r["amount_inr"] = round(sum(e["total_inr"] for e in r["edges"]) * 1.1, 2)
+        r["amount_inr"] = round(math.fsum(e["total_inr"] for e in r["edges"]) * 1.1, 2)
         r["top_features"] = [
             {"feature": FEATURES[(j + int(r["score"] * 10)) % len(FEATURES)],
              "mean_contribution": round(0.9 / (j + 1.5), 4)}
