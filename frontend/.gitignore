@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+.env
+.env.local
+# The real bundle is copied here by scripts/sync_frontend_snapshots.py. Commit it only after the
+# Stage 03 numbers are frozen (plan section 8); the demo bundle in public/demo-snapshots is committed.
+public/snapshots/*
+!public/snapshots/.gitkeep
