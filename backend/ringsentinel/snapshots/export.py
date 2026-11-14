@@ -3,6 +3,8 @@
 The bundle is deterministic: the same input files and options give byte-identical output. There
 are no timestamps; the git commit is passed in. Drift and replay are not built until Stage 07 and
 the case-file AI layer until Stage 06, so those parts are exported as explicit placeholders.
+From Stage 06 on, `ai_cases.json` (data stage D10) is merged into the cases when it exists; blocks
+that no longer match their case are left out (see `ai_merge.py`).
 """
 
 from __future__ import annotations
@@ -14,6 +16,7 @@ from pathlib import Path
 import pandas as pd
 
 from ringsentinel.config import Settings
+from ringsentinel.snapshots.ai_merge import AI_SOURCE_NAME, ai_document_hash, apply_ai_blocks
 from ringsentinel.snapshots.bundle import (
     DATA_FILES,
     Bundle,
@@ -95,6 +98,7 @@ def _edges_by_ring(rings: list[dict], events_path: Path | None) -> dict[int, lis
 def build_documents(
     settings: Settings, *, git_commit: str = "unknown", frozen: bool = False,
     max_rings: int = DEFAULT_MAX_RINGS, events_path: Path | None = None,
+    ai_doc: dict | None = None,
 ) -> tuple[dict[str, dict], dict[str, str]]:  # fmt: skip
     """Build the six bundle documents in memory. Returns (documents, source file hashes)."""
     if max_rings < 1:
@@ -151,8 +155,12 @@ def build_documents(
             "ai": {
                 "status": "not_built", "built_in_stage": "06", "investigator": None,
                 "verifier": None, "benign_explanation": None,
+                "benign_failure_reason": None,
             },
         }  # fmt: skip
+    if ai_doc is not None:
+        apply_ai_blocks(cases, ai_doc)
+        source_hashes[AI_SOURCE_NAME] = ai_document_hash(ai_doc)
     queue = {
         "schema_version": SCHEMA_VERSION, "detector": detector, "split": rings_doc["split"],
         "threshold": rings_doc["threshold"], "threshold_kind": rings_doc["threshold_kind"],
@@ -211,9 +219,12 @@ def export_snapshots(
     """Build, write and re-load (schema, hash and cross-reference check) the bundle."""
     out_dir = Path(out_dir) if out_dir is not None else settings.snapshots_dir
     events_path = settings.events_path if with_edges else None
+    ai_doc = None
+    if settings.ai_cases_path.is_file():
+        ai_doc = json.loads(settings.ai_cases_path.read_text(encoding="utf-8"))
     docs, _ = build_documents(
         settings, git_commit=git_commit, frozen=frozen, max_rings=max_rings,
-        events_path=events_path,
+        events_path=events_path, ai_doc=ai_doc,
     )  # fmt: skip
     write_bundle(clean(docs), out_dir)
     return load_bundle(out_dir)

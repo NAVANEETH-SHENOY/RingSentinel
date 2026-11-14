@@ -30,6 +30,15 @@ DEFAULT_FP_COST_INR = 500.0
 DEFAULT_LOSS_CAPTURE_RATE = 1.0
 DEFAULT_RING_TAU = 0.5
 DEFAULT_RING_MIN_SIZE = 3
+# Stage 06 defaults (AI layer). API keys are NOT settings: they are read from the environment
+# (GROQ_API_KEY, GEMINI_API_KEY) when a provider is built, so Settings can be printed safely.
+LLM_PROVIDERS = ("none", "fake", "groq", "gemini")
+DEFAULT_LLM_PROVIDER = "none"
+DEFAULT_LLM_TIMEOUT_S = 60.0
+DEFAULT_LLM_MIN_INTERVAL_S = 2.5
+DEFAULT_LLM_MAX_TOOL_CALLS = 5
+DEFAULT_LLM_VERIFY_RETRIES = 2
+DEFAULT_AI_MAX_LLM_CASES = 100
 
 
 class Settings(BaseModel):
@@ -55,6 +64,14 @@ class Settings(BaseModel):
     # Ring-level match: predicted ring is a true positive at Jaccard >= ring_tau.
     ring_tau: float = DEFAULT_RING_TAU
     ring_min_size: int = DEFAULT_RING_MIN_SIZE
+    # Stage 06: AI layer. llm_model None means the provider's default model name.
+    llm_provider: str = DEFAULT_LLM_PROVIDER
+    llm_model: str | None = None
+    llm_timeout_s: float = DEFAULT_LLM_TIMEOUT_S
+    llm_min_interval_s: float = DEFAULT_LLM_MIN_INTERVAL_S
+    llm_max_tool_calls: int = DEFAULT_LLM_MAX_TOOL_CALLS
+    llm_verify_retries: int = DEFAULT_LLM_VERIFY_RETRIES
+    ai_max_llm_cases: int = DEFAULT_AI_MAX_LLM_CASES
 
     @field_validator("dataset_variant")
     @classmethod
@@ -87,6 +104,16 @@ class Settings(BaseModel):
             raise ValueError("ring_tau must be in (0, 1].")
         if self.ring_min_size < 2:
             raise ValueError("ring_min_size must be at least 2.")
+        if self.llm_provider not in LLM_PROVIDERS:
+            raise ValueError(f"llm_provider must be one of {LLM_PROVIDERS}.")
+        if self.llm_timeout_s <= 0 or self.llm_min_interval_s < 0:
+            raise ValueError("llm_timeout_s must be positive and llm_min_interval_s not negative.")
+        if not 0 <= self.llm_max_tool_calls <= 10:
+            raise ValueError("llm_max_tool_calls must be between 0 and 10.")
+        if not 0 <= self.llm_verify_retries <= 5:
+            raise ValueError("llm_verify_retries must be between 0 and 5.")
+        if self.ai_max_llm_cases < 0:
+            raise ValueError("ai_max_llm_cases must not be negative.")
         return self
 
     @property
@@ -216,6 +243,20 @@ class Settings(BaseModel):
     def results_table_path(self) -> Path:
         return self.processed_dir / "results_table.md"
 
+    # ---- Stage 06 outputs (AI layer, data stage D10) ----
+    @property
+    def ai_cache_dir(self) -> Path:
+        """One JSON file per verified case file, keyed by the hash of the case's inputs."""
+        return self.processed_dir / "ai_cache"
+
+    @property
+    def ai_cases_path(self) -> Path:
+        return self.processed_dir / "ai_cases.json"
+
+    @property
+    def ai_report_path(self) -> Path:
+        return self.processed_dir / "ai_report.json"
+
     @property
     def snapshots_dir(self) -> Path:
         return self.data_dir / "snapshots"
@@ -260,8 +301,19 @@ def get_settings(load_env_file: bool = True) -> Settings:
         ("RS_LOSS_CAPTURE_RATE", "loss_capture_rate", float),
         ("RS_RING_TAU", "ring_tau", float),
         ("RS_RING_MIN_SIZE", "ring_min_size", int),
+        ("RS_LLM_TIMEOUT_S", "llm_timeout_s", float),
+        ("RS_LLM_MIN_INTERVAL_S", "llm_min_interval_s", float),
+        ("RS_LLM_MAX_TOOL_CALLS", "llm_max_tool_calls", int),
+        ("RS_LLM_VERIFY_RETRIES", "llm_verify_retries", int),
+        ("RS_AI_MAX_LLM_CASES", "ai_max_llm_cases", int),
     ):
         raw = os.environ.get(env_name, "").strip()
         if raw:
             values[field] = cast(raw)
+    provider = os.environ.get("RS_LLM_PROVIDER", "").strip().lower()
+    if provider:
+        values["llm_provider"] = provider
+    model = os.environ.get("RS_LLM_MODEL", "").strip()
+    if model:
+        values["llm_model"] = model
     return Settings(**values)
