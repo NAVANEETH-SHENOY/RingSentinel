@@ -23,14 +23,14 @@ Status at Stage 05: the analyst interface (C15) is built for the queue, case, me
 | C6 | Detectors | Velocity rule, tabular XGBoost, graph-feature XGBoost, Isolation Forest | Built (Stage 03): `backend/ringsentinel/detect/tabular.py`, `backend/ringsentinel/detect/matrix.py`, `backend/ringsentinel/detect/models.py`, `backend/ringsentinel/detect/guard.py`; Stage 01 baselines remain in `backend/ringsentinel/models/baselines.py` |
 | C7 | Ring extractor | Scores to candidate rings | Built: `backend/ringsentinel/rings/extract.py` |
 | C8 | Evaluation harness | Metrics, cost model, ablations, robustness, latency | Built: `backend/ringsentinel/evaluate/metrics.py`, `backend/ringsentinel/evaluate/ringmatch.py`, `backend/ringsentinel/evaluate/cost.py`, `backend/ringsentinel/evaluate/report.py`, orchestration `backend/ringsentinel/stage03.py`; Stage 01 metrics remain in `backend/ringsentinel/evaluation/metrics.py` |
-| C9 | AI layer | Investigator, verifier, devil's advocate | Stage 06 [planned] |
+| C9 | AI layer | Investigator, verifier, devil's advocate, template fallback, cache, constrained query | Built (Stage 06): `backend/ringsentinel/ai/pipeline.py`, `backend/ringsentinel/ai/investigator.py`, `backend/ringsentinel/ai/verifier.py`, `backend/ringsentinel/ai/facts.py`, `backend/ringsentinel/ai/tools.py`, `backend/ringsentinel/ai/query.py`, `backend/ringsentinel/ai/cache.py`, `backend/ringsentinel/snapshots/ai_merge.py`, `backend/ringsentinel/stage06.py` |
 | C10 | Snapshot exporter | Static JSON bundle with version metadata | Built (Stage 04): `backend/ringsentinel/snapshots/export.py`, `backend/ringsentinel/snapshots/bundle.py`, `backend/ringsentinel/snapshots/schemas.py`, `scripts/export_snapshots.py` |
 | C11 | Backend API | Serves snapshots, accepts analyst actions | Built (Stage 04): `backend/app/main.py`, `backend/app/routes.py`, `backend/app/ratelimit.py`, `backend/app/config.py`, `backend/app/schemas.py`, `backend/app/store.py` |
 | C12 | Audit store | Append-only hash-chained log | Built (Stage 04): `backend/app/audit.py` (SQLite) |
 | C13 | Drift monitor | Population stability index per window | Stage 07 [planned] |
 | C14 | Replay engine | Time-ordered playback with latency | Stage 07 [planned] |
 | C15 | Frontend | Queue, case view, metrics, audit, replay | Built (Stage 05, read-only): `frontend/src/lib/source.ts`, `frontend/src/lib/graph.ts`, `frontend/src/lib/metricsView.ts`, `frontend/src/components/QueueView.tsx`, `frontend/src/components/CaseView.tsx`, `frontend/src/components/MetricsView.tsx`, `frontend/src/components/AuditView.tsx`; actions and replay are Stage 07 |
-| C16 | LLM provider | Groq (development), Gemini (production) | Stage 06 [planned] |
+| C16 | LLM provider | Groq (development), Gemini (production), fake (tests) | Built (Stage 06), live calls not yet run: `backend/ringsentinel/ai/provider.py`, `backend/ringsentinel/ai/fake.py` |
 | Config | Settings and variant switch | Single source of configuration | Built: `backend/ringsentinel/config.py` |
 
 ## Architecture diagram
@@ -108,3 +108,15 @@ GET  /audit/verify                walks the hash chain
 Status codes: 200 and 201 success (200 with replayed true for a repeated submission), 401 bad or missing token, 404 unknown ring, 409 key reuse for a different request or an action the ring's status does not allow, 422 invalid input, 429 rate limited (Retry-After header), 503 when no analyst token is configured. Request and response details, the audit log design and its limits: `docs/STAGE_04.md`.
 
 The full decision log is in `docs/PROJECT_EXPLAINER.md`.
+
+## AI layer (Stage 06)
+
+```
+ranked cases (D12) -> CaseFacts (aliases acct-N) -> cache? -> investigator loop (tools, budget) -> verifier
+                                                      |            -> devil's advocate -> verifier
+                                                      v                         |
+                                 template case file (any failure) <-------------+
+                                          |
+                          ai_cases.json (D10) -> merge_ai_into_bundle -> cases.json `ai` field only
+```
+The model only explains. It has no access to scores, ranks or actions, and the merge refuses any field except `ai`. The case view (C15) shows the block with its verifier status and source. Details: `docs/STAGE_06.md`.

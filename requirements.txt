@@ -25,3 +25,4 @@ fastapi==0.162.5
 uvicorn==0.54.0
 httpx2==2.16.0
 jsonschema==4.26.0
+# Stage 06 (AI layer) adds no dependency: the Groq and Gemini clients use the standard library.

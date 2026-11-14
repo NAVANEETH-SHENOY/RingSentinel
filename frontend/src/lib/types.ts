@@ -54,12 +54,62 @@ export interface Edge {
   last_ts: string;
 }
 
+export type AiLevel = "low" | "medium" | "high";
+
+export interface AiClaim {
+  metric: string;
+  account?: string | null;
+  counterparty?: string | null;
+  value?: number;
+  value_inr?: number;
+}
+
+export interface AiFinding {
+  text: string;
+  nodes?: string[];
+  counts?: AiClaim[];
+  amounts?: AiClaim[];
+}
+
+export interface AiCaseFile {
+  pattern: string;
+  suspicion: AiLevel;
+  summary: string;
+  findings: AiFinding[];
+  key_accounts?: { account: string; role: string; reason: string }[];
+  limits?: string;
+  suggested_checks?: string[];
+}
+
+export interface AiBenignCase {
+  plausibility: AiLevel;
+  summary: string;
+  hypotheses: { label: string; argument: string; strength: AiLevel; how_to_check?: string }[];
+  weakest_point?: string;
+}
+
+export interface AiVerifier {
+  status: "verified" | "unverified";
+  issues?: string[];
+  warnings?: string[];
+  checked?: number;
+  attempts?: number;
+}
+
 export interface AiBlock {
   status: "not_built" | "ready";
   built_in_stage: string;
-  investigator?: Record<string, unknown> | null;
-  verifier?: Record<string, unknown> | null;
-  benign_explanation?: Record<string, unknown> | null;
+  /** Stage 06: where the text came from. "template" means rule-based, no language model. */
+  source?: "llm" | "cache" | "template";
+  provider?: { name: string; model: string } | null;
+  investigator?: AiCaseFile | null;
+  verifier?: AiVerifier | null;
+  benign_explanation?: AiBenignCase | null;
+  benign_verifier?: AiVerifier | null;
+  contested?: boolean;
+  contested_reason?: string | null;
+  fallback_kind?: string | null;
+  fallback_reason?: string | null;
 }
 
 export interface Case {

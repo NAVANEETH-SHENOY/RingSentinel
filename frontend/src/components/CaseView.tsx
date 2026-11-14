@@ -158,17 +158,126 @@ function FeaturesCard({ c }: { c: Case }) {
   );
 }
 
+const SOURCE_TEXT: Record<string, string> = {
+  llm: "Written by a language model",
+  cache: "Written by a language model (cached)",
+  template: "Rule-based summary, no language model",
+};
+
+function Level({ label, level }: { label: string; level: string }) {
+  return (
+    <span className="chip" data-testid={`ai-${label.toLowerCase()}`}>
+      {label}: {level}
+    </span>
+  );
+}
+
 function AiCard({ c }: { c: Case }) {
+  const ai = c.ai;
+  if (ai.status !== "ready" || !ai.investigator) {
+    return (
+      <section className="card" aria-labelledby="ai-h">
+        <h2 id="ai-h">Explanation</h2>
+        <EmptyState title="No case file yet">
+          {ai.status === "not_built"
+            ? `The investigator, verifier and benign-explanation pass have not been run for this bundle (Stage ${ai.built_in_stage}). Nothing on this page was written by a language model.`
+            : "This bundle has an AI block without a case file."}
+        </EmptyState>
+      </section>
+    );
+  }
+  const file = ai.investigator;
+  const benign = ai.benign_explanation;
+  const verified = ai.verifier?.status === "verified";
+  const fromModel = ai.source === "llm" || ai.source === "cache";
   return (
     <section className="card" aria-labelledby="ai-h">
       <h2 id="ai-h">Explanation</h2>
-      {c.ai.status === "not_built" ? (
-        <EmptyState title="No case file yet">
-          The investigator, verifier and benign-explanation pass arrive in Stage {c.ai.built_in_stage}. Nothing on this page was written by a language model.
-        </EmptyState>
-      ) : (
-        <p className="muted">An AI case file exists in this bundle, but this version of the interface does not display it yet (Stage 06).</p>
-      )}
+      <p className="small">
+        <span className={`chip ${verified ? "live" : "demo"}`} data-testid="ai-verifier">
+          {verified ? "Facts verified against the transfers" : "Not verified"}
+        </span>{" "}
+        <span className="chip" data-testid="ai-source">
+          {SOURCE_TEXT[ai.source ?? "template"] ?? "Unknown source"}
+        </span>{" "}
+        {ai.contested ? (
+          <span className="chip held" data-testid="ai-contested">
+            Contested
+          </span>
+        ) : null}
+      </p>
+      <p className="small muted">
+        {verified
+          ? "Verified means every count, amount and account cited matches this ring's transfers. It does not mean the interpretation is right. "
+          : "Some cited facts did not match the transfers; treat this text with care. "}
+        {fromModel ? "This text does not change the score, the rank or any decision." : "This summary is built by fixed rules from the transfers."}
+      </p>
+      <p>
+        <Level label="Pattern" level={file.pattern.replace(/_/g, " ")} /> <Level label="Suspicion" level={file.suspicion} />
+      </p>
+      <p>{file.summary}</p>
+      <ul>
+        {file.findings.map((f, i) => (
+          <li key={i}>{f.text}</li>
+        ))}
+      </ul>
+      {file.key_accounts && file.key_accounts.length > 0 ? (
+        <>
+          <h3>Key accounts</h3>
+          <ul>
+            {file.key_accounts.map((k, i) => (
+              <li key={i}>
+                <code>{k.account}</code> ({k.role}): {k.reason}
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : null}
+      {file.limits ? <p className="small muted">What this data cannot show: {file.limits}</p> : null}
+      {file.suggested_checks && file.suggested_checks.length > 0 ? (
+        <>
+          <h3>Suggested checks</h3>
+          <ul>
+            {file.suggested_checks.map((t, i) => (
+              <li key={i}>{t}</li>
+            ))}
+          </ul>
+        </>
+      ) : null}
+      {benign ? (
+        <>
+          <h3>The innocent explanation</h3>
+          <p className="small">
+            <Level label="Plausibility" level={benign.plausibility} />
+          </p>
+          <p>{benign.summary}</p>
+          <ul>
+            {benign.hypotheses.map((h, i) => (
+              <li key={i}>
+                <strong>{h.label.replace(/_/g, " ")}</strong> ({h.strength}): {h.argument}
+                {h.how_to_check ? <span className="muted"> How to check: {h.how_to_check}</span> : null}
+              </li>
+            ))}
+          </ul>
+          {benign.weakest_point ? <p className="small muted">Weakest point of this reading: {benign.weakest_point}</p> : null}
+          {ai.contested && ai.contested_reason ? <p className="small">{ai.contested_reason}</p> : null}
+        </>
+      ) : null}
+      {ai.verifier?.issues && ai.verifier.issues.length > 0 ? (
+        <details>
+          <summary>Verifier notes</summary>
+          <ul>
+            {ai.verifier.issues.map((m, i) => (
+              <li key={i}>{m}</li>
+            ))}
+          </ul>
+        </details>
+      ) : null}
+      {ai.provider ? (
+        <p className="small muted">
+          Source: {ai.provider.name} / {ai.provider.model}
+        </p>
+      ) : null}
     </section>
   );
 }

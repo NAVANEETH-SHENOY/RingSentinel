@@ -2,6 +2,22 @@
 
 One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 
+## v0.7.0 - Stage 06: AI layer (pending owner confirmation)
+
+### Added
+- `backend/ringsentinel/ai/`: case facts with account aliases, graph tools, typed-claim verifier, JSON tool-call investigator and devil's advocate, template fallback, cache keyed by ring hash, constrained natural-language query (validated JSON DSL), providers (Groq, Gemini, a deterministic fake) on the standard library.
+- `backend/ringsentinel/snapshots/ai_merge.py`: merges AI blocks into the bundle (only the `ai` field of a case; recomputes hashes and `bundle_id`).
+- `backend/ringsentinel/stage06.py`, `scripts/run_stage06.py`, `scripts/ai_query.py`.
+- Case view: the Explanation card now shows the case file, the innocent explanation, the verifier status, the source (model, cached or rule-based) and a contested flag; model text is rendered as plain text.
+- Tests: facts and tools, verifier (planted fake ids, counts, amounts), agent loop, pipeline and cache, query language, prompt injection, providers, bundle merge, API serving, settings; `frontend/tests/ai_card.test.tsx`.
+- `docs/STAGE_06.md` with the prompt and schema listing.
+
+### Changed
+- Settings: LLM provider, model, timeout, pacing, tool budget, verify retries and LLM case limit (`RS_LLM_*`, `RS_AI_MAX_LLM_CASES`); API keys stay outside Settings.
+- The `ai` schema in the bundle is now strict (`SCHEMA_VERSION` stays "1": the not-built placeholder is still valid); `export_snapshots` keeps AI blocks when `ai_cases.json` [generated] exists.
+- `frontend/src/lib/types.ts`: `AiBlock` typed.
+- No new dependency.
+
 ## v0.6.0 - Stage 05: frontend core (pending owner confirmation)
 
 ### Added

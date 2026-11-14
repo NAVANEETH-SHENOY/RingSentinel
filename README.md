@@ -2,7 +2,7 @@
 
 A defense-only abuse-ring detection and analyst-review tool, built solo for the Razorpay AI Buildathon, Track 02 (AI Risk Manager).
 
-> **Status: Stage 05 built (read-only analyst interface) on top of Stage 04 (snapshot exporter and backend API with a hash-chained audit log) and Stage 03 (detectors, ring extraction, evaluation harness). Stages 03 to 05 are tested on synthetic, hand-made or invented demo data only; Stage 03 has not been run on the real data yet, so there are no results below.** Stage 01 is confirmed on the real data. The AI layer, analyst actions in the UI, drift and replay do not exist yet. Sections marked "Planned" are filled in by the stage named next to them. Nothing in this README claims a result that has not been produced.
+> **Status: Stage 05 built (read-only analyst interface) on top of Stage 04 (snapshot exporter and backend API with a hash-chained audit log) and Stage 03 (detectors, ring extraction, evaluation harness). Stages 03 to 05 are tested on synthetic, hand-made or invented demo data only; Stage 03 has not been run on the real data yet, so there are no results below.** Stage 01 is confirmed on the real data. Stage 06 (AI layer, shown in the case view) is built but has not been run against a live language model. Analyst actions in the UI, drift and replay do not exist yet. Sections marked "Planned" are filled in by the stage named next to them. Nothing in this README claims a result that has not been produced.
 
 ## Problem
 
@@ -75,7 +75,16 @@ so changing or deleting an earlier entry is detected when the chain is verified 
 
 The analyst interface (Stage 05, `docs/STAGE_05.md`) shows this queue and each ring's transfer graph (drawn from at most 500 accounts, chosen deterministically by transfer volume) and works from the snapshot files when the backend is off. Actions in the interface arrive in Stage 07.
 
-Planned: AI layer with verifier (Stage 06) and drift with the population stability index (Stage 07).
+**8. AI layer with verifier (built in Stage 06; live model calls not yet run).** For each ring a language model writes a case file and a devil's advocate pass, using four read-only graph tools and a hard call budget. It sees accounts only as `acct-N` aliases. Every count and rupee amount it cites is a typed claim recomputed from the ring's own transfers:
+
+```
+claim ok  <=>  metric recomputed from the ring's edges == claimed value
+               (counts exactly; rupees within INR 1)
+```
+
+Prose is also scanned for unknown aliases, dates and numbers. Any failure falls back to a rule-based template case file built only from the data, and templates are excluded from the reported verified share. The model cannot change a score, rank or action; the bundle merge accepts only the `ai` field. "Verified" means the cited facts match the data, not that the interpretation is right. Questions to the queue become a validated JSON query (never code or SQL). See `docs/STAGE_06.md`.
+
+Planned: drift with the population stability index (Stage 07).
 
 ## Data
 
@@ -110,7 +119,9 @@ Stage 04 (after Stage 03): `python scripts\export_snapshots.py` writes the snaps
 
 Stage 05 (from `frontend`; Node 22 LTS or newer): `npm ci`, then `npm run dev` and open http://localhost:3000 (demo data until a real bundle is synced). `npm run check` runs the type check, lint and tests; `npm run build` writes the static site to `frontend/out`. With the API running, put `NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000` in `frontend/.env.local` [generated]. To show real results: `python scripts\export_snapshots.py`, then `python scripts\sync_frontend_snapshots.py`.
 
-Environment variables (names only): `RS_DATASET_VARIANT`, `RS_DATA_DIR`, `RS_SEED`, `RS_TRAIN_FRAC`, `RS_VAL_FRAC`, `RS_HUB_CAP`, `RS_ATTR_CAP`, `RS_COMMUNITY_CAP`, `RS_LOUVAIN_RESOLUTION`, `RS_NEG_SAMPLE_FRAC`, `RS_REVIEW_COST_INR`, `RS_FP_COST_INR`, `RS_LOSS_CAPTURE_RATE`, `RS_RING_TAU`, `RS_RING_MIN_SIZE`, `RS_GIT_COMMIT`, `RS_SNAPSHOT_DIR`, `RS_ANALYST_TOKEN`, `RS_AUDIT_DB_URL`, `RS_CORS_ORIGINS`, `RS_RATE_LIMIT_READ_PER_MIN`, `RS_RATE_LIMIT_WRITE_PER_MIN`; frontend: `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_API_TIMEOUT_MS`. See `.env.example` for reserved future names.
+Stage 06 (after Stage 04): `python scripts\run_stage06.py --provider fake` runs the whole AI layer offline; for a live run put `GROQ_API_KEY` in `.env`, then `python scripts\run_stage06.py --provider groq --limit 20`. Ask the queue a question: `python scripts\ai_query.py "rings with a cycle"`. See `docs/STAGE_06.md`.
+
+Environment variables (names only): `RS_DATASET_VARIANT`, `RS_DATA_DIR`, `RS_SEED`, `RS_TRAIN_FRAC`, `RS_VAL_FRAC`, `RS_HUB_CAP`, `RS_ATTR_CAP`, `RS_COMMUNITY_CAP`, `RS_LOUVAIN_RESOLUTION`, `RS_NEG_SAMPLE_FRAC`, `RS_REVIEW_COST_INR`, `RS_FP_COST_INR`, `RS_LOSS_CAPTURE_RATE`, `RS_RING_TAU`, `RS_RING_MIN_SIZE`, `RS_GIT_COMMIT`, `RS_SNAPSHOT_DIR`, `RS_ANALYST_TOKEN`, `RS_AUDIT_DB_URL`, `RS_CORS_ORIGINS`, `RS_RATE_LIMIT_READ_PER_MIN`, `RS_RATE_LIMIT_WRITE_PER_MIN`, `RS_LLM_PROVIDER`, `RS_LLM_MODEL`, `RS_LLM_TIMEOUT_S`, `RS_LLM_MIN_INTERVAL_S`, `RS_LLM_MAX_TOOL_CALLS`, `RS_LLM_VERIFY_RETRIES`, `RS_AI_MAX_LLM_CASES`, `GROQ_API_KEY`, `GEMINI_API_KEY`; frontend: `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_API_TIMEOUT_MS`. See `.env.example` for reserved future names.
 
 Deployment steps: Planned (Stage 09).
 

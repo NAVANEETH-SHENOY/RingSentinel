@@ -106,15 +106,53 @@ _EDGE = {
     },
 }  # fmt: skip
 
-_AI_PLACEHOLDER = {
+_VERIFIER = {
+    "type": "object",
+    "required": ["status", "issues", "warnings", "checked", "coverage", "attempts"],
+    "properties": {
+        "status": {"enum": ["verified", "unverified"]},
+        "issues": {"type": "array", "items": {"type": "string"}},
+        "warnings": {"type": "array", "items": {"type": "string"}},
+        "checked": {"type": "object"},
+        "coverage": {"enum": ["full", "partial", "none"]},
+        "attempts": {"type": "integer", "minimum": 1},
+    },
+}  # fmt: skip
+
+# The AI block of one case (Stage 06). `not_built` is the Stage 04 placeholder. A `ready` block
+# always carries a case file and a verifier result; the benign (devil's advocate) pass is
+# optional because it only runs when the first pass verified.
+_AI = {
     "type": "object",
     "required": ["status", "built_in_stage"],
+    "additionalProperties": False,
     "properties": {
         "status": {"enum": ["not_built", "ready"]},
         "built_in_stage": {"type": "string"},
+        "source": {"enum": ["llm", "cache", "template"]},
+        "input_hash": _SHA256,
+        "prompt_version": {"type": "string"},
+        "provider": {"type": ["object", "null"]},
         "investigator": {"type": ["object", "null"]},
-        "verifier": {"type": ["object", "null"]},
+        "verifier": {"anyOf": [_VERIFIER, {"type": "null"}]},
         "benign_explanation": {"type": ["object", "null"]},
+        "benign_failure_reason": {"type": ["string", "null"]},
+        "benign_verifier": {"anyOf": [_VERIFIER, {"type": "null"}]},
+        "contested": {"type": "boolean"},
+        "contested_reason": {"type": ["string", "null"]},
+        "trace": {"type": "object"},
+        "fallback_kind": {
+            "enum": [None, "no_provider", "outside_limit", "provider_error", "no_valid_output"]
+        },
+        "fallback_reason": {"type": ["string", "null"]},
+    },
+    "if": {"properties": {"status": {"const": "ready"}}, "required": ["status"]},
+    "then": {
+        "required": [
+            "source", "input_hash", "prompt_version", "investigator", "verifier", "contested",
+            "trace",
+        ],
+        "properties": {"investigator": {"type": "object"}, "verifier": {"type": "object"}},
     },
 }  # fmt: skip
 
@@ -150,7 +188,7 @@ CASES = {
                     "edges": {"type": "array", "items": _EDGE},
                     "edges_available": {"type": "boolean"},
                     "edges_truncated": {"type": "boolean"},
-                    "ai": _AI_PLACEHOLDER,
+                    "ai": _AI,
                 },
             },
         },
