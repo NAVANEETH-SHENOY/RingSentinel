@@ -1,0 +1,1514 @@
+{
+  "ablations": {
+    "variants": {
+      "xgb_graph": {
+        "label": "Graph, hub control on",
+        "summary": {
+          "ring_f1": 0.14,
+          "test_pr_auc": 0.047
+        }
+      },
+      "xgb_graph_nohub": {
+        "label": "Graph, hub control off",
+        "summary": {
+          "ring_f1": 0.12,
+          "test_pr_auc": 0.039
+        }
+      },
+      "xgb_tabular": {
+        "label": "Tabular only",
+        "summary": {
+          "ring_f1": 0.09,
+          "test_pr_auc": 0.031
+        }
+      }
+    }
+  },
+  "cost_sweep": {
+    "iforest": [
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -2285,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -8610,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -21260,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -46560,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -8225,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -14550,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -27200,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -52500,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -18125,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -24450,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -37100,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -62400,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 1715,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -4610,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -17260,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -42560,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -4225,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -10550,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -23200,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -48500,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -14125,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -20450,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -33100,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -58400,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 5715,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -610,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -13260,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -38560,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -225,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -6550,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -19200,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -44500,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -10125,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -16450,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -29100,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -54400,
+        "threshold": 0.5
+      }
+    ],
+    "velocity": [
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -6268,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -12555,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -25130,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -50280,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -12238,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -18525,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -31100,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -56250,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -22188,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -28475,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -41050,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -66200,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -4268,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -10555,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -23130,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -48280,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -10238,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -16525,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -29100,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -54250,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -20188,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -26475,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -39050,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -64200,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -2267,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -8555,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -21130,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -46280,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -8238,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -14525,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -27100,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -52250,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -18188,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -24475,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -37050,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -62200,
+        "threshold": 0.5
+      }
+    ],
+    "xgb_graph": [
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 83339,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 76208,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 61945,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 33420,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 78044,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 70912,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 56650,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 28125,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 69219,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 62088,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 47825,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 19300,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 130339,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 123208,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 108945,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 80420,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 125044,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 117912,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 103650,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 75125,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 116219,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 109088,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 94825,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 66300,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 177339,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 170208,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 155945,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 127420,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 172044,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 164912,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 150650,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 122125,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 163219,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 156088,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 141825,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 113300,
+        "threshold": 0.5
+      }
+    ],
+    "xgb_tabular": [
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 51479,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 44648,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 30985,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 3660,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 45944,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 39112,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 25450,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -1875,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 36719,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 29888,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 16225,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.5,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": -11100,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 82479,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 75648,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 61985,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 34660,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 76944,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 70112,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 56450,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 29125,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 67719,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 60888,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 47225,
+        "threshold": 0.5
+      },
+      {
+        "capture": 0.75,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 19900,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 113479,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 106648,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 92985,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 100.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 65660,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 107944,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 101112,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 87450,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 250.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 60125,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 250.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 98719,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 500.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 91888,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 1000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 78225,
+        "threshold": 0.5
+      },
+      {
+        "capture": 1.0,
+        "fp_cost_inr": 2000.0,
+        "review_cost_inr": 500.0,
+        "rings_flagged": 20,
+        "test_net_value_inr": 50900,
+        "threshold": 0.5
+      }
+    ]
+  },
+  "detectors": {
+    "iforest": {
+      "test": {
+        "positives": 1500,
+        "pr_auc": 0.004,
+        "prevalence": 0.00177,
+        "ring_pr_tau_0.5": [
+          {
+            "precision": 0.0144,
+            "recall": 0.0
+          },
+          {
+            "precision": 0.0114,
+            "recall": 0.1
+          },
+          {
+            "precision": 0.0091,
+            "recall": 0.2
+          },
+          {
+            "precision": 0.0072,
+            "recall": 0.3
+          },
+          {
+            "precision": 0.0057,
+            "recall": 0.4
+          },
+          {
+            "precision": 0.0046,
+            "recall": 0.5
+          },
+          {
+            "precision": 0.0036,
+            "recall": 0.6
+          },
+          {
+            "precision": 0.0029,
+            "recall": 0.7
+          },
+          {
+            "precision": 0.0023,
+            "recall": 0.8
+          },
+          {
+            "precision": 0.0018,
+            "recall": 0.9
+          },
+          {
+            "precision": 0.0014,
+            "recall": 1.0
+          }
+        ]
+      },
+      "val": {
+        "positives": 900,
+        "pr_auc": 0.0036,
+        "prevalence": 0.00107
+      }
+    },
+    "velocity": {
+      "test": {
+        "positives": 1500,
+        "pr_auc": 0.002,
+        "prevalence": 0.00177,
+        "ring_pr_tau_0.5": [
+          {
+            "precision": 0.0072,
+            "recall": 0.0
+          },
+          {
+            "precision": 0.0057,
+            "recall": 0.1
+          },
+          {
+            "precision": 0.0045,
+            "recall": 0.2
+          },
+          {
+            "precision": 0.0036,
+            "recall": 0.3
+          },
+          {
+            "precision": 0.0029,
+            "recall": 0.4
+          },
+          {
+            "precision": 0.0023,
+            "recall": 0.5
+          },
+          {
+            "precision": 0.0018,
+            "recall": 0.6
+          },
+          {
+            "precision": 0.0014,
+            "recall": 0.7
+          },
+          {
+            "precision": 0.0011,
+            "recall": 0.8
+          },
+          {
+            "precision": 0.0009,
+            "recall": 0.9
+          },
+          {
+            "precision": 0.0007,
+            "recall": 1.0
+          }
+        ]
+      },
+      "val": {
+        "positives": 900,
+        "pr_auc": 0.0018,
+        "prevalence": 0.00107
+      }
+    },
+    "xgb_graph": {
+      "test": {
+        "positives": 1500,
+        "pr_auc": 0.047,
+        "prevalence": 0.00177,
+        "ring_pr_tau_0.5": [
+          {
+            "precision": 0.1692,
+            "recall": 0.0
+          },
+          {
+            "precision": 0.1344,
+            "recall": 0.1
+          },
+          {
+            "precision": 0.1068,
+            "recall": 0.2
+          },
+          {
+            "precision": 0.0848,
+            "recall": 0.3
+          },
+          {
+            "precision": 0.0674,
+            "recall": 0.4
+          },
+          {
+            "precision": 0.0535,
+            "recall": 0.5
+          },
+          {
+            "precision": 0.0425,
+            "recall": 0.6
+          },
+          {
+            "precision": 0.0338,
+            "recall": 0.7
+          },
+          {
+            "precision": 0.0268,
+            "recall": 0.8
+          },
+          {
+            "precision": 0.0213,
+            "recall": 0.9
+          },
+          {
+            "precision": 0.0169,
+            "recall": 1.0
+          }
+        ]
+      },
+      "val": {
+        "positives": 900,
+        "pr_auc": 0.0423,
+        "prevalence": 0.00107
+      }
+    },
+    "xgb_tabular": {
+      "test": {
+        "positives": 1500,
+        "pr_auc": 0.031,
+        "prevalence": 0.00177,
+        "ring_pr_tau_0.5": [
+          {
+            "precision": 0.1116,
+            "recall": 0.0
+          },
+          {
+            "precision": 0.0886,
+            "recall": 0.1
+          },
+          {
+            "precision": 0.0704,
+            "recall": 0.2
+          },
+          {
+            "precision": 0.0559,
+            "recall": 0.3
+          },
+          {
+            "precision": 0.0444,
+            "recall": 0.4
+          },
+          {
+            "precision": 0.0353,
+            "recall": 0.5
+          },
+          {
+            "precision": 0.028,
+            "recall": 0.6
+          },
+          {
+            "precision": 0.0223,
+            "recall": 0.7
+          },
+          {
+            "precision": 0.0177,
+            "recall": 0.8
+          },
+          {
+            "precision": 0.014,
+            "recall": 0.9
+          },
+          {
+            "precision": 0.0112,
+            "recall": 1.0
+          }
+        ]
+      },
+      "val": {
+        "positives": 900,
+        "pr_auc": 0.0279,
+        "prevalence": 0.00107
+      }
+    }
+  },
+  "latency": {
+    "iforest": {
+      "events_median": 1250,
+      "events_p90": 3300,
+      "minutes_median": 420,
+      "minutes_p90": 1800,
+      "rings_with_flag": 12,
+      "threshold": 0.5
+    },
+    "velocity": {
+      "events_median": 800,
+      "events_p90": 2400,
+      "minutes_median": 300,
+      "minutes_p90": 1500,
+      "rings_with_flag": 12,
+      "threshold": 0.5
+    },
+    "xgb_graph": {
+      "events_median": 1100,
+      "events_p90": 3000,
+      "minutes_median": 380,
+      "minutes_p90": 1700,
+      "rings_with_flag": 12,
+      "threshold": 0.5
+    },
+    "xgb_tabular": {
+      "events_median": 950,
+      "events_p90": 2700,
+      "minutes_median": 340,
+      "minutes_p90": 1600,
+      "rings_with_flag": 12,
+      "threshold": 0.5
+    }
+  },
+  "meta": {
+    "cost_assumptions_inr": {
+      "fp_cost_inr": 500.0,
+      "loss_capture_rate": 1.0,
+      "note": "DEMO values, not a measurement.",
+      "review_cost_inr": 250.0
+    },
+    "dataset_variant": "DEMO-SYNTHETIC",
+    "note": "DEMO: every number in this bundle is invented for interface development.",
+    "seed": 0
+  },
+  "results_table_md": "DEMO (invented numbers)\n\n| detector | test PR-AUC | ring F1 (tau 0.5) | net value |\n| --- | --- | --- | --- |\n| velocity | 0.0020 | 0.006 | ₹2,000 |\n| xgb_tabular | 0.0310 | 0.093 | ₹31,000 |\n| xgb_graph | 0.0470 | 0.141 | ₹47,000 |\n| iforest | 0.0040 | 0.012 | ₹4,000 |\n",
+  "robustness": {
+    "levels": [
+      {
+        "dropout": 0.0,
+        "events_kept": 1000000,
+        "pr_auc_relative_to_no_dropout": 1.0,
+        "rings_at_f1_threshold": 40,
+        "rings_at_nv_threshold": 14,
+        "test_pr_auc": 0.047
+      },
+      {
+        "dropout": 0.1,
+        "events_kept": 900000,
+        "pr_auc_relative_to_no_dropout": 0.8538,
+        "rings_at_f1_threshold": 36,
+        "rings_at_nv_threshold": 12,
+        "test_pr_auc": 0.0401
+      },
+      {
+        "dropout": 0.2,
+        "events_kept": 800000,
+        "pr_auc_relative_to_no_dropout": 0.7155,
+        "rings_at_f1_threshold": 32,
+        "rings_at_nv_threshold": 11,
+        "test_pr_auc": 0.0336
+      },
+      {
+        "dropout": 0.3,
+        "events_kept": 700000,
+        "pr_auc_relative_to_no_dropout": 0.5857,
+        "rings_at_f1_threshold": 28,
+        "rings_at_nv_threshold": 9,
+        "test_pr_auc": 0.0275
+      },
+      {
+        "dropout": 0.5,
+        "events_kept": 500000,
+        "pr_auc_relative_to_no_dropout": 0.3536,
+        "rings_at_f1_threshold": 20,
+        "rings_at_nv_threshold": 7,
+        "test_pr_auc": 0.0166
+      }
+    ]
+  },
+  "schema_version": "1"
+}
