@@ -2,6 +2,18 @@
 
 One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 
+## v0.6.0 - Stage 05: frontend core (pending owner confirmation)
+
+### Added
+- `frontend/`: light-mode Next.js 16 static-export app: review queue, case view with a force-directed graph capped at 500 accounts by a deterministic rule, metrics dashboard (comparison table, ring PR curves, cost curve, ablations, robustness, latency), audit page (chain check, token-gated list), replay placeholder; loading, empty, error and offline states; works with the backend off.
+- Data source with fallback: API, then saved snapshot, then built-in demo bundle; origin shown in the header.
+- `scripts/make_demo_bundle.py` and the committed `frontend/public/demo-snapshots` (invented data, banner on every page); `scripts/sync_frontend_snapshots.py` to copy a validated real bundle into the frontend.
+- Tests: 79 Vitest tests (graph cap, data source, every page, metrics extractors, contrast), `backend/tests/test_stage05_bundle.py`; `.github/workflows/frontend.yml`.
+- `docs/STAGE_05.md`, `docs/screenshots/`.
+
+### Changed
+- Docs: README, ARCHITECTURE (C15), PROJECT_EXPLAINER, HANDOVER.
+
 ## v0.5.0 - Stage 04: snapshots and backend (pending owner confirmation)
 
 ### Added
