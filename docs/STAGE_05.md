@@ -45,7 +45,7 @@ cases.json holds every ring with up to 500 members and 500 edges; the browser do
 
 ## The metrics page and its main uncertainty
 
-Stage 03 has never run on real data, so the exact key names inside metrics.json are those documented in `docs/PROJECT_EXPLAINER.md` (D9), not observed. `frontend/src/lib/metricsView.ts` therefore reads them tolerantly: the comparison table is the Stage 03 markdown table (`results_table_md`) parsed as is; the PR curve, cost curve, ablation, robustness and latency panels each say "not in this bundle, or not a layout this version recognises" when their data is missing or shaped differently, and the raw JSON is at the bottom of the page. The demo metrics were written to the same assumed layout, so a green test on them proves the code matches the assumption, not that the assumption matches Stage 03. Send the first real `data/snapshots/metrics.json` back to settle this.
+Stage 03 has never run on real data, so the exact key names inside metrics.json are those documented in `docs/PROJECT_EXPLAINER.md` (D9), not observed. `frontend/src/lib/metricsView.ts` therefore reads them tolerantly: the comparison table is the Stage 03 markdown table (`results_table_md`) parsed as is; the PR curve, cost curve, ablation, robustness and latency panels each say "not in this bundle, or not a layout this version recognises" when their data is missing or shaped differently, and the raw JSON is at the bottom of the page. The demo metrics were written to the same assumed layout, so a green test on them proves the code matches the assumption, not that the assumption matches Stage 03. Send the first real metrics snapshot file back to settle this.
 
 ## Accessibility and style
 

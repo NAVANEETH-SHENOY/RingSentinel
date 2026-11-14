@@ -86,7 +86,7 @@ IBM AML (Altman et al., NeurIPS 2023 Datasets and Benchmarks): authors, title an
 - `config/fx_rates_inr.json` rates are approximate placeholders.
 - Audit log: single shared token and free-text analyst names (does not prove who acted); tamper-evident, not tamper-proof; SQLite only until Stage 09 (Postgres free-tier limits are to be verified then). Rate limits are per process and per client address, which may be too coarse behind a proxy.
 - Starlette's test client now wants `httpx2`; if pip cannot install it on your machine, tell me and the pin changes.
-- Stage 05: metrics.json inner key names are the documented ones, not observed; any panel that does not recognise them says so. Send the first real `data/snapshots/metrics.json`.
+- Stage 05: metrics.json inner key names are the documented ones, not observed; any panel that does not recognise them says so. Send the first real metrics snapshot file.
 - Stage 05: the case graph has no neighbour nodes because the bundle has none (plan: "strongest neighbours"). Decide whether to extend the exporter (schema version 2) in a later stage.
 - Stage 05: offline mode downloads all of cases.json; check its size on real data (the sync script warns above 5 MiB).
 - Stage 05: eslint 9.39.5 is pinned and flagged deprecated by npm; typescript is 5.9.3 (7.x exists but was not tried).
