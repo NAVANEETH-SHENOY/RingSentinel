@@ -1,6 +1,6 @@
 # RingSentinel: zero-context project explainer
 
-Written for a reader (human or LLM) who has only the project zip. Current milestone: **Stage 04 (snapshot exporter and backend API) built and tested on hand-made and synthetic data only. It sits on top of Stage 03, which has never been run on the real data, so no real result exists yet and the snapshot bundle is marked `evaluation_frozen: false`. Stage 02 was run on the real data by the builder (the owner's run and tag v0.3.0 were not seen); Stage 01 is confirmed and tagged v0.2.0**. Anything that does not exist yet is marked [planned]. If this file and the code disagree, the code wins; run `python scripts/check_docs.py` to catch stale paths.
+Written for a reader (human or LLM) who has only the project zip. Current milestone: **Stage 05 (read-only analyst interface in `frontend/`) built and tested on the demo bundle and against a real API process on it; it sits on Stage 04 (snapshot exporter and backend API), tested on hand-made and synthetic data only. It sits on top of Stage 03, which has never been run on the real data, so no real result exists yet and the snapshot bundle is marked `evaluation_frozen: false`. Stage 02 was run on the real data by the builder (the owner's run and tag v0.3.0 were not seen); Stage 01 is confirmed and tagged v0.2.0**. Anything that does not exist yet is marked [planned]. If this file and the code disagree, the code wins; run `python scripts/check_docs.py` to catch stale paths.
 
 ## 1. Plain-language summary
 
@@ -8,26 +8,28 @@ RingSentinel is a tool for fraud analysts. Money moves between accounts. Sometim
 
 It is built for the Razorpay AI Buildathon, Track 02 (AI Risk Manager), as a solo project, and it is defense-only. It uses a public synthetic dataset (IBM anti-money-laundering transactions), not real customer data.
 
-So far the project can load and clean that dataset, label the known laundering rings, split the data by time, turn the transfers into an account graph with hub control and a table of per-account and per-community features, score every transfer with four detectors (including one that uses the graph features), group flagged transfers into candidate rings, and measure everything on a held-out test period, including the rupee cost of false alarms. The measurement code exists but has not been run on the real data yet. The results can now be packaged into a small snapshot bundle and served by a local API that ranks the flagged rings for review and records each analyst decision (confirm, dismiss or hold) in a tamper-evident log, where every entry carries a fingerprint of the one before it. The explanations written by a language model, the drift and replay views, the analyst interface and the deployment do not exist yet.
+So far the project can load and clean that dataset, label the known laundering rings, split the data by time, turn the transfers into an account graph with hub control and a table of per-account and per-community features, score every transfer with four detectors (including one that uses the graph features), group flagged transfers into candidate rings, and measure everything on a held-out test period, including the rupee cost of false alarms. The measurement code exists but has not been run on the real data yet. The results can now be packaged into a small snapshot bundle and served by a local API that ranks the flagged rings for review and records each analyst decision (confirm, dismiss or hold) in a tamper-evident log, where every entry carries a fingerprint of the one before it. A web interface (Stage 05) shows the ranked queue, each ring as a graph of transfers, the evaluation metrics and the audit log, and keeps working from saved files when the backend is off. It is read-only for now: the buttons to confirm, dismiss or hold, the explanations written by a language model, the drift and replay views, and the deployment do not exist yet.
 
 ## 2. Technical summary
 
-- Stack: Python 3.10+ (owner uses 3.13), pandas, numpy, pyarrow, scikit-learn, XGBoost, pydantic, pytest, ruff, scipy, python-igraph, joblib, all pinned in `requirements.txt`. FastAPI, uvicorn, jsonschema and SQLite (Stage 04; httpx2 for tests). Later: Next.js, Postgres [planned]. networkx is not used (ring splitting reuses the igraph code).
+- Stack: Python 3.10+ (owner uses 3.13), pandas, numpy, pyarrow, scikit-learn, XGBoost, pydantic, pytest, ruff, scipy, python-igraph, joblib, all pinned in `requirements.txt`. FastAPI, uvicorn, jsonschema and SQLite (Stage 04; httpx2 for tests). Stage 05: Next.js 16 (static export), React 19, TypeScript, d3-force, Vitest and Testing Library (all under `frontend/`). Later: Postgres [planned]. networkx is not used (ring splitting reuses the igraph code).
 - Architecture: a deterministic offline pipeline (ingest, temporal split, graph, features, detectors, ring extraction, evaluation) exports static JSON snapshots; a thin API and a UI sit on top [planned]. See `docs/ARCHITECTURE.md`.
 - Implemented now: (D1) checksum manifest; (D2) chunked CSV reader to a typed event table, pattern parser, label attachment, INR amount, validation; (D4) time-based split with ring assignment; two baselines (velocity rule; tabular XGBoost) scored on the validation split; shared metrics; (D3) label-blind synthetic noise layer; (D5) cumulative past-only transfer graph per window with IDF edge weights, a degree cap tuned on validation, a pruning report and Louvain-split communities; (D6) node and community features; (D7) four detectors scored per transfer (velocity rule, tabular XGBoost, graph-feature XGBoost, Isolation Forest) with a guard that releases the test split once per detector; (D8) ring extraction from the flagged transfers; (D9) transaction-level and ring-level metrics, rupee net-value threshold, cost sweep, ablations (hub control and graph features on/off), robustness (edge dropout) and detection latency, regenerated by `scripts/reproduce.py`.
 - (D12) snapshot exporter: Stage 03 outputs to six schema-validated JSON files tied together by SHA-256 hashes; (D13) FastAPI backend serving them from memory, with a hash-chained SQLite audit log, idempotent actions, token check, CORS and rate limiting.
-- Core logic still to come [planned]: LLM investigator with a verifier, drift (PSI), replay, threshold feedback, UI.
+- (C15, Stage 05) Next.js interface: queue, case view with a force-directed graph capped at 500 accounts, metrics dashboard, audit page; reads the API when it answers, else the snapshot files, else a built-in demo bundle.
+- Core logic still to come [planned]: LLM investigator with a verifier, drift (PSI), replay, threshold feedback, analyst actions in the UI.
 - One setting, `RS_DATASET_VARIANT`, selects HI-Small (default), LI-Small, HI-Medium or LI-Medium; all paths derive from it.
 
 ## 3. Current state
 
 | Item | State |
 | --- | --- |
-| Milestone | M0 and M1 (Stage 01) done and confirmed on the owner's Windows machine, pushed. M2 / Stage 02 built; builder ran it on the real data; owner's run not seen. M3 / Stage 03 built and tested on synthetic data in the builder's sandbox; owner's run and the real-data run are pending. M4 / Stage 04 built on top of it and tested in the builder's sandbox; owner's run pending |
+| Milestone | M0 and M1 (Stage 01) done and confirmed on the owner's Windows machine, pushed. M2 / Stage 02 built; builder ran it on the real data; owner's run not seen. M3 / Stage 03 built and tested on synthetic data in the builder's sandbox; owner's run and the real-data run are pending. M4 / Stage 04 built on top of it and tested in the builder's sandbox; owner's run pending. M5 / Stage 05 built on top of it and tested in the builder's sandbox; owner's run pending |
 | Works (tested on synthetic data; Stage 01 and 02 also on the real HI-Small files) | Everything in Stage 01 and Stage 02, plus: tabular features and velocity counts, design matrices, the four detectors, the test-split vault, ring extraction, Jaccard ring match, cost model, per-detector report, cost sweep, latency, ablation, robustness, result tables, `scripts/run_stage03.py`, `scripts/reproduce.py` |
 | Verified on the real files | Stage 01 (owner: 85 tests passed, pipeline run) and Stage 02 (builder's run of every step). Stage 03: nothing; it has not touched the real files |
 | Works, Stage 04 (hand-made and synthetic data only) | Snapshot exporter and loader, JSON schemas, ranking by expected value, case edges, hash-chained audit log with tamper detection, action rules and idempotency, all API endpoints, token check, CORS, rate limiting, `scripts/export_snapshots.py`, `scripts/run_api.py`. A real uvicorn process was started and queried once in the builder's sandbox |
-| Does not exist yet | AI layer, UI, drift, replay, threshold feedback, deployment, Postgres, any Stage 03 result on real data |
+| Works, Stage 05 | Read-only UI for queue, case graph (500-account cap), metrics, audit, replay placeholder; API-first with snapshot and demo fallback; `scripts/make_demo_bundle.py`, `scripts/sync_frontend_snapshots.py`. Checked in the builder's sandbox: 79 Vitest tests, type check, lint, production build, and a headless Chrome run against a real uvicorn process serving the demo bundle |
+| Does not exist yet | AI layer, analyst actions in the UI, drift, replay, threshold feedback, deployment, Postgres, neighbour nodes in the case graph, any Stage 03 result on real data |
 | Headline numbers | None. Stage 03 produces them when `scripts/reproduce.py` is run on the real data (`docs/EVALUATION_RESULTS.md` [generated]). Validation-split Stage 01 baselines exist; Stage 02 reports graph diagnostics only |
 
 ## 4. Repo map
@@ -70,7 +72,7 @@ So far the project can load and clean that dataset, label the known laundering r
 | `backend/ringsentinel/evaluate/report.py` | `Scored`, `candidate_thresholds()`, `ring_block()`, `txn_block()`, `latency_block()`, `evaluate_detector()`, `cost_sweep()` | `run_evaluate()`, `run_ablate()` | rings, metrics, cost |
 | `backend/ringsentinel/stage03.py` | Orchestration: `load_prepared()`, `run_detect()`, `run_evaluate()`, `run_ablate()`, `run_robustness()`, `build_uncontrolled_features()`, `format_full_results()`, `numeric_differences()` | `scripts/run_stage03.py`, `scripts/reproduce.py` | all of the above, Stage 02 builders |
 | `scripts/run_stage03.py` | Command line for Stage 03 steps | owner | `backend/ringsentinel/stage03.py` |
-| `scripts/reproduce.py` | Reruns Stage 03, compares with the previous `metrics.json` [generated], writes `docs/EVALUATION_RESULTS.md` [generated] | owner | `backend/ringsentinel/stage03.py` |
+| `scripts/reproduce.py` | Reruns Stage 03, compares with the previous metrics.json [generated], writes `docs/EVALUATION_RESULTS.md` [generated] | owner | `backend/ringsentinel/stage03.py` |
 | `backend/tests/s03_world.py` | Synthetic dataset in the real layout for the Stage 03 tests | Stage 03 and 04 tests | none |
 | `backend/ringsentinel/snapshots/schemas.py` | `SCHEMA_VERSION`, one JSON Schema per bundle file (`SCHEMAS`), `RING_ID_PATTERN` | bundle loader, API schemas | none |
 | `backend/ringsentinel/snapshots/bundle.py` | `canonical_text()`, `clean()`, `validate_document()`, `load_bundle()`, `SnapshotError`: read and validate a bundle (schemas, hashes, queue and cases agree) | exporter, `SnapshotStore` | jsonschema, schemas |
@@ -95,7 +97,28 @@ So far the project can load and clean that dataset, label the known laundering r
 | `scripts/check_docs.py` | Fails if docs name a missing path or function | CLI, CI, tests | filesystem |
 | `backend/tests/conftest.py` | Builds a synthetic dataset in the real layout | all data tests | none |
 | `backend/tests/test_*.py` | See section 8 | pytest | the code under test |
-| `frontend/package.json` | Frontend shell, no dependencies yet | npm | none |
+| `frontend/package.json`, `frontend/package-lock.json` | Pinned frontend dependencies and scripts (`dev`, `build`, `check`, `test`) | npm | none |
+| `frontend/next.config.mjs`, `frontend/tsconfig.json`, `frontend/eslint.config.mjs`, `frontend/vitest.config.mts`, `frontend/vitest.setup.ts` | Static export, TypeScript, lint and test setup | Next, tsc, eslint, vitest | none |
+| `frontend/.env.example`, `frontend/.gitignore` | Frontend env var names; ignores the real bundle copy | Humans, git | none |
+| `frontend/src/app/layout.tsx`, `frontend/src/app/globals.css` | Root layout (wraps pages in `AppShell`) and all styles (palette variables) | Next | `frontend/src/components/AppShell.tsx` |
+| `frontend/src/app/page.tsx`, `frontend/src/app/case/page.tsx`, `frontend/src/app/metrics/page.tsx`, `frontend/src/app/audit/page.tsx`, `frontend/src/app/replay/page.tsx`, `frontend/src/app/not-found.tsx` | Route files; each renders one view (the case page reads `?id=` and wraps in Suspense) | Next | the matching component |
+| `frontend/src/components/AppShell.tsx` | Header, nav, data-source chip, demo / not-frozen / out-of-date banners; provides the data source | `frontend/src/app/layout.tsx` | `SourceProvider`, `useSource` |
+| `frontend/src/components/QueueView.tsx` | Ranked table, search, status filter, paging | `frontend/src/app/page.tsx` | `useSource`, `useResource` |
+| `frontend/src/components/CaseView.tsx`, `frontend/src/components/ForceGraph.tsx` | One ring: stats, SVG graph, signals, AI placeholder, link table, members | case page | `capGraph`, `layoutGraph` |
+| `frontend/src/components/MetricsView.tsx`, `frontend/src/components/charts.tsx` | Dashboard panels and the SVG line chart and bars | metrics page | `frontend/src/lib/metricsView.ts`, `frontend/src/lib/markdownTable.ts` |
+| `frontend/src/components/AuditView.tsx`, `frontend/src/components/ReplayView.tsx`, `frontend/src/components/DataState.tsx`, `frontend/src/components/StatusChip.tsx` | Audit page (chain check, token, list), replay placeholder, loading, empty and error states, chips | pages | `frontend/src/lib/source.ts` |
+| `frontend/src/lib/source.ts` | `createSource`: API, then snapshot, then demo, with timeouts, schema-version check and a cached cases.json; `DataUnavailableError`, `SchemaVersionError` | all views via context | `frontend/src/lib/http.ts`, `frontend/src/lib/config.ts` |
+| `frontend/src/lib/http.ts`, `frontend/src/lib/config.ts`, `frontend/src/lib/types.ts`, `frontend/src/lib/format.ts`, `frontend/src/lib/token.ts` | Fetch with timeout, env config, bundle and API types, INR and number formatting, per-tab token storage | source, views | none |
+| `frontend/src/lib/graph.ts` | `buildNodes`, `capGraph` (500-account cap), `layoutGraph` (deterministic d3-force) | `frontend/src/components/ForceGraph.tsx` | d3-force |
+| `frontend/src/lib/metricsView.ts`, `frontend/src/lib/markdownTable.ts` | Tolerant extractors for D9 metrics; markdown table parser | `frontend/src/components/MetricsView.tsx` | none |
+| `frontend/src/lib/useResource.ts`, `frontend/src/lib/SourceContext.tsx` | Load-state hook; context holding the source | views | none |
+| `frontend/public/demo-snapshots` | Committed DEMO bundle (invented data) | `createSource` (last fallback) | none |
+| `frontend/public/snapshots` | Real bundle copy [generated], git-ignored | `createSource` | none |
+| `scripts/make_demo_bundle.py` | Builds and validates the demo bundle (`build_demo_documents()`, `main()`) | owner | `ring_id_for()`, `expected_value_inr()`, `write_bundle()`, `load_bundle()` |
+| `scripts/sync_frontend_snapshots.py` | `sync()`: validate a bundle with `load_bundle()`, copy it into the frontend | owner | `load_bundle()` |
+| `.github/workflows/frontend.yml` | CI for the frontend: type check, lint, tests, build | GitHub | npm scripts |
+| `frontend/tests/*.test.ts*` | See section 8 | vitest | the code under test |
+| `backend/tests/test_stage05_bundle.py` | Demo bundle and sync script against the real loader | pytest | both scripts |
 | `docs/*.md` | Architecture, data facts, per-stage notes, this file | Humans | none |
 
 Planned (created in the stage named): `backend/ringsentinel/ai/` [planned, Stage 06], `docs/DIAGRAM_SPECS.md` [planned, Stage 09]. Note the two metric packages: `backend/ringsentinel/evaluation/metrics.py` is Stage 01's (used by the Stage 01 baselines); `backend/ringsentinel/evaluate/metrics.py` and its neighbours are Stage 03's. Stage 03 code does not import the Stage 01 package.
@@ -125,11 +148,11 @@ Stage 03 pipeline (`python scripts/reproduce.py` or `main()` in `scripts/run_sta
 2. `run_detect()`: `make_vault()` exposes train and validation rows only. `velocity` is the `sender_cnt_24h` column. `xgb_tabular` and `xgb_graph` each go through `_fit_and_score_xgb()`: `sample_rows()` keeps all positives and a share of negatives, `matrix_for()` builds the design matrix (graph variant joins each account's window features via `design_matrix()`), `fit_xgb()` trains with early stopping on a validation sample, `score_chunks()` scores every validation row, then `SplitVault.release_test()` hands out the test rows once. `ImputedIsolationForest` is fitted on a uniform train sample without labels. `write_scores()` writes `scores.parquet` [generated]; models go to the `models` folder.
 3. `run_evaluate()`: `read_scores()` re-attaches scores (it refuses scores that do not match the events); for each detector `evaluate_detector()` picks the F1 threshold with `best_f1_threshold()` and the net-value threshold with `choose_nv_threshold()` over `candidate_thresholds()`, both on validation; `Scored.rings()` calls `extract_rings()` for each threshold; `ring_block()` applies `ring_metrics()` (Jaccard match) and `cost_terms()`; test is evaluated at the fixed thresholds; `cost_sweep()` repeats the net-value choice for 36 cost settings; `latency_block()` measures delay; `rings_payload()` writes `rings.json` [generated] with XGBoost contributions; `format_results_table()` writes `results_table.md` [generated].
 4. `run_ablate()`: `build_uncontrolled_features()` rebuilds features with no degree cap and all edge weights 1, a third XGBoost is fitted on them, and `ablations.json` [generated] compares tabular only, hub control off, hub control on.
-5. `run_robustness()`: for each dropout level a seeded share of the test-window transfers is removed, `build_window_features()` rebuilds the test-window features, and the saved `xgb_graph` model is applied with the validation thresholds from `metrics.json` [generated]; `robustness.json` [generated].
-6. `scripts/reproduce.py` then calls `format_full_results()` and, if a previous `metrics.json` [generated] existed, `numeric_differences()` reports any change.
+5. `run_robustness()`: for each dropout level a seeded share of the test-window transfers is removed, `build_window_features()` rebuilds the test-window features, and the saved `xgb_graph` model is applied with the validation thresholds from metrics.json [generated]; `robustness.json` [generated].
+6. `scripts/reproduce.py` then calls `format_full_results()` and, if a previous metrics.json [generated] existed, `numeric_differences()` reports any change.
 
 Stage 04 export (`python scripts\export_snapshots.py`, `main()` in `scripts/export_snapshots.py`; needs the Stage 03 outputs):
-1. `export_snapshots()` calls `build_documents()`, which reads `rings.json` [generated], `metrics.json` [generated], `ablations.json` [generated], `robustness.json` [generated] and `latency.json` [generated], and hashes them.
+1. `export_snapshots()` calls `build_documents()`, which reads `rings.json` [generated], metrics.json [generated], `ablations.json` [generated], `robustness.json` [generated] and `latency.json` [generated], and hashes them.
 2. Each ring gets `ring_id_for()` and `expected_value_inr()`; rings are sorted by value then id and cut to `--max-rings`.
 3. `_edges_by_ring()` reads only the needed rows of `events.parquet` [generated] and aggregates each ring's listed transfers into account-to-account edges.
 4. Placeholders are added for drift, replay and the AI block; each file is hashed in its canonical text form; `meta.json` [generated] gets the hashes and the `bundle_id`.
@@ -138,6 +161,19 @@ Stage 04 export (`python scripts\export_snapshots.py`, `main()` in `scripts/expo
 Serving a request (`python scripts\run_api.py`, `main()` in `scripts/run_api.py`): `create_app()` runs `load_app_settings()`, `SnapshotStore` (which calls `load_bundle()`, so a missing, edited or inconsistent bundle stops the start), `AuditLog`, adds the CORS and rate-limit middleware, and includes the router. A queue request: middleware `RateLimiter.check()`, then `queue()` in `backend/app/routes.py` merges the bundle's items with `AuditLog.statuses()`. A case request: `case()` returns the bundle's case plus `AuditLog.status_of()`.
 
 Taking an analyst action: `take_action()` in `backend/app/routes.py` after `require_token()` and pydantic validation of `ActionRequest`: ring must exist in the bundle (404); `AuditLog.append()` opens `BEGIN IMMEDIATE`, looks up the idempotency key (same request returns the stored entry, different request raises `IdempotencyConflict`), checks `allowed_actions()` for the ring's current status (`InvalidTransition`), builds the entry with `prev_hash` of the last entry, computes `entry_hash()`, inserts, commits. `audit_verify()` calls `AuditLog.verify()`.
+
+Loading a page in the browser (Stage 05): `AppShell` in `frontend/src/components/AppShell.tsx` creates the source (`createSource`, config from `readConfig` in `frontend/src/lib/config.ts`) and, for the header, asks for `meta` and `health`. A view calls `useResource`, which calls one source method:
+1. If an API base URL is configured, `getJson` (`frontend/src/lib/http.ts`) asks the API with a timeout. Success: origin "api".
+2. Any API failure (unreachable, timeout, non-2xx) falls through; a `SchemaVersionError` stops everything. For cases, a 404 from the live API is returned as an answer.
+3. Next it fetches the file from /snapshots/ (origin "snapshot"), then from /demo-snapshots/ (origin "demo"). The cases.json file is fetched once and cached.
+4. If nothing answers, `DataUnavailableError` lists every cause and the view shows `ErrorState` with a retry.
+5. The view renders the data, and `OriginNote` says when it is not live.
+
+Showing a case: `CaseView` loads the case; `ForceGraph` calls `capGraph` (keeps the 500 accounts with the largest transfer volume) then `layoutGraph` (d3-force to completion, then view fitted to the drawing).
+
+Audit page: `AuditView` calls the open verify endpoint through `useResource`; the list is requested only after the user enters the analyst token (sent as the X-Analyst-Token header; kept in memory, and in sessionStorage only if the user ticks the box).
+
+Making the demo or real bundle available: `python scripts\make_demo_bundle.py` rebuilds `frontend/public/demo-snapshots`; `python scripts\sync_frontend_snapshots.py` runs `load_bundle()` on `data/snapshots/` [generated] and copies the six files to `frontend/public/snapshots` [generated].
 
 Case generation by a language model is [planned].
 
@@ -177,16 +213,18 @@ D7 `scores.parquet` [generated]: one row per validation and test transfer. Colum
 
 D8 `rings.json` [generated]: `{detector: "xgb_graph", split: "test", threshold, threshold_kind, rings: [...]}`. Each ring: ring_index, score (mean score of its transfers), n_members, n_transfers, amount_inr, oversized, members (up to 500 account strings), event_ids (up to 500), top_features (five items of feature and mean_contribution). If the validation net-value rule chose to flag nothing, `rings` is empty and `note` says why. Non-finite thresholds are written as the strings "inf" and "-inf".
 
-D9 `metrics.json` [generated]: `meta` (variant, seed, hub cap, cost assumptions, tau, row and positive counts, protocol and scope notes), `detectors` (per detector: `val` and `test` with pr_auc, positives, prevalence and `at_f1_threshold` counts and rates including recall on ring positives and on unringed positives; `thresholds` f1 and net_value; `operating_points` f1 and net_value, each with `val` and `test` ring blocks holding predicted_rings, truth_rings, by_tau matched/precision/recall/f1, lenient_precision, ring_size, oversized_rings, cost_terms and net_value_inr; `val_net_value_choice`; test `ring_pr_tau_0.5` points and `ring_ap_grid`), and `cost_sweep` (per detector, 36 rows of capture, review cost, false-positive cost, chosen threshold, test net value and ring counts). `ablations.json` [generated]: `variants` keyed by detector name with label and summary metrics. `robustness.json` [generated]: `levels` with dropout, events_kept, test_pr_auc, at_val_f1_threshold, rings_at_f1_threshold, rings_at_nv_threshold, pr_auc_relative_to_no_dropout. `latency.json` [generated]: per detector threshold, rings with a flagged transfer, events and minutes median and 90th percentile. `results_table.md` [generated]: the comparison table. `docs/EVALUATION_RESULTS.md` [generated]: all tables for the docs.
+D9 metrics.json [generated]: `meta` (variant, seed, hub cap, cost assumptions, tau, row and positive counts, protocol and scope notes), `detectors` (per detector: `val` and `test` with pr_auc, positives, prevalence and `at_f1_threshold` counts and rates including recall on ring positives and on unringed positives; `thresholds` f1 and net_value; `operating_points` f1 and net_value, each with `val` and `test` ring blocks holding predicted_rings, truth_rings, by_tau matched/precision/recall/f1, lenient_precision, ring_size, oversized_rings, cost_terms and net_value_inr; `val_net_value_choice`; test `ring_pr_tau_0.5` points and `ring_ap_grid`), and `cost_sweep` (per detector, 36 rows of capture, review cost, false-positive cost, chosen threshold, test net value and ring counts). `ablations.json` [generated]: `variants` keyed by detector name with label and summary metrics. `robustness.json` [generated]: `levels` with dropout, events_kept, test_pr_auc, at_val_f1_threshold, rings_at_f1_threshold, rings_at_nv_threshold, pr_auc_relative_to_no_dropout. `latency.json` [generated]: per detector threshold, rings with a flagged transfer, events and minutes median and 90th percentile. `results_table.md` [generated]: the comparison table. `docs/EVALUATION_RESULTS.md` [generated]: all tables for the docs.
 
 D12 `data/snapshots/` [generated] (the bundle; the formal JSON Schemas are in `backend/ringsentinel/snapshots/schemas.py`). Every file has `schema_version` "1" except `meta.json` [generated], which also has it. Files are canonical JSON: sorted keys, two-space indent, UTF-8, LF, final newline, NaN written as null.
 - `queue.json` [generated]: detector, split, threshold, threshold_kind, `score_calibrated` (always false), `value_formula`, `cost_assumptions` (review_cost_inr, fp_cost_inr, loss_capture_rate), optional `note`, and `items`: ring_id (`R-` plus 12 hex), rank (1..n), score, expected_value_inr, n_members, n_transfers, amount_inr, oversized, top_features (three of feature and mean_contribution).
-- `cases.json` [generated]: `cases` keyed by ring_id; each has the queue fields plus members (sorted, up to 500), members_truncated, top_features (five), edges (src, dst, n_transfers, total_inr, first_ts, last_ts; up to 500), edges_available, edges_truncated, and `ai` (status "not_built", built_in_stage "06", investigator, verifier and benign_explanation null).
-- `metrics.json` [generated]: meta, detectors, cost_sweep (as in D9), ablations, robustness, latency, results_table_md.
+- cases.json [generated]: `cases` keyed by ring_id; each has the queue fields plus members (sorted, up to 500), members_truncated, top_features (five), edges (src, dst, n_transfers, total_inr, first_ts, last_ts; up to 500), edges_available, edges_truncated, and `ai` (status "not_built", built_in_stage "06", investigator, verifier and benign_explanation null).
+- metrics.json [generated]: meta, detectors, cost_sweep (as in D9), ablations, robustness, latency, results_table_md.
 - `drift.json` [generated]: status "not_built", built_in_stage "07", psi_alert_level null, windows []. `replay.json` [generated]: status "not_built", built_in_stage "07", events [].
 - `meta.json` [generated]: bundle_id, dataset_variant, seed, git_commit, evaluation_frozen, detector, split, n_rings_total, n_rings_exported, max_rings, `sources` (SHA-256 of each Stage 03 input) and `files` (SHA-256 of each of the five data files). `bundle_id` is the SHA-256 of the sorted "name:hash" lines of `files`; the git commit and the frozen flag do not change it.
 
 D13 audit log, table `audit` in the SQLite file named by `RS_AUDIT_DB_URL`: seq (1, 2, ... without gaps), ts (UTC, microseconds, Z), ring_id, action (confirm, dismiss, hold), analyst, note, idempotency_key (unique), request_sha256 (hash of ring, action, analyst, note), prev_hash (64 zeros for seq 1), hash. `hash` is the SHA-256 of the canonical JSON of all other columns except itself. The API never returns `request_sha256`.
+
+Frontend reading of D12 (Stage 05): the TypeScript types in `frontend/src/lib/types.ts` mirror the schemas; the app accepts only `schema_version` "1". The queue from a snapshot has no `status` field (the API adds it). metrics.json inner keys are read by `frontend/src/lib/metricsView.ts` tolerantly (see section 10).
 
 D10 and D11 are [planned] (Stages 06 and 07).
 
@@ -218,6 +256,13 @@ Stage 04 (API and snapshots):
 | `RS_AUDIT_DB_URL` | `sqlite:///<data dir>/audit/audit.sqlite3` | Anything except `sqlite:///...` raises a ValueError naming the variable. Pointing at a different file starts a new, empty log |
 | `RS_CORS_ORIGINS` | `http://localhost:3000` | A browser front end on another origin is blocked; `*` is rejected |
 | `RS_RATE_LIMIT_READ_PER_MIN`, `RS_RATE_LIMIT_WRITE_PER_MIN` | 120, 20 | Negative is rejected; 0 turns the limit off; too low gives 429 for normal use |
+
+Stage 05 (frontend, read at build time and baked into the browser files, so never put a secret in them; set in `frontend/.env.local` [generated], names in `frontend/.env.example`):
+
+| Variable | Default | If wrong |
+| --- | --- | --- |
+| `NEXT_PUBLIC_API_BASE_URL` | blank (snapshot-only mode) | A wrong URL means every API call fails and the UI quietly falls back to the snapshot, with a "Backend unreachable" note. A browser origin not listed in `RS_CORS_ORIGINS` is blocked and looks the same. Changing it needs a restart or rebuild |
+| `NEXT_PUBLIC_API_TIMEOUT_MS` | 4000 | Values outside 200 to 60000 are ignored. Too low makes a slow, waking backend look down; too high delays the fallback |
 
 Reserved for later stages and listed in `.env.example`: Kaggle credentials, LLM provider and keys. `config/fx_rates_inr.json` holds the placeholder currency rates; a currency missing from it stops ingest.
 
@@ -255,8 +300,14 @@ Reserved for later stages and listed in `.env.example`: Kaggle credentials, LLM 
 | `backend/tests/test_stage04_api.py` | Every endpoint's contract, paging and bounds, auth (401, 503), validation (15 bad bodies), repeated submission, conflicts, SQL-looking input, audit list and verify (including tampering through the database file), rate limits with a fake clock, CORS, start-up refusal on a bad bundle | API behaviour drifting from the documented contract |
 | `backend/tests/test_stage04_config.py` | API settings defaults and overrides, blank values, weak token, wildcard CORS, token hidden in repr, rate-limiter window, isolation and memory bound | Bad configuration accepted; limiter wrong |
 | `backend/tests/test_stage04_integration.py` | Synthetic world through Stage 02 and 03, export, API session with actions, audit verify, and both `scripts/export_snapshots.py` outcomes | The pieces working alone but not together |
+| `frontend/tests/graph.test.ts` | Node building, the 500-account cap (count, ties, order independence, kept edges, the demo's oversized ring), deterministic layout that fits its view | A graph that freezes the browser or changes between visits |
+| `frontend/tests/source.test.ts` | Config parsing; API, snapshot, demo fallback order; timeouts; schema-version refusal; 404 handling; cached cases; token header | Offline mode broken, stale data shown as live |
+| `frontend/tests/pages.test.tsx` | Every page: loading, empty, error and offline states, filters, paging, case graph and cap, keyboard selection, metrics panels and missing-section messages, audit token flow and chain states, app shell with the backend unreachable, banners | The analyst experience breaking |
+| `frontend/tests/lib.test.ts` | Formatting, markdown table parser, metrics extractors, chart colour mapping | Wrong figures on the dashboard |
+| `frontend/tests/palette.test.ts` | WCAG AA contrast for text pairs, light-only | Unreadable text, a dark-mode rule sneaking in |
+| `backend/tests/test_stage05_bundle.py` | The committed demo bundle passes `load_bundle()`, equals a fresh build, is deterministic, has an oversized ring, is marked DEMO; the sync script copies a valid bundle and refuses a tampered one | Demo bundle out of date or invalid; the sync script copying bad data |
 
-Run: `pytest` from the repo root.
+Run: `pytest` from the repo root; `npm run check` from `frontend` for the frontend.
 
 ## 9. Debugging playbook
 
@@ -283,9 +334,9 @@ Run: `pytest` from the repo root.
 | `ValueError: ... does not match the current events` | `scores.parquet` [generated] built from different events or split | `read_scores()` | Compare event counts | Rerun `--step detect` |
 | `ValueError: The train split needs both positive and negative rows` | A split has no positives or no negatives | `fit_xgb()`, `split_meta.json` [generated] | See illicit rows per split | Adjust split fractions or variant |
 | `TestSplitAccessError` | Code asked for the test split twice for one detector, or fitting code touched it | `SplitVault.release_test()` | Read the message for the detector name | Fix the caller; never bypass the vault |
-| Net-value threshold says "flags nothing" or flags nearly everything | Costs too high for the model, or capture rate 1.0 with huge synthetic amounts | `choose_nv_threshold()`, `cost_sweep()` | Read `cost_sweep` in `metrics.json` [generated] | Report the sweep; do not tune costs to get a nicer answer |
-| Very large rings or very slow evaluation | Threshold flags a huge share of transfers (tied scores, velocity rule) | `candidate_thresholds()`, `extract_rings()` | Check `flagged` and ring sizes in `metrics.json` [generated] | The grid already skips thresholds that flag over ten times the maximum; raise `RS_RING_MIN_SIZE` or lower the community cap only with a documented reason |
-| `reproduce.py` exits with code 2 | New numbers differ from the previous `metrics.json` [generated] | `numeric_differences()` output | Compare platform, `RS_SEED`, package versions | Same machine and inputs should be identical; otherwise record the platform |
+| Net-value threshold says "flags nothing" or flags nearly everything | Costs too high for the model, or capture rate 1.0 with huge synthetic amounts | `choose_nv_threshold()`, `cost_sweep()` | Read `cost_sweep` in metrics.json [generated] | Report the sweep; do not tune costs to get a nicer answer |
+| Very large rings or very slow evaluation | Threshold flags a huge share of transfers (tied scores, velocity rule) | `candidate_thresholds()`, `extract_rings()` | Check `flagged` and ring sizes in metrics.json [generated] | The grid already skips thresholds that flag over ten times the maximum; raise `RS_RING_MIN_SIZE` or lower the community cap only with a documented reason |
+| `reproduce.py` exits with code 2 | New numbers differ from the previous metrics.json [generated] | `numeric_differences()` output | Compare platform, `RS_SEED`, package versions | Same machine and inputs should be identical; otherwise record the platform |
 | Export fails with "Stage 03 output missing" | Stage 03 not run (or its outputs deleted) | `_read_json()` in `backend/ringsentinel/snapshots/export.py` | The message names the file | Run `scripts\run_stage03.py` |
 | API start says "CANNOT START: ... hash mismatch" | A bundle file was edited or partly overwritten | `load_bundle()` in `backend/ringsentinel/snapshots/bundle.py` | The message names the files | Re-run `scripts\export_snapshots.py`; never edit bundle files by hand |
 | API start says "violates its schema" | Bundle written by a different version of the exporter | `validate_document()`, `backend/ringsentinel/snapshots/schemas.py` | Message lists the first problems | Re-export with the current code |
@@ -299,6 +350,15 @@ Run: `pytest` from the repo root.
 | Browser blocked by CORS | Front end origin not listed | `create_app()` | Browser console | Add the origin to `RS_CORS_ORIGINS` |
 | `ValueError: RS_AUDIT_DB_URL must look like sqlite:///...` | Non-SQLite URL | `sqlite_path_from_url()` | Read the message | Use a sqlite URL until Stage 09 |
 | Feature values change after a rerun | Hub cap or community settings changed, or a different platform | `effective_hub_cap()`, `Settings` | Compare `hub_cap` in `pruning_report.json` [generated] | Fix the settings; features are deterministic for fixed settings |
+| Page says "Could not load data" | No API and no snapshot answered (a static server not serving `public`, or wrong base path) | `createSource` in `frontend/src/lib/source.ts`; the causes are listed on the page | Open `/demo-snapshots/queue.json` in the browser | Serve `frontend/out` [generated] from its root, or run `npm run dev` |
+| "Backend unreachable: using saved snapshot" with the API running | Wrong `NEXT_PUBLIC_API_BASE_URL`, CORS origin not allowed, or the value was set after the build | `frontend/src/lib/config.ts`; browser console | `curl http://127.0.0.1:8000/api/v1/health`; check the console for a CORS error | Fix the URL, add the origin to `RS_CORS_ORIGINS`, restart or rebuild the frontend |
+| Yellow "Demo data" banner on real work | No real bundle in `frontend/public/snapshots` [generated] | `AppShell` | List the folder | `python scripts\sync_frontend_snapshots.py` |
+| "Snapshot out of date" banner | The saved snapshot is a different bundle from the one the API serves | `AppShell` | Compare bundle ids (health endpoint, `meta.json` [generated]) | Re-run the sync script |
+| "Unsupported snapshot schema_version" | Bundle from a newer exporter | `SchemaVersionError` in `frontend/src/lib/source.ts` | Read `schema_version` in the files | Update the frontend types and reader together |
+| A metrics panel says "not in this bundle, or not a layout ... recognises" | The real Stage 03 key names differ from the documented ones, or the data is absent | `frontend/src/lib/metricsView.ts` (the matching extractor) | Open the raw document at the bottom of the page | Adjust the extractor and its test to the real layout |
+| Case graph shows fewer accounts than the case lists | The 500-account cap, or the bundle truncated members or edges | `capGraph`; the graph summary line | Read the line above the graph | By design; use the link table |
+| Audit page empty with "needs the backend" | Snapshot-only mode | `AuditView` | Check `NEXT_PUBLIC_API_BASE_URL` | Set it and start the API |
+| `npm install` or `npm ci` fails | Node older than 22.12, or a blocked registry | `frontend/package.json` (`engines`) | `node -v` | Install Node 22 LTS |
 
 Order to rule out causes: environment (venv active, installs done), working directory, config values, input files (verify step), then code. Logs: pytest output, console output of `scripts/run_stage01.py`, and the ingest report.
 
@@ -327,6 +387,14 @@ Order to rule out causes: environment (venv active, installs done), working dire
 - **Rate limits are per process and per client address**; behind a proxy they may be too coarse.
 - **SQLite only**; Postgres and its free-tier limits are a Stage 09 task. Drift, replay, AI case files and threshold feedback are placeholders or absent.
 - Cases hold edges rebuilt from at most 500 transfers per ring.
+- **Stage 05 never saw real Stage 03 output.** The metrics extractors follow the documented D9 layout, not an observed one; the demo metrics are invented in that same layout.
+- **No neighbour nodes** in the case graph: the bundle holds only the ring's own accounts and edges (plan item "strongest neighbours" is open).
+- **Read-only UI**: no confirm, dismiss or hold buttons until Stage 07.
+- **Offline mode has no analyst decisions** and no audit log.
+- **cases.json is downloaded whole** in offline mode; with real data it could be large.
+- The app was checked in jsdom and in one headless Chrome session on Linux; no Windows, no other browsers, no deployed host. The frontend CI workflow has not run on GitHub.
+- ESLint is pinned at 9.39.5 (the version `eslint-config-next` supports); npm marks it as no longer supported upstream.
+- check_docs has not been run on these docs by the builder.
 
 ## 11. Decision log
 
@@ -382,6 +450,14 @@ Order to rule out causes: environment (venv active, installs done), working dire
 | One shared analyst token, constant-time compare; reads open, writes and audit list gated | The plan asks for a simple analyst token; data is public demo data. Not user authentication |
 | Own small rate limiter instead of a library | No new dependency; behaviour is tested with a fake clock |
 | httpx2 pinned instead of httpx | Starlette's test client reports plain httpx as deprecated; httpx2 is the replacement it asks for. Used by tests only |
+| Static export, client-side fetch, case id in a query string | Works with the backend asleep and on any static host; ring ids are not known at build time |
+| API first, then snapshot, then demo, with the source shown in the header | Free-tier backends sleep; the analyst must never mistake a saved file for live data |
+| Own SVG charts and a small d3-force layout instead of a chart or graph library | Fewer dependencies; deterministic and testable in jsdom; every chart has a table view |
+| Deterministic 500-account cap by transfer volume, tie by id | Same graph on every visit; keeps the money-heavy accounts; protects the browser (risk R6) |
+| Plain CSS with variables, system font stack | No font download or CSS framework; contrast checked by a test |
+| Metrics extractors tolerant of layout, with explicit "not recognised" states | Stage 03 keys are unverified; never draw a wrong chart silently |
+| Committed DEMO bundle with a banner on every page | The UI can be built and shown before real results exist, without passing invented numbers off as results |
+| Analyst token in memory, sessionStorage only on request | A token in `localStorage` would outlive the tab; none is ever baked into the build |
 | jsonschema added | The plan asks for a JSON Schema for the bundle; the library is mainstream and pinned |
 
 ## 12. Glossary
@@ -417,6 +493,10 @@ Order to rule out causes: environment (venv active, installs done), working dire
 - **Head hash**: hash of the latest audit entry; recording it elsewhere makes tail truncation detectable.
 - **Idempotency key**: a client-chosen string that makes repeating the same action request safe.
 - **Placeholder (bundle)**: a valid but empty document for something built in a later stage (`status: not_built`).
+- **Static export**: a build that outputs plain HTML, JS and JSON files, with no server code.
+- **Origin (frontend)**: which source answered a request: live API, saved snapshot, or demo bundle.
+- **Demo bundle**: an invented, schema-valid bundle shipped with the frontend; marked DEMO everywhere.
+- **Node cap**: the 500-account limit on the drawn case graph, chosen by transfer volume.
 - **PSI**: population stability index, the drift measure planned for Stage 07 (see `docs/ARCHITECTURE.md`).
 
 ## 13. How to regenerate every artifact
@@ -438,4 +518,4 @@ ruff check .
 python scripts\check_docs.py
 ```
 
-Individual steps: `python scripts\run_stage01.py --step ingest --force` (and `split`, `baselines`); `python scripts\run_stage02.py --step noise|tune|features|ablation --window train|val|test`. Stage 03: `python scripts\run_stage03.py --step detect|evaluate|ablate|robustness`, or `python scripts\reproduce.py` for everything plus `docs/EVALUATION_RESULTS.md` [generated] (`--evaluate-only` reuses the scores). Stage 04: `python scripts\export_snapshots.py [--git-commit SHA] [--frozen] [--max-rings N] [--no-edges] [--out DIR]` writes `data/snapshots/` [generated]; `python scripts\run_api.py [--port 8000]` serves it (set `RS_ANALYST_TOKEN` first for actions). The audit database is created on first start and is not regenerated: deleting it deletes the log.
+Individual steps: `python scripts\run_stage01.py --step ingest --force` (and `split`, `baselines`); `python scripts\run_stage02.py --step noise|tune|features|ablation --window train|val|test`. Stage 03: `python scripts\run_stage03.py --step detect|evaluate|ablate|robustness`, or `python scripts\reproduce.py` for everything plus `docs/EVALUATION_RESULTS.md` [generated] (`--evaluate-only` reuses the scores). Stage 05 (from `frontend`): `npm ci`, `npm run dev`, `npm run check`, `npm run build`; from the repo root `python scripts\make_demo_bundle.py [--check]` rebuilds the demo bundle and `python scripts\sync_frontend_snapshots.py [--src DIR]` copies the real bundle into the frontend. Stage 04: `python scripts\export_snapshots.py [--git-commit SHA] [--frozen] [--max-rings N] [--no-edges] [--out DIR]` writes `data/snapshots/` [generated]; `python scripts\run_api.py [--port 8000]` serves it (set `RS_ANALYST_TOKEN` first for actions). The audit database is created on first start and is not regenerated: deleting it deletes the log.

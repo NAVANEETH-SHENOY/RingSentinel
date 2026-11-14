@@ -2,7 +2,7 @@
 
 A defense-only abuse-ring detection and analyst-review tool, built solo for the Razorpay AI Buildathon, Track 02 (AI Risk Manager).
 
-> **Status: Stage 04 built (snapshot exporter and backend API with a hash-chained audit log) on top of Stage 03 (detectors, ring extraction, evaluation harness). Both are tested on synthetic or hand-made data only; Stage 03 has not been run on the real data yet, so there are no results below.** Stage 01 is confirmed on the real data. The AI layer and the UI do not exist yet. Sections marked "Planned" are filled in by the stage named next to them. Nothing in this README claims a result that has not been produced.
+> **Status: Stage 05 built (read-only analyst interface) on top of Stage 04 (snapshot exporter and backend API with a hash-chained audit log) and Stage 03 (detectors, ring extraction, evaluation harness). Stages 03 to 05 are tested on synthetic, hand-made or invented demo data only; Stage 03 has not been run on the real data yet, so there are no results below.** Stage 01 is confirmed on the real data. The AI layer, analyst actions in the UI, drift and replay do not exist yet. Sections marked "Planned" are filled in by the stage named next to them. Nothing in this README claims a result that has not been produced.
 
 ## Problem
 
@@ -16,7 +16,7 @@ Fraud and risk analysts reviewing flagged groups of accounts. A human always dec
 
 RingSentinel links accounts through the money they move, finds groups that behave like a coordinated ring, ranks them by expected value to review, and explains each one. Every claim in an explanation is checked against the underlying data. The project is judged on honest measurement: precision and recall on a time-based held-out test, plus the rupee cost of wrongly flagging real users.
 
-Screenshots or a GIF: Planned (Stage 05 and Stage 09).
+Screenshots (of the built-in **demo data**, which is invented; not results): `docs/screenshots/queue.png`, `docs/screenshots/case-ring.png`, `docs/screenshots/case-capped-500.png`, `docs/screenshots/metrics-curves.png`, `docs/screenshots/audit.png`, `docs/screenshots/queue-backend-off.png`. A GIF and screenshots of real results: Planned (Stage 09).
 
 ## Architecture summary
 
@@ -73,6 +73,8 @@ hash_i = SHA-256( canonical_json(seq, ts, ring, action, analyst, note, idempoten
 
 so changing or deleting an earlier entry is detected when the chain is verified (it detects tampering; it does not prevent it, and cannot see entries cut off from the end unless the head hash is recorded elsewhere). Dismissals nudging the review threshold inside fixed bounds is planned for Stage 07.
 
+The analyst interface (Stage 05, `docs/STAGE_05.md`) shows this queue and each ring's transfer graph (drawn from at most 500 accounts, chosen deterministically by transfer volume) and works from the snapshot files when the backend is off. Actions in the interface arrive in Stage 07.
+
 Planned: AI layer with verifier (Stage 06) and drift with the population stability index (Stage 07).
 
 ## Data
@@ -106,7 +108,9 @@ Stage 03 (after Stage 02): `python scripts\run_stage03.py`, or `python scripts\r
 
 Stage 04 (after Stage 03): `python scripts\export_snapshots.py` writes the snapshot bundle; `python scripts\run_api.py` serves it at http://127.0.0.1:8000 (interactive docs at /api/docs). Put a token of at least 16 characters in `.env` as `RS_ANALYST_TOKEN` to allow analyst actions. Endpoints, status codes and the audit log design: `docs/STAGE_04.md`.
 
-Environment variables (names only): `RS_DATASET_VARIANT`, `RS_DATA_DIR`, `RS_SEED`, `RS_TRAIN_FRAC`, `RS_VAL_FRAC`, `RS_HUB_CAP`, `RS_ATTR_CAP`, `RS_COMMUNITY_CAP`, `RS_LOUVAIN_RESOLUTION`, `RS_NEG_SAMPLE_FRAC`, `RS_REVIEW_COST_INR`, `RS_FP_COST_INR`, `RS_LOSS_CAPTURE_RATE`, `RS_RING_TAU`, `RS_RING_MIN_SIZE`, `RS_GIT_COMMIT`, `RS_SNAPSHOT_DIR`, `RS_ANALYST_TOKEN`, `RS_AUDIT_DB_URL`, `RS_CORS_ORIGINS`, `RS_RATE_LIMIT_READ_PER_MIN`, `RS_RATE_LIMIT_WRITE_PER_MIN`. See `.env.example` for reserved future names.
+Stage 05 (from `frontend`; Node 22 LTS or newer): `npm ci`, then `npm run dev` and open http://localhost:3000 (demo data until a real bundle is synced). `npm run check` runs the type check, lint and tests; `npm run build` writes the static site to `frontend/out`. With the API running, put `NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000` in `frontend/.env.local` [generated]. To show real results: `python scripts\export_snapshots.py`, then `python scripts\sync_frontend_snapshots.py`.
+
+Environment variables (names only): `RS_DATASET_VARIANT`, `RS_DATA_DIR`, `RS_SEED`, `RS_TRAIN_FRAC`, `RS_VAL_FRAC`, `RS_HUB_CAP`, `RS_ATTR_CAP`, `RS_COMMUNITY_CAP`, `RS_LOUVAIN_RESOLUTION`, `RS_NEG_SAMPLE_FRAC`, `RS_REVIEW_COST_INR`, `RS_FP_COST_INR`, `RS_LOSS_CAPTURE_RATE`, `RS_RING_TAU`, `RS_RING_MIN_SIZE`, `RS_GIT_COMMIT`, `RS_SNAPSHOT_DIR`, `RS_ANALYST_TOKEN`, `RS_AUDIT_DB_URL`, `RS_CORS_ORIGINS`, `RS_RATE_LIMIT_READ_PER_MIN`, `RS_RATE_LIMIT_WRITE_PER_MIN`; frontend: `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_API_TIMEOUT_MS`. See `.env.example` for reserved future names.
 
 Deployment steps: Planned (Stage 09).
 

@@ -1,0 +1,354 @@
+{
+  "cost_assumptions": {
+    "fp_cost_inr": 500.0,
+    "loss_capture_rate": 1.0,
+    "note": "DEMO values, not a measurement.",
+    "review_cost_inr": 250.0
+  },
+  "detector": "demo_detector",
+  "items": [
+    {
+      "amount_inr": 61769167.2,
+      "expected_value_inr": 45625733.73,
+      "n_members": 640,
+      "n_transfers": 1658,
+      "oversized": true,
+      "rank": 1,
+      "ring_id": "R-5fc06cd4c7a7",
+      "score": 0.74,
+      "top_features": [
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 2280082.37,
+      "expected_value_inr": 2119806.6,
+      "n_members": 12,
+      "n_transfers": 45,
+      "oversized": false,
+      "rank": 2,
+      "ring_id": "R-37a9c041c9ff",
+      "score": 0.93,
+      "top_features": [
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 1892857.06,
+      "expected_value_inr": 1588949.93,
+      "n_members": 10,
+      "n_transfers": 30,
+      "oversized": false,
+      "rank": 3,
+      "ring_id": "R-21c8e2a50d07",
+      "score": 0.84,
+      "top_features": [
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 1902825.05,
+      "expected_value_inr": 1463775.29,
+      "n_members": 10,
+      "n_transfers": 33,
+      "oversized": false,
+      "rank": 4,
+      "ring_id": "R-913710343136",
+      "score": 0.77,
+      "top_features": [
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 1211817.07,
+      "expected_value_inr": 1065609.02,
+      "n_members": 9,
+      "n_transfers": 18,
+      "oversized": false,
+      "rank": 5,
+      "ring_id": "R-9ad2f1590069",
+      "score": 0.88,
+      "top_features": [
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 1144924.37,
+      "expected_value_inr": 1041361.18,
+      "n_members": 6,
+      "n_transfers": 19,
+      "oversized": false,
+      "rank": 6,
+      "ring_id": "R-af691dffe255",
+      "score": 0.91,
+      "top_features": [
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 1150519.98,
+      "expected_value_inr": 803913.99,
+      "n_members": 8,
+      "n_transfers": 19,
+      "oversized": false,
+      "rank": 7,
+      "ring_id": "R-2cb4e8f99a12",
+      "score": 0.7,
+      "top_features": [
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 1395556.35,
+      "expected_value_inr": 723519.3,
+      "n_members": 8,
+      "n_transfers": 28,
+      "oversized": false,
+      "rank": 8,
+      "ring_id": "R-f4342be029f8",
+      "score": 0.52,
+      "top_features": [
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 772002.68,
+      "expected_value_inr": 616652.14,
+      "n_members": 7,
+      "n_transfers": 15,
+      "oversized": false,
+      "rank": 9,
+      "ring_id": "R-693cdc9fea19",
+      "score": 0.8,
+      "top_features": [
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 807202.83,
+      "expected_value_inr": 531483.87,
+      "n_members": 6,
+      "n_transfers": 18,
+      "oversized": false,
+      "rank": 10,
+      "ring_id": "R-ba93ce19dbf1",
+      "score": 0.66,
+      "top_features": [
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 634093.7,
+      "expected_value_inr": 296449.04,
+      "n_members": 5,
+      "n_transfers": 11,
+      "oversized": false,
+      "rank": 11,
+      "ring_id": "R-edea28935ff7",
+      "score": 0.47,
+      "top_features": [
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 419257.22,
+      "expected_value_inr": 241869.19,
+      "n_members": 5,
+      "n_transfers": 10,
+      "oversized": false,
+      "rank": 12,
+      "ring_id": "R-f2ee83fe438a",
+      "score": 0.58,
+      "top_features": [
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 438758.58,
+      "expected_value_inr": 178461.02,
+      "n_members": 4,
+      "n_transfers": 13,
+      "oversized": false,
+      "rank": 13,
+      "ring_id": "R-2af2891f1602",
+      "score": 0.41,
+      "top_features": [
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.2571
+        }
+      ]
+    },
+    {
+      "amount_inr": 287479.57,
+      "expected_value_inr": 93278.26,
+      "n_members": 4,
+      "n_transfers": 5,
+      "oversized": false,
+      "rank": 14,
+      "ring_id": "R-526b3f09f290",
+      "score": 0.33,
+      "top_features": [
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.2571
+        }
+      ]
+    }
+  ],
+  "note": "DEMO: every number in this bundle is invented for interface development.",
+  "schema_version": "1",
+  "score_calibrated": false,
+  "split": "test",
+  "threshold": 0.3,
+  "threshold_kind": "DEMO threshold",
+  "value_formula": "expected_value_inr = score * loss_capture_rate * amount_inr - review_cost_inr - fp_cost_inr * n_members * (1 - score). DEMO data; the score is not a calibrated probability."
+}

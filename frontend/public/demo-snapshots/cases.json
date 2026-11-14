@@ -1,0 +1,6075 @@
+{
+  "cases": {
+    "R-21c8e2a50d07": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 1892857.06,
+      "edges": [
+        {
+          "dst": "827D6E53B",
+          "first_ts": "2022-09-04T07:13:00",
+          "last_ts": "2022-09-06T08:11:00",
+          "n_transfers": 4,
+          "src": "8151ADB9F",
+          "total_inr": 338392.79
+        },
+        {
+          "dst": "80546505B",
+          "first_ts": "2022-09-04T04:52:00",
+          "last_ts": "2022-09-06T23:44:00",
+          "n_transfers": 3,
+          "src": "8151ADB9F",
+          "total_inr": 254020.59
+        },
+        {
+          "dst": "8DD22F067",
+          "first_ts": "2022-09-04T00:00:00",
+          "last_ts": "2022-09-06T03:00:00",
+          "n_transfers": 4,
+          "src": "8151ADB9F",
+          "total_inr": 241833.02
+        },
+        {
+          "dst": "83AAA6370",
+          "first_ts": "2022-09-04T11:05:00",
+          "last_ts": "2022-09-04T11:05:00",
+          "n_transfers": 4,
+          "src": "8151ADB9F",
+          "total_inr": 232304.06
+        },
+        {
+          "dst": "8D734B4EC",
+          "first_ts": "2022-09-04T18:18:00",
+          "last_ts": "2022-09-05T09:06:00",
+          "n_transfers": 3,
+          "src": "8151ADB9F",
+          "total_inr": 190030.86
+        },
+        {
+          "dst": "89E8EEFB2",
+          "first_ts": "2022-09-04T21:39:00",
+          "last_ts": "2022-09-04T21:39:00",
+          "n_transfers": 4,
+          "src": "8151ADB9F",
+          "total_inr": 170493.52
+        },
+        {
+          "dst": "8384771B7",
+          "first_ts": "2022-09-04T08:44:00",
+          "last_ts": "2022-09-05T19:28:00",
+          "n_transfers": 2,
+          "src": "8151ADB9F",
+          "total_inr": 150484.77
+        },
+        {
+          "dst": "8F4F1836F",
+          "first_ts": "2022-09-04T01:31:00",
+          "last_ts": "2022-09-05T14:17:00",
+          "n_transfers": 4,
+          "src": "8151ADB9F",
+          "total_inr": 135654.65
+        },
+        {
+          "dst": "88A0634BD",
+          "first_ts": "2022-09-04T14:26:00",
+          "last_ts": "2022-09-06T13:22:00",
+          "n_transfers": 2,
+          "src": "8151ADB9F",
+          "total_inr": 7564.89
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 1588949.93,
+      "members": [
+        "80546505B",
+        "8151ADB9F",
+        "827D6E53B",
+        "8384771B7",
+        "83AAA6370",
+        "88A0634BD",
+        "89E8EEFB2",
+        "8D734B4EC",
+        "8DD22F067",
+        "8F4F1836F"
+      ],
+      "members_truncated": false,
+      "n_members": 10,
+      "n_transfers": 30,
+      "oversized": false,
+      "rank": 3,
+      "ring_id": "R-21c8e2a50d07",
+      "score": 0.84,
+      "top_features": [
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-2af2891f1602": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 438758.58,
+      "edges": [
+        {
+          "dst": "85C0C7E36",
+          "first_ts": "2022-09-03T21:39:00",
+          "last_ts": "2022-09-03T21:39:00",
+          "n_transfers": 3,
+          "src": "8A09A3B26",
+          "total_inr": 186124.05
+        },
+        {
+          "dst": "80C6B890F",
+          "first_ts": "2022-09-03T07:13:00",
+          "last_ts": "2022-09-03T08:11:00",
+          "n_transfers": 3,
+          "src": "83728C7BF",
+          "total_inr": 109693.66
+        },
+        {
+          "dst": "8A09A3B26",
+          "first_ts": "2022-09-03T14:26:00",
+          "last_ts": "2022-09-05T13:22:00",
+          "n_transfers": 3,
+          "src": "80C6B890F",
+          "total_inr": 72872.94
+        },
+        {
+          "dst": "83728C7BF",
+          "first_ts": "2022-09-03T00:00:00",
+          "last_ts": "2022-09-04T03:00:00",
+          "n_transfers": 4,
+          "src": "85C0C7E36",
+          "total_inr": 30180.79
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 178461.02,
+      "members": [
+        "80C6B890F",
+        "83728C7BF",
+        "85C0C7E36",
+        "8A09A3B26"
+      ],
+      "members_truncated": false,
+      "n_members": 4,
+      "n_transfers": 13,
+      "oversized": false,
+      "rank": 13,
+      "ring_id": "R-2af2891f1602",
+      "score": 0.41,
+      "top_features": [
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-2cb4e8f99a12": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 1150519.98,
+      "edges": [
+        {
+          "dst": "875842522",
+          "first_ts": "2022-09-07T14:26:00",
+          "last_ts": "2022-09-07T14:26:00",
+          "n_transfers": 4,
+          "src": "84E2292ED",
+          "total_inr": 337100.21
+        },
+        {
+          "dst": "89D58AC82",
+          "first_ts": "2022-09-07T18:18:00",
+          "last_ts": "2022-09-07T18:18:00",
+          "n_transfers": 4,
+          "src": "807FBF7AC",
+          "total_inr": 269072.0
+        },
+        {
+          "dst": "8E4F06AB7",
+          "first_ts": "2022-09-07T21:39:00",
+          "last_ts": "2022-09-09T18:33:00",
+          "n_transfers": 3,
+          "src": "875842522",
+          "total_inr": 169173.1
+        },
+        {
+          "dst": "8506FB433",
+          "first_ts": "2022-09-07T00:00:00",
+          "last_ts": "2022-09-07T03:00:00",
+          "n_transfers": 1,
+          "src": "88DFEC43A",
+          "total_inr": 77305.12
+        },
+        {
+          "dst": "88DFEC43A",
+          "first_ts": "2022-09-07T01:31:00",
+          "last_ts": "2022-09-07T14:17:00",
+          "n_transfers": 2,
+          "src": "89D58AC82",
+          "total_inr": 65990.47
+        },
+        {
+          "dst": "89FED4077",
+          "first_ts": "2022-09-07T04:52:00",
+          "last_ts": "2022-09-07T23:44:00",
+          "n_transfers": 1,
+          "src": "8E4F06AB7",
+          "total_inr": 54323.5
+        },
+        {
+          "dst": "84E2292ED",
+          "first_ts": "2022-09-07T07:13:00",
+          "last_ts": "2022-09-08T08:11:00",
+          "n_transfers": 2,
+          "src": "8506FB433",
+          "total_inr": 41097.39
+        },
+        {
+          "dst": "807FBF7AC",
+          "first_ts": "2022-09-07T11:05:00",
+          "last_ts": "2022-09-09T04:55:00",
+          "n_transfers": 2,
+          "src": "89FED4077",
+          "total_inr": 31865.46
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 803913.99,
+      "members": [
+        "807FBF7AC",
+        "84E2292ED",
+        "8506FB433",
+        "875842522",
+        "88DFEC43A",
+        "89D58AC82",
+        "89FED4077",
+        "8E4F06AB7"
+      ],
+      "members_truncated": false,
+      "n_members": 8,
+      "n_transfers": 19,
+      "oversized": false,
+      "rank": 7,
+      "ring_id": "R-2cb4e8f99a12",
+      "score": 0.7,
+      "top_features": [
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-37a9c041c9ff": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 2280082.37,
+      "edges": [
+        {
+          "dst": "8A78BA041",
+          "first_ts": "2022-09-01T07:13:00",
+          "last_ts": "2022-09-02T08:11:00",
+          "n_transfers": 4,
+          "src": "8109031C0",
+          "total_inr": 351500.47
+        },
+        {
+          "dst": "82F796790",
+          "first_ts": "2022-09-01T13:07:00",
+          "last_ts": "2022-09-03T02:29:00",
+          "n_transfers": 4,
+          "src": "8ADD66C2A",
+          "total_inr": 280889.42
+        },
+        {
+          "dst": "82C3A93F1",
+          "first_ts": "2022-09-01T18:18:00",
+          "last_ts": "2022-09-01T18:18:00",
+          "n_transfers": 4,
+          "src": "8109031C0",
+          "total_inr": 264641.74
+        },
+        {
+          "dst": "82F796790",
+          "first_ts": "2022-09-01T16:28:00",
+          "last_ts": "2022-09-01T16:28:00",
+          "n_transfers": 2,
+          "src": "82C3A93F1",
+          "total_inr": 154118.72
+        },
+        {
+          "dst": "85318848B",
+          "first_ts": "2022-09-01T00:00:00",
+          "last_ts": "2022-09-02T03:00:00",
+          "n_transfers": 3,
+          "src": "8109031C0",
+          "total_inr": 117162.73
+        },
+        {
+          "dst": "82F796790",
+          "first_ts": "2022-09-01T23:41:00",
+          "last_ts": "2022-09-03T16:07:00",
+          "n_transfers": 4,
+          "src": "85DFEA6F3",
+          "total_inr": 114012.65
+        },
+        {
+          "dst": "8ADD66C2A",
+          "first_ts": "2022-09-01T15:57:00",
+          "last_ts": "2022-09-02T00:39:00",
+          "n_transfers": 3,
+          "src": "8109031C0",
+          "total_inr": 100268.73
+        },
+        {
+          "dst": "8A268C52C",
+          "first_ts": "2022-09-01T11:05:00",
+          "last_ts": "2022-09-02T04:55:00",
+          "n_transfers": 3,
+          "src": "8109031C0",
+          "total_inr": 99180.69
+        },
+        {
+          "dst": "82F796790",
+          "first_ts": "2022-09-01T09:15:00",
+          "last_ts": "2022-09-03T06:45:00",
+          "n_transfers": 3,
+          "src": "8A268C52C",
+          "total_inr": 95996.27
+        },
+        {
+          "dst": "865BAAAD1",
+          "first_ts": "2022-09-01T14:26:00",
+          "last_ts": "2022-09-02T13:22:00",
+          "n_transfers": 1,
+          "src": "8109031C0",
+          "total_inr": 87545.42
+        },
+        {
+          "dst": "8E1CD00DA",
+          "first_ts": "2022-09-01T21:39:00",
+          "last_ts": "2022-09-03T18:33:00",
+          "n_transfers": 1,
+          "src": "8109031C0",
+          "total_inr": 87177.67
+        },
+        {
+          "dst": "82F796790",
+          "first_ts": "2022-09-01T22:10:00",
+          "last_ts": "2022-09-03T05:50:00",
+          "n_transfers": 1,
+          "src": "85318848B",
+          "total_inr": 75142.48
+        },
+        {
+          "dst": "82F796790",
+          "first_ts": "2022-09-01T12:36:00",
+          "last_ts": "2022-09-01T15:12:00",
+          "n_transfers": 1,
+          "src": "865BAAAD1",
+          "total_inr": 61087.34
+        },
+        {
+          "dst": "82F796790",
+          "first_ts": "2022-09-01T19:49:00",
+          "last_ts": "2022-09-02T20:23:00",
+          "n_transfers": 1,
+          "src": "8E1CD00DA",
+          "total_inr": 59049.17
+        },
+        {
+          "dst": "8F93916B4",
+          "first_ts": "2022-09-01T08:44:00",
+          "last_ts": "2022-09-01T19:28:00",
+          "n_transfers": 1,
+          "src": "8109031C0",
+          "total_inr": 39816.91
+        },
+        {
+          "dst": "85DFEA6F3",
+          "first_ts": "2022-09-01T01:31:00",
+          "last_ts": "2022-09-01T14:17:00",
+          "n_transfers": 1,
+          "src": "8109031C0",
+          "total_inr": 25104.29
+        },
+        {
+          "dst": "82F796790",
+          "first_ts": "2022-09-01T02:02:00",
+          "last_ts": "2022-09-01T02:02:00",
+          "n_transfers": 1,
+          "src": "8F51A4164",
+          "total_inr": 17295.11
+        },
+        {
+          "dst": "8F51A4164",
+          "first_ts": "2022-09-01T04:52:00",
+          "last_ts": "2022-09-01T23:44:00",
+          "n_transfers": 1,
+          "src": "8109031C0",
+          "total_inr": 16545.47
+        },
+        {
+          "dst": "82F796790",
+          "first_ts": "2022-09-01T05:23:00",
+          "last_ts": "2022-09-01T10:01:00",
+          "n_transfers": 2,
+          "src": "8A78BA041",
+          "total_inr": 16368.99
+        },
+        {
+          "dst": "82F796790",
+          "first_ts": "2022-09-01T06:54:00",
+          "last_ts": "2022-09-03T21:18:00",
+          "n_transfers": 4,
+          "src": "8F93916B4",
+          "total_inr": 9897.88
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 2119806.6,
+      "members": [
+        "8109031C0",
+        "82C3A93F1",
+        "82F796790",
+        "85318848B",
+        "85DFEA6F3",
+        "865BAAAD1",
+        "8A268C52C",
+        "8A78BA041",
+        "8ADD66C2A",
+        "8E1CD00DA",
+        "8F51A4164",
+        "8F93916B4"
+      ],
+      "members_truncated": false,
+      "n_members": 12,
+      "n_transfers": 45,
+      "oversized": false,
+      "rank": 2,
+      "ring_id": "R-37a9c041c9ff",
+      "score": 0.93,
+      "top_features": [
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-526b3f09f290": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 287479.57,
+      "edges": [
+        {
+          "dst": "86AD058A9",
+          "first_ts": "2022-09-04T07:13:00",
+          "last_ts": "2022-09-04T08:11:00",
+          "n_transfers": 2,
+          "src": "8D1F5B538",
+          "total_inr": 140772.0
+        },
+        {
+          "dst": "860BC9393",
+          "first_ts": "2022-09-04T14:26:00",
+          "last_ts": "2022-09-06T13:22:00",
+          "n_transfers": 2,
+          "src": "86AD058A9",
+          "total_inr": 79769.4
+        },
+        {
+          "dst": "8D1F5B538",
+          "first_ts": "2022-09-04T00:00:00",
+          "last_ts": "2022-09-06T03:00:00",
+          "n_transfers": 1,
+          "src": "89314E44A",
+          "total_inr": 40803.66
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 93278.26,
+      "members": [
+        "860BC9393",
+        "86AD058A9",
+        "89314E44A",
+        "8D1F5B538"
+      ],
+      "members_truncated": false,
+      "n_members": 4,
+      "n_transfers": 5,
+      "oversized": false,
+      "rank": 14,
+      "ring_id": "R-526b3f09f290",
+      "score": 0.33,
+      "top_features": [
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-5fc06cd4c7a7": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 61769167.2,
+      "edges": [
+        {
+          "dst": "84A253CE7",
+          "first_ts": "2022-09-04T14:02:00",
+          "last_ts": "2022-09-06T13:34:00",
+          "n_transfers": 4,
+          "src": "82982A39A",
+          "total_inr": 345569.12
+        },
+        {
+          "dst": "8C98B1AEB",
+          "first_ts": "2022-09-04T19:13:00",
+          "last_ts": "2022-09-04T20:11:00",
+          "n_transfers": 4,
+          "src": "82010A243",
+          "total_inr": 340423.72
+        },
+        {
+          "dst": "8D646CD28",
+          "first_ts": "2022-09-04T21:03:00",
+          "last_ts": "2022-09-04T21:03:00",
+          "n_transfers": 4,
+          "src": "85DAA6B74",
+          "total_inr": 330445.37
+        },
+        {
+          "dst": "8CC0806ED",
+          "first_ts": "2022-09-04T23:29:00",
+          "last_ts": "2022-09-05T16:43:00",
+          "n_transfers": 4,
+          "src": "8BA5D42B0",
+          "total_inr": 330190.27
+        },
+        {
+          "dst": "80C5CE86C",
+          "first_ts": "2022-09-04T23:53:00",
+          "last_ts": "2022-09-05T16:31:00",
+          "n_transfers": 4,
+          "src": "896DB6565",
+          "total_inr": 329190.85
+        },
+        {
+          "dst": "8AE288510",
+          "first_ts": "2022-09-04T05:11:00",
+          "last_ts": "2022-09-04T10:37:00",
+          "n_transfers": 4,
+          "src": "8F163D6AB",
+          "total_inr": 327719.96
+        },
+        {
+          "dst": "868592365",
+          "first_ts": "2022-09-04T09:27:00",
+          "last_ts": "2022-09-04T09:27:00",
+          "n_transfers": 4,
+          "src": "89629834B",
+          "total_inr": 324388.53
+        },
+        {
+          "dst": "891AAE1EF",
+          "first_ts": "2022-09-04T03:09:00",
+          "last_ts": "2022-09-06T12:03:00",
+          "n_transfers": 4,
+          "src": "8AF4465C1",
+          "total_inr": 323773.86
+        },
+        {
+          "dst": "84603F4E1",
+          "first_ts": "2022-09-04T09:03:00",
+          "last_ts": "2022-09-06T06:21:00",
+          "n_transfers": 4,
+          "src": "8F2C2E879",
+          "total_inr": 320770.34
+        },
+        {
+          "dst": "86BBE6711",
+          "first_ts": "2022-09-04T04:16:00",
+          "last_ts": "2022-09-04T23:32:00",
+          "n_transfers": 4,
+          "src": "89C4BB31D",
+          "total_inr": 319743.57
+        },
+        {
+          "dst": "8B973DAE1",
+          "first_ts": "2022-09-04T17:59:00",
+          "last_ts": "2022-09-06T22:13:00",
+          "n_transfers": 4,
+          "src": "88A3F7E12",
+          "total_inr": 319377.75
+        },
+        {
+          "dst": "87B96223A",
+          "first_ts": "2022-09-04T18:18:00",
+          "last_ts": "2022-09-06T09:06:00",
+          "n_transfers": 4,
+          "src": "8454D69D6",
+          "total_inr": 318074.87
+        },
+        {
+          "dst": "8F507AC7B",
+          "first_ts": "2022-09-04T09:39:00",
+          "last_ts": "2022-09-05T06:33:00",
+          "n_transfers": 4,
+          "src": "862C25B00",
+          "total_inr": 316596.15
+        },
+        {
+          "dst": "8725BFCFB",
+          "first_ts": "2022-09-04T18:30:00",
+          "last_ts": "2022-09-04T18:30:00",
+          "n_transfers": 4,
+          "src": "8C96AC994",
+          "total_inr": 311898.25
+        },
+        {
+          "dst": "88884B617",
+          "first_ts": "2022-09-04T04:52:00",
+          "last_ts": "2022-09-04T23:44:00",
+          "n_transfers": 4,
+          "src": "87D244FFD",
+          "total_inr": 310571.19
+        },
+        {
+          "dst": "8208466F5",
+          "first_ts": "2022-09-04T00:12:00",
+          "last_ts": "2022-09-05T03:24:00",
+          "n_transfers": 4,
+          "src": "8C6998837",
+          "total_inr": 310114.57
+        },
+        {
+          "dst": "81AE69EC4",
+          "first_ts": "2022-09-04T20:32:00",
+          "last_ts": "2022-09-06T07:04:00",
+          "n_transfers": 4,
+          "src": "8CE93A02F",
+          "total_inr": 309748.85
+        },
+        {
+          "dst": "8C630626A",
+          "first_ts": "2022-09-04T06:18:00",
+          "last_ts": "2022-09-05T21:06:00",
+          "n_transfers": 4,
+          "src": "824F2D379",
+          "total_inr": 302209.3
+        },
+        {
+          "dst": "865A1FB78",
+          "first_ts": "2022-09-04T21:39:00",
+          "last_ts": "2022-09-04T21:39:00",
+          "n_transfers": 4,
+          "src": "87D1BE65F",
+          "total_inr": 297670.38
+        },
+        {
+          "dst": "81541EE58",
+          "first_ts": "2022-09-04T02:38:00",
+          "last_ts": "2022-09-06T01:46:00",
+          "n_transfers": 4,
+          "src": "86E9D24A3",
+          "total_inr": 296074.17
+        },
+        {
+          "dst": "83F36D67D",
+          "first_ts": "2022-09-04T11:53:00",
+          "last_ts": "2022-09-05T04:31:00",
+          "n_transfers": 4,
+          "src": "873360998",
+          "total_inr": 295345.32
+        },
+        {
+          "dst": "84D21B308",
+          "first_ts": "2022-09-04T03:21:00",
+          "last_ts": "2022-09-04T12:27:00",
+          "n_transfers": 4,
+          "src": "8798A1246",
+          "total_inr": 291946.73
+        },
+        {
+          "dst": "86EF3D4D6",
+          "first_ts": "2022-09-04T08:56:00",
+          "last_ts": "2022-09-05T19:52:00",
+          "n_transfers": 4,
+          "src": "8C9BE9214",
+          "total_inr": 282953.99
+        },
+        {
+          "dst": "848FC904E",
+          "first_ts": "2022-09-04T01:07:00",
+          "last_ts": "2022-09-05T14:29:00",
+          "n_transfers": 4,
+          "src": "82A8B7EC7",
+          "total_inr": 282073.44
+        },
+        {
+          "dst": "8C4329CD9",
+          "first_ts": "2022-09-04T02:02:00",
+          "last_ts": "2022-09-05T01:34:00",
+          "n_transfers": 4,
+          "src": "885A0C0EA",
+          "total_inr": 280620.81
+        },
+        {
+          "dst": "8EC817611",
+          "first_ts": "2022-09-04T23:29:00",
+          "last_ts": "2022-09-05T16:43:00",
+          "n_transfers": 4,
+          "src": "877DAA2C6",
+          "total_inr": 277430.06
+        },
+        {
+          "dst": "87B96223A",
+          "first_ts": "2022-09-04T22:46:00",
+          "last_ts": "2022-09-04T22:46:00",
+          "n_transfers": 3,
+          "src": "82C37B404",
+          "total_inr": 268695.43
+        },
+        {
+          "dst": "80F3D95D1",
+          "first_ts": "2022-09-04T03:57:00",
+          "last_ts": "2022-09-05T12:39:00",
+          "n_transfers": 4,
+          "src": "86580E5AA",
+          "total_inr": 266909.11
+        },
+        {
+          "dst": "867DC89CD",
+          "first_ts": "2022-09-04T21:51:00",
+          "last_ts": "2022-09-05T18:57:00",
+          "n_transfers": 3,
+          "src": "8C7D05953",
+          "total_inr": 266843.01
+        },
+        {
+          "dst": "86D277815",
+          "first_ts": "2022-09-04T13:31:00",
+          "last_ts": "2022-09-05T02:17:00",
+          "n_transfers": 4,
+          "src": "8A6008658",
+          "total_inr": 265520.77
+        },
+        {
+          "dst": "8640D2F6B",
+          "first_ts": "2022-09-04T04:04:00",
+          "last_ts": "2022-09-04T23:08:00",
+          "n_transfers": 4,
+          "src": "81136FE20",
+          "total_inr": 264479.54
+        },
+        {
+          "dst": "8CC0806ED",
+          "first_ts": "2022-09-04T10:10:00",
+          "last_ts": "2022-09-06T17:50:00",
+          "n_transfers": 4,
+          "src": "8A6627A4A",
+          "total_inr": 263750.39
+        },
+        {
+          "dst": "8208466F5",
+          "first_ts": "2022-09-04T08:56:00",
+          "last_ts": "2022-09-04T19:52:00",
+          "n_transfers": 4,
+          "src": "852DFC617",
+          "total_inr": 263264.33
+        },
+        {
+          "dst": "86A2F670F",
+          "first_ts": "2022-09-04T21:15:00",
+          "last_ts": "2022-09-04T21:15:00",
+          "n_transfers": 3,
+          "src": "8298BB6C9",
+          "total_inr": 260037.27
+        },
+        {
+          "dst": "8C630626A",
+          "first_ts": "2022-09-04T19:25:00",
+          "last_ts": "2022-09-05T20:35:00",
+          "n_transfers": 4,
+          "src": "82F26F0BA",
+          "total_inr": 256689.02
+        },
+        {
+          "dst": "86A2F670F",
+          "first_ts": "2022-09-04T09:27:00",
+          "last_ts": "2022-09-04T09:27:00",
+          "n_transfers": 3,
+          "src": "855BB8E99",
+          "total_inr": 253955.94
+        },
+        {
+          "dst": "81AE69EC4",
+          "first_ts": "2022-09-04T09:51:00",
+          "last_ts": "2022-09-05T06:57:00",
+          "n_transfers": 3,
+          "src": "8ADB8FA38",
+          "total_inr": 253596.85
+        },
+        {
+          "dst": "86EF3D4D6",
+          "first_ts": "2022-09-04T16:52:00",
+          "last_ts": "2022-09-05T11:44:00",
+          "n_transfers": 4,
+          "src": "823EB9E7A",
+          "total_inr": 252895.3
+        },
+        {
+          "dst": "8C9EFD704",
+          "first_ts": "2022-09-04T19:49:00",
+          "last_ts": "2022-09-04T20:23:00",
+          "n_transfers": 4,
+          "src": "8C40871D3",
+          "total_inr": 251239.68
+        },
+        {
+          "dst": "89BAD7BD0",
+          "first_ts": "2022-09-04T14:14:00",
+          "last_ts": "2022-09-06T13:58:00",
+          "n_transfers": 3,
+          "src": "834794937",
+          "total_inr": 250297.92
+        },
+        {
+          "dst": "89DC89D0E",
+          "first_ts": "2022-09-04T02:38:00",
+          "last_ts": "2022-09-05T01:46:00",
+          "n_transfers": 4,
+          "src": "8E772D193",
+          "total_inr": 249587.79
+        },
+        {
+          "dst": "83F36D67D",
+          "first_ts": "2022-09-04T09:15:00",
+          "last_ts": "2022-09-05T06:45:00",
+          "n_transfers": 3,
+          "src": "8C4329CD9",
+          "total_inr": 248952.76
+        },
+        {
+          "dst": "8C9BE9214",
+          "first_ts": "2022-09-04T15:21:00",
+          "last_ts": "2022-09-06T00:27:00",
+          "n_transfers": 4,
+          "src": "89EAB3675",
+          "total_inr": 248142.77
+        },
+        {
+          "dst": "8BE7F892D",
+          "first_ts": "2022-09-04T22:58:00",
+          "last_ts": "2022-09-05T05:26:00",
+          "n_transfers": 3,
+          "src": "83A138DE9",
+          "total_inr": 247852.02
+        },
+        {
+          "dst": "877673431",
+          "first_ts": "2022-09-04T03:45:00",
+          "last_ts": "2022-09-05T12:15:00",
+          "n_transfers": 4,
+          "src": "8199E6BD7",
+          "total_inr": 241527.67
+        },
+        {
+          "dst": "8CDB2743A",
+          "first_ts": "2022-09-04T07:01:00",
+          "last_ts": "2022-09-04T08:47:00",
+          "n_transfers": 4,
+          "src": "8EBB293F4",
+          "total_inr": 241124.94
+        },
+        {
+          "dst": "84D21B308",
+          "first_ts": "2022-09-04T01:07:00",
+          "last_ts": "2022-09-05T14:29:00",
+          "n_transfers": 3,
+          "src": "8E289CFBA",
+          "total_inr": 240945.67
+        },
+        {
+          "dst": "8B3E397AD",
+          "first_ts": "2022-09-04T19:49:00",
+          "last_ts": "2022-09-05T20:23:00",
+          "n_transfers": 3,
+          "src": "8FE93F23E",
+          "total_inr": 240576.93
+        },
+        {
+          "dst": "86EF3D4D6",
+          "first_ts": "2022-09-04T03:09:00",
+          "last_ts": "2022-09-06T12:03:00",
+          "n_transfers": 3,
+          "src": "86FE69B5A",
+          "total_inr": 240361.99
+        },
+        {
+          "dst": "873360998",
+          "first_ts": "2022-09-04T12:24:00",
+          "last_ts": "2022-09-04T15:48:00",
+          "n_transfers": 4,
+          "src": "8F1B72F9F",
+          "total_inr": 239734.79
+        },
+        {
+          "dst": "812E52056",
+          "first_ts": "2022-09-04T16:16:00",
+          "last_ts": "2022-09-05T11:32:00",
+          "n_transfers": 3,
+          "src": "8BA42DE5B",
+          "total_inr": 238862.78
+        },
+        {
+          "dst": "846077F2E",
+          "first_ts": "2022-09-04T23:17:00",
+          "last_ts": "2022-09-04T23:17:00",
+          "n_transfers": 4,
+          "src": "86F0A6733",
+          "total_inr": 238359.05
+        },
+        {
+          "dst": "8C649CF98",
+          "first_ts": "2022-09-04T08:08:00",
+          "last_ts": "2022-09-04T19:16:00",
+          "n_transfers": 3,
+          "src": "85F7745ED",
+          "total_inr": 237147.13
+        },
+        {
+          "dst": "8725BFCFB",
+          "first_ts": "2022-09-04T02:14:00",
+          "last_ts": "2022-09-05T01:58:00",
+          "n_transfers": 3,
+          "src": "8CB1BAB5C",
+          "total_inr": 235335.91
+        },
+        {
+          "dst": "8B3E397AD",
+          "first_ts": "2022-09-04T12:36:00",
+          "last_ts": "2022-09-04T15:12:00",
+          "n_transfers": 4,
+          "src": "808490096",
+          "total_inr": 235245.41
+        },
+        {
+          "dst": "86F95600D",
+          "first_ts": "2022-09-04T23:41:00",
+          "last_ts": "2022-09-04T23:41:00",
+          "n_transfers": 4,
+          "src": "808CB5A89",
+          "total_inr": 232496.57
+        },
+        {
+          "dst": "80C5CE86C",
+          "first_ts": "2022-09-04T08:56:00",
+          "last_ts": "2022-09-04T19:52:00",
+          "n_transfers": 4,
+          "src": "812EE6A26",
+          "total_inr": 231981.01
+        },
+        {
+          "dst": "8F40C719A",
+          "first_ts": "2022-09-04T17:23:00",
+          "last_ts": "2022-09-05T22:01:00",
+          "n_transfers": 3,
+          "src": "828D1E879",
+          "total_inr": 231551.72
+        },
+        {
+          "dst": "8C9BE9214",
+          "first_ts": "2022-09-04T20:56:00",
+          "last_ts": "2022-09-06T07:52:00",
+          "n_transfers": 4,
+          "src": "8326E937D",
+          "total_inr": 230155.14
+        },
+        {
+          "dst": "84A8DF29B",
+          "first_ts": "2022-09-04T21:39:00",
+          "last_ts": "2022-09-05T18:33:00",
+          "n_transfers": 3,
+          "src": "8439B5E23",
+          "total_inr": 229865.93
+        },
+        {
+          "dst": "86A2F670F",
+          "first_ts": "2022-09-04T07:13:00",
+          "last_ts": "2022-09-06T08:11:00",
+          "n_transfers": 3,
+          "src": "87BE67392",
+          "total_inr": 229679.06
+        },
+        {
+          "dst": "882EC230B",
+          "first_ts": "2022-09-04T15:57:00",
+          "last_ts": "2022-09-05T00:39:00",
+          "n_transfers": 3,
+          "src": "8468BE221",
+          "total_inr": 228934.51
+        },
+        {
+          "dst": "8F2C2E879",
+          "first_ts": "2022-09-04T02:02:00",
+          "last_ts": "2022-09-06T01:34:00",
+          "n_transfers": 3,
+          "src": "8C424ADBD",
+          "total_inr": 228866.28
+        },
+        {
+          "dst": "87B96223A",
+          "first_ts": "2022-09-04T12:36:00",
+          "last_ts": "2022-09-05T15:12:00",
+          "n_transfers": 4,
+          "src": "8C2CB18AE",
+          "total_inr": 227569.53
+        },
+        {
+          "dst": "8EC4AF591",
+          "first_ts": "2022-09-04T16:40:00",
+          "last_ts": "2022-09-04T16:40:00",
+          "n_transfers": 3,
+          "src": "89671A1FA",
+          "total_inr": 227471.77
+        },
+        {
+          "dst": "8C4C7BB47",
+          "first_ts": "2022-09-04T09:15:00",
+          "last_ts": "2022-09-05T06:45:00",
+          "n_transfers": 4,
+          "src": "8089DE0C4",
+          "total_inr": 226505.99
+        },
+        {
+          "dst": "8F9814016",
+          "first_ts": "2022-09-04T14:26:00",
+          "last_ts": "2022-09-04T14:26:00",
+          "n_transfers": 3,
+          "src": "8F6923684",
+          "total_inr": 224258.76
+        },
+        {
+          "dst": "8F29FCB77",
+          "first_ts": "2022-09-04T06:42:00",
+          "last_ts": "2022-09-04T21:54:00",
+          "n_transfers": 3,
+          "src": "878572B18",
+          "total_inr": 222900.49
+        },
+        {
+          "dst": "86D277815",
+          "first_ts": "2022-09-04T05:47:00",
+          "last_ts": "2022-09-04T10:49:00",
+          "n_transfers": 4,
+          "src": "81E0A3EA2",
+          "total_inr": 221596.29
+        },
+        {
+          "dst": "87611AE18",
+          "first_ts": "2022-09-04T03:57:00",
+          "last_ts": "2022-09-06T12:39:00",
+          "n_transfers": 3,
+          "src": "8A64F73B3",
+          "total_inr": 218651.64
+        },
+        {
+          "dst": "8D9854E28",
+          "first_ts": "2022-09-04T23:05:00",
+          "last_ts": "2022-09-05T16:55:00",
+          "n_transfers": 4,
+          "src": "824542AA9",
+          "total_inr": 217841.05
+        },
+        {
+          "dst": "88718BAA1",
+          "first_ts": "2022-09-04T01:19:00",
+          "last_ts": "2022-09-04T14:53:00",
+          "n_transfers": 4,
+          "src": "8381DFF95",
+          "total_inr": 217070.67
+        },
+        {
+          "dst": "8C393D55A",
+          "first_ts": "2022-09-04T12:48:00",
+          "last_ts": "2022-09-05T15:36:00",
+          "n_transfers": 3,
+          "src": "81541EE58",
+          "total_inr": 216528.72
+        },
+        {
+          "dst": "8F29FCB77",
+          "first_ts": "2022-09-04T22:34:00",
+          "last_ts": "2022-09-05T05:38:00",
+          "n_transfers": 4,
+          "src": "86192858A",
+          "total_inr": 216456.3
+        },
+        {
+          "dst": "86192858A",
+          "first_ts": "2022-09-04T01:31:00",
+          "last_ts": "2022-09-06T14:17:00",
+          "n_transfers": 3,
+          "src": "8BF7C5A26",
+          "total_inr": 216329.1
+        },
+        {
+          "dst": "885A0C0EA",
+          "first_ts": "2022-09-04T23:41:00",
+          "last_ts": "2022-09-06T16:07:00",
+          "n_transfers": 4,
+          "src": "8C4C7BB47",
+          "total_inr": 214198.88
+        },
+        {
+          "dst": "833D4A00D",
+          "first_ts": "2022-09-04T21:03:00",
+          "last_ts": "2022-09-05T18:21:00",
+          "n_transfers": 4,
+          "src": "8D0E447B1",
+          "total_inr": 210186.62
+        },
+        {
+          "dst": "867DC89CD",
+          "first_ts": "2022-09-04T08:56:00",
+          "last_ts": "2022-09-04T19:52:00",
+          "n_transfers": 3,
+          "src": "891A52E86",
+          "total_inr": 209354.34
+        },
+        {
+          "dst": "8E7DFA06E",
+          "first_ts": "2022-09-04T14:50:00",
+          "last_ts": "2022-09-04T14:50:00",
+          "n_transfers": 3,
+          "src": "89BAD7BD0",
+          "total_inr": 208064.93
+        },
+        {
+          "dst": "8DEE8BAE8",
+          "first_ts": "2022-09-04T20:56:00",
+          "last_ts": "2022-09-06T07:52:00",
+          "n_transfers": 4,
+          "src": "8AEFE4B36",
+          "total_inr": 207866.98
+        },
+        {
+          "dst": "87B96223A",
+          "first_ts": "2022-09-04T02:50:00",
+          "last_ts": "2022-09-06T01:10:00",
+          "n_transfers": 3,
+          "src": "83BFA7CA9",
+          "total_inr": 207572.12
+        },
+        {
+          "dst": "8CF331C84",
+          "first_ts": "2022-09-04T07:25:00",
+          "last_ts": "2022-09-05T08:35:00",
+          "n_transfers": 3,
+          "src": "8C6D1BB0F",
+          "total_inr": 207446.01
+        },
+        {
+          "dst": "884A1D4F6",
+          "first_ts": "2022-09-04T04:16:00",
+          "last_ts": "2022-09-06T23:32:00",
+          "n_transfers": 3,
+          "src": "81CA41074",
+          "total_inr": 204244.14
+        },
+        {
+          "dst": "8473BCFBB",
+          "first_ts": "2022-09-04T05:11:00",
+          "last_ts": "2022-09-06T10:37:00",
+          "n_transfers": 4,
+          "src": "87546778E",
+          "total_inr": 203794.91
+        },
+        {
+          "dst": "8D9EFBAC3",
+          "first_ts": "2022-09-04T17:11:00",
+          "last_ts": "2022-09-06T22:37:00",
+          "n_transfers": 4,
+          "src": "85AA68D91",
+          "total_inr": 203362.24
+        },
+        {
+          "dst": "83DE6FB44",
+          "first_ts": "2022-09-04T11:53:00",
+          "last_ts": "2022-09-04T11:53:00",
+          "n_transfers": 3,
+          "src": "834C0AD01",
+          "total_inr": 201063.56
+        },
+        {
+          "dst": "848FC904E",
+          "first_ts": "2022-09-04T23:53:00",
+          "last_ts": "2022-09-04T23:53:00",
+          "n_transfers": 3,
+          "src": "857C56CC3",
+          "total_inr": 198101.5
+        },
+        {
+          "dst": "845851112",
+          "first_ts": "2022-09-04T07:25:00",
+          "last_ts": "2022-09-04T08:35:00",
+          "n_transfers": 3,
+          "src": "80F9ED90D",
+          "total_inr": 197959.21
+        },
+        {
+          "dst": "89BAD7BD0",
+          "first_ts": "2022-09-04T06:42:00",
+          "last_ts": "2022-09-06T21:54:00",
+          "n_transfers": 3,
+          "src": "83EFAC118",
+          "total_inr": 197732.63
+        },
+        {
+          "dst": "877673431",
+          "first_ts": "2022-09-04T01:43:00",
+          "last_ts": "2022-09-04T14:41:00",
+          "n_transfers": 4,
+          "src": "8C98B1AEB",
+          "total_inr": 194836.44
+        },
+        {
+          "dst": "8AD1E538C",
+          "first_ts": "2022-09-04T08:20:00",
+          "last_ts": "2022-09-06T19:40:00",
+          "n_transfers": 3,
+          "src": "86991E8D5",
+          "total_inr": 193832.75
+        },
+        {
+          "dst": "8725BFCFB",
+          "first_ts": "2022-09-04T10:22:00",
+          "last_ts": "2022-09-05T17:14:00",
+          "n_transfers": 3,
+          "src": "8EB3290B0",
+          "total_inr": 192846.01
+        },
+        {
+          "dst": "8C630626A",
+          "first_ts": "2022-09-04T08:08:00",
+          "last_ts": "2022-09-05T19:16:00",
+          "n_transfers": 4,
+          "src": "8D37C1F7F",
+          "total_inr": 192593.56
+        },
+        {
+          "dst": "8DEE8BAE8",
+          "first_ts": "2022-09-04T01:55:00",
+          "last_ts": "2022-09-05T14:05:00",
+          "n_transfers": 4,
+          "src": "85F645DDD",
+          "total_inr": 192312.41
+        },
+        {
+          "dst": "897CAA258",
+          "first_ts": "2022-09-04T15:21:00",
+          "last_ts": "2022-09-04T15:21:00",
+          "n_transfers": 4,
+          "src": "85FD80C78",
+          "total_inr": 190520.56
+        },
+        {
+          "dst": "81541EE58",
+          "first_ts": "2022-09-04T17:47:00",
+          "last_ts": "2022-09-05T22:49:00",
+          "n_transfers": 4,
+          "src": "8BD8F6E9C",
+          "total_inr": 190426.18
+        },
+        {
+          "dst": "8A64F73B3",
+          "first_ts": "2022-09-04T02:02:00",
+          "last_ts": "2022-09-04T02:02:00",
+          "n_transfers": 4,
+          "src": "848854C7E",
+          "total_inr": 189928.47
+        },
+        {
+          "dst": "871A0E1A0",
+          "first_ts": "2022-09-04T03:45:00",
+          "last_ts": "2022-09-05T12:15:00",
+          "n_transfers": 4,
+          "src": "8CF0D9292",
+          "total_inr": 189531.7
+        },
+        {
+          "dst": "86F95600D",
+          "first_ts": "2022-09-04T22:46:00",
+          "last_ts": "2022-09-04T22:46:00",
+          "n_transfers": 3,
+          "src": "8E4CCD3C9",
+          "total_inr": 188754.95
+        },
+        {
+          "dst": "83EFAC118",
+          "first_ts": "2022-09-04T10:58:00",
+          "last_ts": "2022-09-05T17:26:00",
+          "n_transfers": 4,
+          "src": "819AA43E5",
+          "total_inr": 188731.76
+        },
+        {
+          "dst": "85E1BA470",
+          "first_ts": "2022-09-04T01:31:00",
+          "last_ts": "2022-09-06T14:17:00",
+          "n_transfers": 3,
+          "src": "8F94A2EDA",
+          "total_inr": 185312.97
+        },
+        {
+          "dst": "8EA3D57B1",
+          "first_ts": "2022-09-04T23:17:00",
+          "last_ts": "2022-09-05T16:19:00",
+          "n_transfers": 4,
+          "src": "8E81D254C",
+          "total_inr": 184658.8
+        },
+        {
+          "dst": "87F95FC69",
+          "first_ts": "2022-09-04T17:59:00",
+          "last_ts": "2022-09-06T22:13:00",
+          "n_transfers": 4,
+          "src": "80F3D95D1",
+          "total_inr": 184359.22
+        },
+        {
+          "dst": "801307735",
+          "first_ts": "2022-09-04T19:37:00",
+          "last_ts": "2022-09-05T20:59:00",
+          "n_transfers": 3,
+          "src": "8F29FCB77",
+          "total_inr": 184127.09
+        },
+        {
+          "dst": "8AF4465C1",
+          "first_ts": "2022-09-04T22:46:00",
+          "last_ts": "2022-09-04T22:46:00",
+          "n_transfers": 3,
+          "src": "86A2F670F",
+          "total_inr": 182900.46
+        },
+        {
+          "dst": "89C625ECC",
+          "first_ts": "2022-09-04T20:20:00",
+          "last_ts": "2022-09-05T07:40:00",
+          "n_transfers": 3,
+          "src": "888FB08C8",
+          "total_inr": 182145.29
+        },
+        {
+          "dst": "868592365",
+          "first_ts": "2022-09-04T00:24:00",
+          "last_ts": "2022-09-06T03:48:00",
+          "n_transfers": 3,
+          "src": "81AB58582",
+          "total_inr": 181055.92
+        },
+        {
+          "dst": "863B19137",
+          "first_ts": "2022-09-04T00:48:00",
+          "last_ts": "2022-09-05T03:36:00",
+          "n_transfers": 4,
+          "src": "8EBA5643A",
+          "total_inr": 178263.84
+        },
+        {
+          "dst": "846077F2E",
+          "first_ts": "2022-09-04T02:02:00",
+          "last_ts": "2022-09-05T01:34:00",
+          "n_transfers": 2,
+          "src": "8FF08DE8B",
+          "total_inr": 178066.43
+        },
+        {
+          "dst": "8AD520658",
+          "first_ts": "2022-09-04T01:19:00",
+          "last_ts": "2022-09-06T14:53:00",
+          "n_transfers": 4,
+          "src": "8EE73B2FC",
+          "total_inr": 177754.97
+        },
+        {
+          "dst": "8439B5E23",
+          "first_ts": "2022-09-04T15:21:00",
+          "last_ts": "2022-09-06T00:27:00",
+          "n_transfers": 4,
+          "src": "8D37F8F08",
+          "total_inr": 177564.87
+        },
+        {
+          "dst": "8C630626A",
+          "first_ts": "2022-09-04T17:11:00",
+          "last_ts": "2022-09-06T22:37:00",
+          "n_transfers": 2,
+          "src": "81A1457D5",
+          "total_inr": 177037.76
+        },
+        {
+          "dst": "83F36D67D",
+          "first_ts": "2022-09-04T19:49:00",
+          "last_ts": "2022-09-05T20:23:00",
+          "n_transfers": 2,
+          "src": "84849EF40",
+          "total_inr": 176344.52
+        },
+        {
+          "dst": "8208466F5",
+          "first_ts": "2022-09-04T02:02:00",
+          "last_ts": "2022-09-04T02:02:00",
+          "n_transfers": 2,
+          "src": "8086E7B97",
+          "total_inr": 175753.7
+        },
+        {
+          "dst": "86BBE6711",
+          "first_ts": "2022-09-04T04:28:00",
+          "last_ts": "2022-09-05T23:56:00",
+          "n_transfers": 2,
+          "src": "82A174256",
+          "total_inr": 175368.25
+        },
+        {
+          "dst": "8B80512E4",
+          "first_ts": "2022-09-04T00:00:00",
+          "last_ts": "2022-09-04T03:00:00",
+          "n_transfers": 2,
+          "src": "800B9946F",
+          "total_inr": 174349.64
+        },
+        {
+          "dst": "8E772D193",
+          "first_ts": "2022-09-04T14:14:00",
+          "last_ts": "2022-09-05T13:58:00",
+          "n_transfers": 3,
+          "src": "8B2DBBD1B",
+          "total_inr": 172687.88
+        },
+        {
+          "dst": "877673431",
+          "first_ts": "2022-09-04T08:32:00",
+          "last_ts": "2022-09-05T19:04:00",
+          "n_transfers": 3,
+          "src": "87409AFD1",
+          "total_inr": 172118.5
+        },
+        {
+          "dst": "8E7DFA06E",
+          "first_ts": "2022-09-04T02:14:00",
+          "last_ts": "2022-09-05T01:58:00",
+          "n_transfers": 3,
+          "src": "8956B98F0",
+          "total_inr": 171198.74
+        },
+        {
+          "dst": "82B09213E",
+          "first_ts": "2022-09-04T16:04:00",
+          "last_ts": "2022-09-04T16:04:00",
+          "n_transfers": 3,
+          "src": "86EFD8B9E",
+          "total_inr": 170522.31
+        },
+        {
+          "dst": "8F2C2E879",
+          "first_ts": "2022-09-04T14:02:00",
+          "last_ts": "2022-09-04T14:02:00",
+          "n_transfers": 3,
+          "src": "8E0CF83CA",
+          "total_inr": 170304.1
+        },
+        {
+          "dst": "8086E7B97",
+          "first_ts": "2022-09-04T03:45:00",
+          "last_ts": "2022-09-04T12:15:00",
+          "n_transfers": 3,
+          "src": "85940E129",
+          "total_inr": 169438.77
+        },
+        {
+          "dst": "83052BCDE",
+          "first_ts": "2022-09-04T08:20:00",
+          "last_ts": "2022-09-04T19:40:00",
+          "n_transfers": 4,
+          "src": "8E4425254",
+          "total_inr": 168867.16
+        },
+        {
+          "dst": "863B19137",
+          "first_ts": "2022-09-04T19:49:00",
+          "last_ts": "2022-09-04T20:23:00",
+          "n_transfers": 2,
+          "src": "80868C875",
+          "total_inr": 167544.39
+        },
+        {
+          "dst": "86DAC9A3A",
+          "first_ts": "2022-09-04T23:05:00",
+          "last_ts": "2022-09-05T16:55:00",
+          "n_transfers": 2,
+          "src": "863B19137",
+          "total_inr": 165336.52
+        },
+        {
+          "dst": "8AF4465C1",
+          "first_ts": "2022-09-04T19:01:00",
+          "last_ts": "2022-09-04T20:47:00",
+          "n_transfers": 3,
+          "src": "8548AFA8A",
+          "total_inr": 164836.99
+        },
+        {
+          "dst": "86A2F670F",
+          "first_ts": "2022-09-04T07:37:00",
+          "last_ts": "2022-09-05T08:59:00",
+          "n_transfers": 3,
+          "src": "8D09EB805",
+          "total_inr": 164324.35
+        },
+        {
+          "dst": "825753D99",
+          "first_ts": "2022-09-04T17:47:00",
+          "last_ts": "2022-09-06T22:49:00",
+          "n_transfers": 4,
+          "src": "8F5E8F56A",
+          "total_inr": 163640.07
+        },
+        {
+          "dst": "87F95FC69",
+          "first_ts": "2022-09-04T19:25:00",
+          "last_ts": "2022-09-06T20:35:00",
+          "n_transfers": 2,
+          "src": "8E68B2519",
+          "total_inr": 163280.76
+        },
+        {
+          "dst": "8C4578BC5",
+          "first_ts": "2022-09-04T11:29:00",
+          "last_ts": "2022-09-04T11:29:00",
+          "n_transfers": 4,
+          "src": "85E64E6EE",
+          "total_inr": 160758.33
+        },
+        {
+          "dst": "84BC7F1BB",
+          "first_ts": "2022-09-04T10:22:00",
+          "last_ts": "2022-09-04T17:14:00",
+          "n_transfers": 2,
+          "src": "833466335",
+          "total_inr": 159737.97
+        },
+        {
+          "dst": "82B09213E",
+          "first_ts": "2022-09-04T05:23:00",
+          "last_ts": "2022-09-06T10:01:00",
+          "n_transfers": 3,
+          "src": "8FCA53241",
+          "total_inr": 159418.14
+        },
+        {
+          "dst": "891AAE1EF",
+          "first_ts": "2022-09-04T12:48:00",
+          "last_ts": "2022-09-05T15:36:00",
+          "n_transfers": 2,
+          "src": "85474DA43",
+          "total_inr": 158429.97
+        },
+        {
+          "dst": "8C393D55A",
+          "first_ts": "2022-09-04T15:45:00",
+          "last_ts": "2022-09-04T15:45:00",
+          "n_transfers": 3,
+          "src": "8EF1BFE3A",
+          "total_inr": 156606.36
+        },
+        {
+          "dst": "8E772D193",
+          "first_ts": "2022-09-04T01:19:00",
+          "last_ts": "2022-09-05T14:53:00",
+          "n_transfers": 4,
+          "src": "873A0F935",
+          "total_inr": 156242.14
+        },
+        {
+          "dst": "8EA3D57B1",
+          "first_ts": "2022-09-04T14:38:00",
+          "last_ts": "2022-09-04T14:38:00",
+          "n_transfers": 2,
+          "src": "88C27FDF7",
+          "total_inr": 154852.77
+        },
+        {
+          "dst": "84D21B308",
+          "first_ts": "2022-09-04T22:22:00",
+          "last_ts": "2022-09-04T22:22:00",
+          "n_transfers": 3,
+          "src": "814593721",
+          "total_inr": 154663.87
+        },
+        {
+          "dst": "83052BCDE",
+          "first_ts": "2022-09-04T13:55:00",
+          "last_ts": "2022-09-05T02:05:00",
+          "n_transfers": 4,
+          "src": "8F3B5396B",
+          "total_inr": 154653.88
+        },
+        {
+          "dst": "889CD3531",
+          "first_ts": "2022-09-04T12:48:00",
+          "last_ts": "2022-09-06T15:36:00",
+          "n_transfers": 2,
+          "src": "8CAF24540",
+          "total_inr": 153827.84
+        },
+        {
+          "dst": "85E1BA470",
+          "first_ts": "2022-09-04T03:45:00",
+          "last_ts": "2022-09-06T12:15:00",
+          "n_transfers": 2,
+          "src": "89946A936",
+          "total_inr": 152863.46
+        },
+        {
+          "dst": "884A1D4F6",
+          "first_ts": "2022-09-04T09:51:00",
+          "last_ts": "2022-09-05T06:57:00",
+          "n_transfers": 4,
+          "src": "8E7DBC476",
+          "total_inr": 152371.06
+        },
+        {
+          "dst": "838CB70E2",
+          "first_ts": "2022-09-04T02:14:00",
+          "last_ts": "2022-09-05T01:58:00",
+          "n_transfers": 2,
+          "src": "85587153A",
+          "total_inr": 150938.16
+        },
+        {
+          "dst": "880C7B2EA",
+          "first_ts": "2022-09-04T09:39:00",
+          "last_ts": "2022-09-06T06:33:00",
+          "n_transfers": 3,
+          "src": "8D8319847",
+          "total_inr": 149806.91
+        },
+        {
+          "dst": "863B19137",
+          "first_ts": "2022-09-04T10:34:00",
+          "last_ts": "2022-09-06T17:38:00",
+          "n_transfers": 3,
+          "src": "84133419D",
+          "total_inr": 149117.05
+        },
+        {
+          "dst": "846077F2E",
+          "first_ts": "2022-09-04T08:44:00",
+          "last_ts": "2022-09-04T19:28:00",
+          "n_transfers": 2,
+          "src": "8F9814016",
+          "total_inr": 148973.97
+        },
+        {
+          "dst": "8CC0806ED",
+          "first_ts": "2022-09-04T20:32:00",
+          "last_ts": "2022-09-04T20:32:00",
+          "n_transfers": 3,
+          "src": "8986CD2C2",
+          "total_inr": 148603.2
+        },
+        {
+          "dst": "8F507AC7B",
+          "first_ts": "2022-09-04T10:22:00",
+          "last_ts": "2022-09-06T17:14:00",
+          "n_transfers": 4,
+          "src": "8B0530B1D",
+          "total_inr": 148509.19
+        },
+        {
+          "dst": "8CDB2743A",
+          "first_ts": "2022-09-04T17:35:00",
+          "last_ts": "2022-09-05T22:25:00",
+          "n_transfers": 4,
+          "src": "8EB66E1B9",
+          "total_inr": 148087.1
+        },
+        {
+          "dst": "8F2C2E879",
+          "first_ts": "2022-09-04T05:35:00",
+          "last_ts": "2022-09-06T10:25:00",
+          "n_transfers": 3,
+          "src": "8C9FAAF75",
+          "total_inr": 147929.21
+        },
+        {
+          "dst": "81541EE58",
+          "first_ts": "2022-09-04T04:52:00",
+          "last_ts": "2022-09-06T23:44:00",
+          "n_transfers": 3,
+          "src": "80255031B",
+          "total_inr": 147858.04
+        },
+        {
+          "dst": "891AAE1EF",
+          "first_ts": "2022-09-04T11:05:00",
+          "last_ts": "2022-09-05T04:55:00",
+          "n_transfers": 3,
+          "src": "8BEAA67C8",
+          "total_inr": 147726.68
+        },
+        {
+          "dst": "8FDC9C0D2",
+          "first_ts": "2022-09-04T18:54:00",
+          "last_ts": "2022-09-04T18:54:00",
+          "n_transfers": 3,
+          "src": "82A750F64",
+          "total_inr": 147726.1
+        },
+        {
+          "dst": "83058B565",
+          "first_ts": "2022-09-04T12:12:00",
+          "last_ts": "2022-09-06T15:24:00",
+          "n_transfers": 2,
+          "src": "86CBC49CA",
+          "total_inr": 147285.6
+        },
+        {
+          "dst": "8EE73B2FC",
+          "first_ts": "2022-09-04T00:48:00",
+          "last_ts": "2022-09-04T03:36:00",
+          "n_transfers": 2,
+          "src": "833DBC3C0",
+          "total_inr": 146116.23
+        },
+        {
+          "dst": "8CF331C84",
+          "first_ts": "2022-09-04T00:36:00",
+          "last_ts": "2022-09-05T03:12:00",
+          "n_transfers": 3,
+          "src": "8A71CD0BB",
+          "total_inr": 145347.62
+        },
+        {
+          "dst": "892DE8F83",
+          "first_ts": "2022-09-04T07:37:00",
+          "last_ts": "2022-09-04T08:59:00",
+          "n_transfers": 3,
+          "src": "89AD13417",
+          "total_inr": 144512.38
+        },
+        {
+          "dst": "8158A98D7",
+          "first_ts": "2022-09-04T07:13:00",
+          "last_ts": "2022-09-04T08:11:00",
+          "n_transfers": 2,
+          "src": "8BDB1CD78",
+          "total_inr": 144167.39
+        },
+        {
+          "dst": "848FC904E",
+          "first_ts": "2022-09-04T06:42:00",
+          "last_ts": "2022-09-04T21:54:00",
+          "n_transfers": 4,
+          "src": "8BBEA90ED",
+          "total_inr": 144063.53
+        },
+        {
+          "dst": "85E1BA470",
+          "first_ts": "2022-09-04T02:14:00",
+          "last_ts": "2022-09-05T01:58:00",
+          "n_transfers": 3,
+          "src": "8158A98D7",
+          "total_inr": 142642.06
+        },
+        {
+          "dst": "8473BCFBB",
+          "first_ts": "2022-09-04T19:13:00",
+          "last_ts": "2022-09-04T20:11:00",
+          "n_transfers": 4,
+          "src": "8A32D6DBF",
+          "total_inr": 142412.2
+        },
+        {
+          "dst": "8BC88599D",
+          "first_ts": "2022-09-04T02:50:00",
+          "last_ts": "2022-09-05T01:10:00",
+          "n_transfers": 3,
+          "src": "8F2A12F9E",
+          "total_inr": 141465.46
+        },
+        {
+          "dst": "84BC7F1BB",
+          "first_ts": "2022-09-04T15:45:00",
+          "last_ts": "2022-09-04T15:45:00",
+          "n_transfers": 2,
+          "src": "8B5F42F05",
+          "total_inr": 140741.89
+        },
+        {
+          "dst": "86EF9555E",
+          "first_ts": "2022-09-04T01:43:00",
+          "last_ts": "2022-09-05T14:41:00",
+          "n_transfers": 4,
+          "src": "812EB210C",
+          "total_inr": 139541.18
+        },
+        {
+          "dst": "885A0C0EA",
+          "first_ts": "2022-09-04T02:26:00",
+          "last_ts": "2022-09-06T01:22:00",
+          "n_transfers": 4,
+          "src": "8626CBB46",
+          "total_inr": 138870.12
+        },
+        {
+          "dst": "86DAC9A3A",
+          "first_ts": "2022-09-04T14:14:00",
+          "last_ts": "2022-09-06T13:58:00",
+          "n_transfers": 4,
+          "src": "8EBB6210E",
+          "total_inr": 138673.37
+        },
+        {
+          "dst": "8DEE8BAE8",
+          "first_ts": "2022-09-04T04:40:00",
+          "last_ts": "2022-09-05T23:20:00",
+          "n_transfers": 3,
+          "src": "8EC738AE4",
+          "total_inr": 138017.21
+        },
+        {
+          "dst": "89DC89D0E",
+          "first_ts": "2022-09-04T01:55:00",
+          "last_ts": "2022-09-04T14:05:00",
+          "n_transfers": 2,
+          "src": "89DDD02E9",
+          "total_inr": 136367.18
+        },
+        {
+          "dst": "81541EE58",
+          "first_ts": "2022-09-04T06:30:00",
+          "last_ts": "2022-09-05T21:30:00",
+          "n_transfers": 4,
+          "src": "8E90FB012",
+          "total_inr": 134911.38
+        },
+        {
+          "dst": "8AF4465C1",
+          "first_ts": "2022-09-04T03:33:00",
+          "last_ts": "2022-09-05T12:51:00",
+          "n_transfers": 2,
+          "src": "889637B01",
+          "total_inr": 134265.32
+        },
+        {
+          "dst": "884A1D4F6",
+          "first_ts": "2022-09-04T18:42:00",
+          "last_ts": "2022-09-06T09:54:00",
+          "n_transfers": 3,
+          "src": "85F50F454",
+          "total_inr": 132506.3
+        },
+        {
+          "dst": "8F507AC7B",
+          "first_ts": "2022-09-04T07:49:00",
+          "last_ts": "2022-09-06T08:23:00",
+          "n_transfers": 3,
+          "src": "829441A48",
+          "total_inr": 132498.71
+        },
+        {
+          "dst": "86A2F670F",
+          "first_ts": "2022-09-04T00:00:00",
+          "last_ts": "2022-09-04T03:00:00",
+          "n_transfers": 3,
+          "src": "8F610DA9F",
+          "total_inr": 131923.46
+        },
+        {
+          "dst": "87F95FC69",
+          "first_ts": "2022-09-04T20:08:00",
+          "last_ts": "2022-09-05T07:16:00",
+          "n_transfers": 3,
+          "src": "8BC88599D",
+          "total_inr": 131229.81
+        },
+        {
+          "dst": "8C40871D3",
+          "first_ts": "2022-09-04T19:13:00",
+          "last_ts": "2022-09-05T20:11:00",
+          "n_transfers": 3,
+          "src": "8D646CD28",
+          "total_inr": 131058.94
+        },
+        {
+          "dst": "8473BCFBB",
+          "first_ts": "2022-09-04T14:02:00",
+          "last_ts": "2022-09-05T13:34:00",
+          "n_transfers": 2,
+          "src": "867E7B2AD",
+          "total_inr": 130593.07
+        },
+        {
+          "dst": "8CFDB75B2",
+          "first_ts": "2022-09-04T04:16:00",
+          "last_ts": "2022-09-04T23:32:00",
+          "n_transfers": 3,
+          "src": "8D1395B7D",
+          "total_inr": 129743.08
+        },
+        {
+          "dst": "84603F4E1",
+          "first_ts": "2022-09-04T23:53:00",
+          "last_ts": "2022-09-05T16:31:00",
+          "n_transfers": 2,
+          "src": "81830296E",
+          "total_inr": 129323.85
+        },
+        {
+          "dst": "8439B5E23",
+          "first_ts": "2022-09-04T07:01:00",
+          "last_ts": "2022-09-05T08:47:00",
+          "n_transfers": 3,
+          "src": "871A0E1A0",
+          "total_inr": 126668.86
+        },
+        {
+          "dst": "846077F2E",
+          "first_ts": "2022-09-04T13:55:00",
+          "last_ts": "2022-09-05T02:05:00",
+          "n_transfers": 4,
+          "src": "8790A1433",
+          "total_inr": 126176.79
+        },
+        {
+          "dst": "810304F7B",
+          "first_ts": "2022-09-04T12:00:00",
+          "last_ts": "2022-09-05T15:00:00",
+          "n_transfers": 3,
+          "src": "81F6DCDD0",
+          "total_inr": 124628.47
+        },
+        {
+          "dst": "8725BFCFB",
+          "first_ts": "2022-09-04T11:17:00",
+          "last_ts": "2022-09-04T11:17:00",
+          "n_transfers": 2,
+          "src": "811AD0CBC",
+          "total_inr": 123891.73
+        },
+        {
+          "dst": "89C625ECC",
+          "first_ts": "2022-09-04T18:42:00",
+          "last_ts": "2022-09-05T09:54:00",
+          "n_transfers": 4,
+          "src": "8D2B1391C",
+          "total_inr": 123868.44
+        },
+        {
+          "dst": "877673431",
+          "first_ts": "2022-09-04T17:23:00",
+          "last_ts": "2022-09-04T22:01:00",
+          "n_transfers": 2,
+          "src": "8DC73D29A",
+          "total_inr": 123569.77
+        },
+        {
+          "dst": "8439B5E23",
+          "first_ts": "2022-09-04T06:30:00",
+          "last_ts": "2022-09-06T21:30:00",
+          "n_transfers": 4,
+          "src": "86F95600D",
+          "total_inr": 122603.64
+        },
+        {
+          "dst": "89DC89D0E",
+          "first_ts": "2022-09-04T10:58:00",
+          "last_ts": "2022-09-05T17:26:00",
+          "n_transfers": 3,
+          "src": "8CF1B6828",
+          "total_inr": 121966.99
+        },
+        {
+          "dst": "8DF81AEF5",
+          "first_ts": "2022-09-04T09:15:00",
+          "last_ts": "2022-09-05T06:45:00",
+          "n_transfers": 2,
+          "src": "8863A57F3",
+          "total_inr": 121805.72
+        },
+        {
+          "dst": "8640D2F6B",
+          "first_ts": "2022-09-04T06:30:00",
+          "last_ts": "2022-09-06T21:30:00",
+          "n_transfers": 2,
+          "src": "8AE507392",
+          "total_inr": 121273.93
+        },
+        {
+          "dst": "848FC904E",
+          "first_ts": "2022-09-04T02:26:00",
+          "last_ts": "2022-09-06T01:22:00",
+          "n_transfers": 3,
+          "src": "8A35985D2",
+          "total_inr": 121122.59
+        },
+        {
+          "dst": "8F9814016",
+          "first_ts": "2022-09-04T11:17:00",
+          "last_ts": "2022-09-05T04:19:00",
+          "n_transfers": 2,
+          "src": "88F6AE47B",
+          "total_inr": 120808.97
+        },
+        {
+          "dst": "845851112",
+          "first_ts": "2022-09-04T20:32:00",
+          "last_ts": "2022-09-04T20:32:00",
+          "n_transfers": 2,
+          "src": "8592D04F2",
+          "total_inr": 120476.64
+        },
+        {
+          "dst": "8AD520658",
+          "first_ts": "2022-09-04T14:26:00",
+          "last_ts": "2022-09-04T14:26:00",
+          "n_transfers": 4,
+          "src": "84394EB9B",
+          "total_inr": 120123.07
+        },
+        {
+          "dst": "8CF331C84",
+          "first_ts": "2022-09-04T20:20:00",
+          "last_ts": "2022-09-06T07:40:00",
+          "n_transfers": 2,
+          "src": "8C54DED01",
+          "total_inr": 119628.07
+        },
+        {
+          "dst": "868592365",
+          "first_ts": "2022-09-04T23:29:00",
+          "last_ts": "2022-09-05T16:43:00",
+          "n_transfers": 2,
+          "src": "8F38306B6",
+          "total_inr": 118174.89
+        },
+        {
+          "dst": "8DEE8BAE8",
+          "first_ts": "2022-09-04T17:11:00",
+          "last_ts": "2022-09-04T22:37:00",
+          "n_transfers": 3,
+          "src": "899B397E8",
+          "total_inr": 117471.73
+        },
+        {
+          "dst": "865A1FB78",
+          "first_ts": "2022-09-04T18:18:00",
+          "last_ts": "2022-09-05T09:06:00",
+          "n_transfers": 2,
+          "src": "8BF751C59",
+          "total_inr": 117338.36
+        },
+        {
+          "dst": "8CDB2743A",
+          "first_ts": "2022-09-04T04:28:00",
+          "last_ts": "2022-09-04T23:56:00",
+          "n_transfers": 4,
+          "src": "8A8D601D4",
+          "total_inr": 117144.09
+        },
+        {
+          "dst": "80C5CE86C",
+          "first_ts": "2022-09-04T13:55:00",
+          "last_ts": "2022-09-05T02:05:00",
+          "n_transfers": 2,
+          "src": "8BC4D84C3",
+          "total_inr": 116445.46
+        },
+        {
+          "dst": "868592365",
+          "first_ts": "2022-09-04T08:44:00",
+          "last_ts": "2022-09-04T19:28:00",
+          "n_transfers": 2,
+          "src": "882DE7DC9",
+          "total_inr": 116346.66
+        },
+        {
+          "dst": "8B80512E4",
+          "first_ts": "2022-09-04T15:09:00",
+          "last_ts": "2022-09-06T00:03:00",
+          "n_transfers": 4,
+          "src": "8136209B0",
+          "total_inr": 114923.53
+        },
+        {
+          "dst": "8FB26CA2A",
+          "first_ts": "2022-09-04T18:06:00",
+          "last_ts": "2022-09-04T18:06:00",
+          "n_transfers": 3,
+          "src": "8739C25DD",
+          "total_inr": 114093.0
+        },
+        {
+          "dst": "8F9814016",
+          "first_ts": "2022-09-04T22:46:00",
+          "last_ts": "2022-09-04T22:46:00",
+          "n_transfers": 2,
+          "src": "8AB979635",
+          "total_inr": 114003.08
+        },
+        {
+          "dst": "82A8B7EC7",
+          "first_ts": "2022-09-04T15:33:00",
+          "last_ts": "2022-09-06T00:51:00",
+          "n_transfers": 3,
+          "src": "8AB482550",
+          "total_inr": 112566.07
+        },
+        {
+          "dst": "8EC817611",
+          "first_ts": "2022-09-04T15:09:00",
+          "last_ts": "2022-09-05T00:03:00",
+          "n_transfers": 2,
+          "src": "853388623",
+          "total_inr": 112161.57
+        },
+        {
+          "dst": "8F7358D78",
+          "first_ts": "2022-09-04T15:45:00",
+          "last_ts": "2022-09-05T00:15:00",
+          "n_transfers": 2,
+          "src": "8747E4175",
+          "total_inr": 111715.15
+        },
+        {
+          "dst": "89C625ECC",
+          "first_ts": "2022-09-04T17:35:00",
+          "last_ts": "2022-09-04T22:25:00",
+          "n_transfers": 2,
+          "src": "8B09C4B47",
+          "total_inr": 110805.13
+        },
+        {
+          "dst": "852DFC617",
+          "first_ts": "2022-09-04T22:34:00",
+          "last_ts": "2022-09-04T22:34:00",
+          "n_transfers": 4,
+          "src": "8D446994E",
+          "total_inr": 110497.95
+        },
+        {
+          "dst": "8626CBB46",
+          "first_ts": "2022-09-04T23:41:00",
+          "last_ts": "2022-09-04T23:41:00",
+          "n_transfers": 3,
+          "src": "849F5CD87",
+          "total_inr": 110314.24
+        },
+        {
+          "dst": "891A52E86",
+          "first_ts": "2022-09-04T06:18:00",
+          "last_ts": "2022-09-04T21:06:00",
+          "n_transfers": 2,
+          "src": "863FCAF71",
+          "total_inr": 109577.28
+        },
+        {
+          "dst": "865A1FB78",
+          "first_ts": "2022-09-04T01:43:00",
+          "last_ts": "2022-09-05T14:41:00",
+          "n_transfers": 2,
+          "src": "852D474CD",
+          "total_inr": 108889.12
+        },
+        {
+          "dst": "86D277815",
+          "first_ts": "2022-09-04T15:45:00",
+          "last_ts": "2022-09-04T15:45:00",
+          "n_transfers": 2,
+          "src": "839005517",
+          "total_inr": 108070.15
+        },
+        {
+          "dst": "87611AE18",
+          "first_ts": "2022-09-04T20:44:00",
+          "last_ts": "2022-09-04T20:44:00",
+          "n_transfers": 4,
+          "src": "8A6165F57",
+          "total_inr": 107127.45
+        },
+        {
+          "dst": "8640D2F6B",
+          "first_ts": "2022-09-04T10:58:00",
+          "last_ts": "2022-09-05T17:26:00",
+          "n_transfers": 3,
+          "src": "899783AF2",
+          "total_inr": 107094.12
+        },
+        {
+          "dst": "8473BCFBB",
+          "first_ts": "2022-09-04T12:24:00",
+          "last_ts": "2022-09-05T15:48:00",
+          "n_transfers": 4,
+          "src": "87614ACAA",
+          "total_inr": 106519.15
+        },
+        {
+          "dst": "8D0A95524",
+          "first_ts": "2022-09-04T03:21:00",
+          "last_ts": "2022-09-06T12:27:00",
+          "n_transfers": 3,
+          "src": "8BCAA2CBA",
+          "total_inr": 106430.82
+        },
+        {
+          "dst": "86EF3D4D6",
+          "first_ts": "2022-09-04T07:37:00",
+          "last_ts": "2022-09-06T08:59:00",
+          "n_transfers": 2,
+          "src": "85CB9A5BF",
+          "total_inr": 105506.03
+        },
+        {
+          "dst": "8347F169B",
+          "first_ts": "2022-09-04T01:55:00",
+          "last_ts": "2022-09-04T14:05:00",
+          "n_transfers": 2,
+          "src": "81D85C46F",
+          "total_inr": 103873.85
+        },
+        {
+          "dst": "8C98B1AEB",
+          "first_ts": "2022-09-04T11:41:00",
+          "last_ts": "2022-09-04T11:41:00",
+          "n_transfers": 3,
+          "src": "82A40F48F",
+          "total_inr": 103717.91
+        },
+        {
+          "dst": "892DE8F83",
+          "first_ts": "2022-09-04T22:10:00",
+          "last_ts": "2022-09-04T22:10:00",
+          "n_transfers": 2,
+          "src": "8C2A476A7",
+          "total_inr": 103055.15
+        },
+        {
+          "dst": "86D277815",
+          "first_ts": "2022-09-04T18:30:00",
+          "last_ts": "2022-09-06T09:30:00",
+          "n_transfers": 3,
+          "src": "85262BFF9",
+          "total_inr": 102830.26
+        },
+        {
+          "dst": "825753D99",
+          "first_ts": "2022-09-04T05:59:00",
+          "last_ts": "2022-09-05T10:13:00",
+          "n_transfers": 3,
+          "src": "8E53E74AC",
+          "total_inr": 102692.44
+        },
+        {
+          "dst": "89BAD7BD0",
+          "first_ts": "2022-09-04T12:36:00",
+          "last_ts": "2022-09-06T15:12:00",
+          "n_transfers": 4,
+          "src": "847F94599",
+          "total_inr": 102203.01
+        },
+        {
+          "dst": "868592365",
+          "first_ts": "2022-09-04T20:08:00",
+          "last_ts": "2022-09-04T20:08:00",
+          "n_transfers": 2,
+          "src": "8F3E79E60",
+          "total_inr": 100069.28
+        },
+        {
+          "dst": "8F94A2EDA",
+          "first_ts": "2022-09-04T03:57:00",
+          "last_ts": "2022-09-05T12:39:00",
+          "n_transfers": 4,
+          "src": "826C342ED",
+          "total_inr": 100046.23
+        },
+        {
+          "dst": "86EF3D4D6",
+          "first_ts": "2022-09-04T08:44:00",
+          "last_ts": "2022-09-04T19:28:00",
+          "n_transfers": 3,
+          "src": "84637543C",
+          "total_inr": 99825.74
+        },
+        {
+          "dst": "8E68B2519",
+          "first_ts": "2022-09-04T04:16:00",
+          "last_ts": "2022-09-04T23:32:00",
+          "n_transfers": 3,
+          "src": "85E1BA470",
+          "total_inr": 99394.67
+        },
+        {
+          "dst": "81AE69EC4",
+          "first_ts": "2022-09-04T21:51:00",
+          "last_ts": "2022-09-05T18:57:00",
+          "n_transfers": 3,
+          "src": "84ED615B1",
+          "total_inr": 98409.28
+        },
+        {
+          "dst": "83EFAC118",
+          "first_ts": "2022-09-04T20:20:00",
+          "last_ts": "2022-09-04T20:20:00",
+          "n_transfers": 3,
+          "src": "84B51BDD1",
+          "total_inr": 97986.0
+        },
+        {
+          "dst": "8E772D193",
+          "first_ts": "2022-09-04T06:54:00",
+          "last_ts": "2022-09-04T21:18:00",
+          "n_transfers": 2,
+          "src": "809ABE7C5",
+          "total_inr": 97352.67
+        },
+        {
+          "dst": "8AF4465C1",
+          "first_ts": "2022-09-04T06:18:00",
+          "last_ts": "2022-09-06T21:06:00",
+          "n_transfers": 4,
+          "src": "8D9A60410",
+          "total_inr": 95831.49
+        },
+        {
+          "dst": "812E52056",
+          "first_ts": "2022-09-04T15:33:00",
+          "last_ts": "2022-09-06T00:51:00",
+          "n_transfers": 2,
+          "src": "8E4B0D4BB",
+          "total_inr": 94159.42
+        },
+        {
+          "dst": "8CC0806ED",
+          "first_ts": "2022-09-04T14:02:00",
+          "last_ts": "2022-09-06T13:34:00",
+          "n_transfers": 2,
+          "src": "8A8C4B87D",
+          "total_inr": 93878.83
+        },
+        {
+          "dst": "81AE69EC4",
+          "first_ts": "2022-09-04T12:24:00",
+          "last_ts": "2022-09-05T15:48:00",
+          "n_transfers": 2,
+          "src": "8B7C68E44",
+          "total_inr": 93759.38
+        },
+        {
+          "dst": "891AAE1EF",
+          "first_ts": "2022-09-04T22:34:00",
+          "last_ts": "2022-09-06T05:38:00",
+          "n_transfers": 3,
+          "src": "8A0669538",
+          "total_inr": 92599.39
+        },
+        {
+          "dst": "8F4799101",
+          "first_ts": "2022-09-04T04:28:00",
+          "last_ts": "2022-09-06T23:56:00",
+          "n_transfers": 4,
+          "src": "8690F073D",
+          "total_inr": 91780.54
+        },
+        {
+          "dst": "8F4799101",
+          "first_ts": "2022-09-04T05:59:00",
+          "last_ts": "2022-09-06T10:13:00",
+          "n_transfers": 3,
+          "src": "8ABD2FD79",
+          "total_inr": 90387.06
+        },
+        {
+          "dst": "8EC817611",
+          "first_ts": "2022-09-04T01:55:00",
+          "last_ts": "2022-09-05T14:05:00",
+          "n_transfers": 1,
+          "src": "8D2D4930B",
+          "total_inr": 89144.16
+        },
+        {
+          "dst": "8C40871D3",
+          "first_ts": "2022-09-04T02:38:00",
+          "last_ts": "2022-09-06T01:46:00",
+          "n_transfers": 3,
+          "src": "82F41C9B3",
+          "total_inr": 88709.17
+        },
+        {
+          "dst": "812E52056",
+          "first_ts": "2022-09-04T12:00:00",
+          "last_ts": "2022-09-05T15:00:00",
+          "n_transfers": 1,
+          "src": "861A6BCA0",
+          "total_inr": 88188.18
+        },
+        {
+          "dst": "8F9814016",
+          "first_ts": "2022-09-04T16:04:00",
+          "last_ts": "2022-09-05T11:08:00",
+          "n_transfers": 4,
+          "src": "831A7273C",
+          "total_inr": 87825.29
+        },
+        {
+          "dst": "8A0669538",
+          "first_ts": "2022-09-04T06:06:00",
+          "last_ts": "2022-09-06T21:42:00",
+          "n_transfers": 1,
+          "src": "896F65ECF",
+          "total_inr": 87825.25
+        },
+        {
+          "dst": "89263FE00",
+          "first_ts": "2022-09-04T18:18:00",
+          "last_ts": "2022-09-05T09:06:00",
+          "n_transfers": 2,
+          "src": "8F8B0684E",
+          "total_inr": 87792.22
+        },
+        {
+          "dst": "8AE288510",
+          "first_ts": "2022-09-04T03:21:00",
+          "last_ts": "2022-09-06T12:27:00",
+          "n_transfers": 2,
+          "src": "8F4799101",
+          "total_inr": 87641.23
+        },
+        {
+          "dst": "84A253CE7",
+          "first_ts": "2022-09-04T08:08:00",
+          "last_ts": "2022-09-06T19:16:00",
+          "n_transfers": 1,
+          "src": "81D8BF0B7",
+          "total_inr": 86921.8
+        },
+        {
+          "dst": "8C40871D3",
+          "first_ts": "2022-09-04T05:35:00",
+          "last_ts": "2022-09-04T10:25:00",
+          "n_transfers": 1,
+          "src": "89263FE00",
+          "total_inr": 86213.08
+        },
+        {
+          "dst": "825753D99",
+          "first_ts": "2022-09-04T16:28:00",
+          "last_ts": "2022-09-05T11:56:00",
+          "n_transfers": 1,
+          "src": "808C27596",
+          "total_inr": 85705.37
+        },
+        {
+          "dst": "8A4A55F14",
+          "first_ts": "2022-09-04T00:36:00",
+          "last_ts": "2022-09-06T03:12:00",
+          "n_transfers": 2,
+          "src": "8DF81AEF5",
+          "total_inr": 85281.16
+        },
+        {
+          "dst": "82A8B7EC7",
+          "first_ts": "2022-09-04T14:26:00",
+          "last_ts": "2022-09-04T14:26:00",
+          "n_transfers": 1,
+          "src": "8BE1520D0",
+          "total_inr": 85186.98
+        },
+        {
+          "dst": "8D646CD28",
+          "first_ts": "2022-09-04T12:36:00",
+          "last_ts": "2022-09-06T15:12:00",
+          "n_transfers": 2,
+          "src": "8858CB7ED",
+          "total_inr": 85115.08
+        },
+        {
+          "dst": "8B973DAE1",
+          "first_ts": "2022-09-04T16:16:00",
+          "last_ts": "2022-09-04T16:16:00",
+          "n_transfers": 1,
+          "src": "877673431",
+          "total_inr": 84967.38
+        },
+        {
+          "dst": "82A8B7EC7",
+          "first_ts": "2022-09-04T19:25:00",
+          "last_ts": "2022-09-05T20:35:00",
+          "n_transfers": 4,
+          "src": "8AC0759FB",
+          "total_inr": 84548.57
+        },
+        {
+          "dst": "8473BCFBB",
+          "first_ts": "2022-09-04T19:01:00",
+          "last_ts": "2022-09-04T20:47:00",
+          "n_transfers": 1,
+          "src": "894FF624C",
+          "total_inr": 84249.8
+        },
+        {
+          "dst": "8C98B1AEB",
+          "first_ts": "2022-09-04T08:08:00",
+          "last_ts": "2022-09-04T19:16:00",
+          "n_transfers": 3,
+          "src": "89E53CBCC",
+          "total_inr": 83968.75
+        },
+        {
+          "dst": "8208466F5",
+          "first_ts": "2022-09-04T23:17:00",
+          "last_ts": "2022-09-05T16:19:00",
+          "n_transfers": 4,
+          "src": "8AE288510",
+          "total_inr": 83812.67
+        },
+        {
+          "dst": "86242F185",
+          "first_ts": "2022-09-04T12:00:00",
+          "last_ts": "2022-09-04T15:00:00",
+          "n_transfers": 4,
+          "src": "8A21710FF",
+          "total_inr": 83576.43
+        },
+        {
+          "dst": "8CAFA6980",
+          "first_ts": "2022-09-04T08:44:00",
+          "last_ts": "2022-09-04T19:28:00",
+          "n_transfers": 1,
+          "src": "8BF96228A",
+          "total_inr": 83567.66
+        },
+        {
+          "dst": "8ADD54EF1",
+          "first_ts": "2022-09-04T21:27:00",
+          "last_ts": "2022-09-05T18:09:00",
+          "n_transfers": 1,
+          "src": "8B32CC80D",
+          "total_inr": 83298.61
+        },
+        {
+          "dst": "876B1D017",
+          "first_ts": "2022-09-04T13:19:00",
+          "last_ts": "2022-09-05T02:53:00",
+          "n_transfers": 1,
+          "src": "8CE47CB28",
+          "total_inr": 83226.96
+        },
+        {
+          "dst": "8B973DAE1",
+          "first_ts": "2022-09-04T13:07:00",
+          "last_ts": "2022-09-04T13:07:00",
+          "n_transfers": 2,
+          "src": "88884B617",
+          "total_inr": 83014.49
+        },
+        {
+          "dst": "867DC89CD",
+          "first_ts": "2022-09-04T00:12:00",
+          "last_ts": "2022-09-05T03:24:00",
+          "n_transfers": 1,
+          "src": "80F4965EA",
+          "total_inr": 82920.11
+        },
+        {
+          "dst": "88718BAA1",
+          "first_ts": "2022-09-04T13:07:00",
+          "last_ts": "2022-09-04T13:07:00",
+          "n_transfers": 1,
+          "src": "84A99B24E",
+          "total_inr": 82818.88
+        },
+        {
+          "dst": "8F2C2E879",
+          "first_ts": "2022-09-04T23:53:00",
+          "last_ts": "2022-09-05T16:31:00",
+          "n_transfers": 1,
+          "src": "8CDB2743A",
+          "total_inr": 82508.7
+        },
+        {
+          "dst": "8CFDB75B2",
+          "first_ts": "2022-09-04T11:41:00",
+          "last_ts": "2022-09-04T11:41:00",
+          "n_transfers": 2,
+          "src": "86912ACC4",
+          "total_inr": 82503.36
+        },
+        {
+          "dst": "84394EB9B",
+          "first_ts": "2022-09-04T10:58:00",
+          "last_ts": "2022-09-04T17:26:00",
+          "n_transfers": 3,
+          "src": "8598EF0DE",
+          "total_inr": 82276.62
+        },
+        {
+          "dst": "84D21B308",
+          "first_ts": "2022-09-04T07:13:00",
+          "last_ts": "2022-09-04T08:11:00",
+          "n_transfers": 2,
+          "src": "8F61B36D2",
+          "total_inr": 81961.93
+        },
+        {
+          "dst": "892DE8F83",
+          "first_ts": "2022-09-04T16:28:00",
+          "last_ts": "2022-09-04T16:28:00",
+          "n_transfers": 1,
+          "src": "886ED10F3",
+          "total_inr": 81526.3
+        },
+        {
+          "dst": "884A1D4F6",
+          "first_ts": "2022-09-04T04:40:00",
+          "last_ts": "2022-09-04T23:20:00",
+          "n_transfers": 1,
+          "src": "872E20BC4",
+          "total_inr": 81307.88
+        },
+        {
+          "dst": "8F29FCB77",
+          "first_ts": "2022-09-04T23:05:00",
+          "last_ts": "2022-09-06T16:55:00",
+          "n_transfers": 1,
+          "src": "8D9854E28",
+          "total_inr": 81159.72
+        },
+        {
+          "dst": "86EF9555E",
+          "first_ts": "2022-09-04T13:07:00",
+          "last_ts": "2022-09-04T13:07:00",
+          "n_transfers": 4,
+          "src": "8FFB8E1B0",
+          "total_inr": 80852.1
+        },
+        {
+          "dst": "8EC4AF591",
+          "first_ts": "2022-09-04T12:36:00",
+          "last_ts": "2022-09-04T15:12:00",
+          "n_transfers": 3,
+          "src": "8FDC9C0D2",
+          "total_inr": 80771.09
+        },
+        {
+          "dst": "86DAC9A3A",
+          "first_ts": "2022-09-04T00:36:00",
+          "last_ts": "2022-09-06T03:12:00",
+          "n_transfers": 1,
+          "src": "82936A45E",
+          "total_inr": 80728.82
+        },
+        {
+          "dst": "8EC817611",
+          "first_ts": "2022-09-04T01:07:00",
+          "last_ts": "2022-09-06T14:29:00",
+          "n_transfers": 1,
+          "src": "8A95196C9",
+          "total_inr": 80499.94
+        },
+        {
+          "dst": "84D21B308",
+          "first_ts": "2022-09-04T15:09:00",
+          "last_ts": "2022-09-06T00:03:00",
+          "n_transfers": 2,
+          "src": "8C9EFD704",
+          "total_inr": 80277.64
+        },
+        {
+          "dst": "86F95600D",
+          "first_ts": "2022-09-04T17:59:00",
+          "last_ts": "2022-09-06T22:13:00",
+          "n_transfers": 3,
+          "src": "84E4A0EAE",
+          "total_inr": 79981.17
+        },
+        {
+          "dst": "8F507AC7B",
+          "first_ts": "2022-09-04T02:26:00",
+          "last_ts": "2022-09-05T01:22:00",
+          "n_transfers": 2,
+          "src": "8D7D8C0E9",
+          "total_inr": 79704.25
+        },
+        {
+          "dst": "82A8B7EC7",
+          "first_ts": "2022-09-04T09:03:00",
+          "last_ts": "2022-09-06T06:21:00",
+          "n_transfers": 1,
+          "src": "8774491EA",
+          "total_inr": 79673.98
+        },
+        {
+          "dst": "89C625ECC",
+          "first_ts": "2022-09-04T17:23:00",
+          "last_ts": "2022-09-06T22:01:00",
+          "n_transfers": 3,
+          "src": "8A6EC7A34",
+          "total_inr": 79533.11
+        },
+        {
+          "dst": "8208466F5",
+          "first_ts": "2022-09-04T11:05:00",
+          "last_ts": "2022-09-04T11:05:00",
+          "n_transfers": 4,
+          "src": "84467CEEE",
+          "total_inr": 79399.99
+        },
+        {
+          "dst": "8D646CD28",
+          "first_ts": "2022-09-04T12:48:00",
+          "last_ts": "2022-09-06T15:36:00",
+          "n_transfers": 2,
+          "src": "89486B945",
+          "total_inr": 79307.02
+        },
+        {
+          "dst": "8C393D55A",
+          "first_ts": "2022-09-04T00:36:00",
+          "last_ts": "2022-09-06T03:12:00",
+          "n_transfers": 2,
+          "src": "8670ADF24",
+          "total_inr": 78973.9
+        },
+        {
+          "dst": "8640D2F6B",
+          "first_ts": "2022-09-04T00:24:00",
+          "last_ts": "2022-09-04T03:48:00",
+          "n_transfers": 1,
+          "src": "85BB118E6",
+          "total_inr": 78814.96
+        },
+        {
+          "dst": "878572B18",
+          "first_ts": "2022-09-04T06:54:00",
+          "last_ts": "2022-09-06T21:18:00",
+          "n_transfers": 1,
+          "src": "8FF9F2D18",
+          "total_inr": 78687.88
+        },
+        {
+          "dst": "86EF9555E",
+          "first_ts": "2022-09-04T22:58:00",
+          "last_ts": "2022-09-04T22:58:00",
+          "n_transfers": 2,
+          "src": "8B62393F1",
+          "total_inr": 76513.15
+        },
+        {
+          "dst": "8AD1E538C",
+          "first_ts": "2022-09-04T22:10:00",
+          "last_ts": "2022-09-05T05:50:00",
+          "n_transfers": 3,
+          "src": "8070089BB",
+          "total_inr": 76425.73
+        },
+        {
+          "dst": "89671A1FA",
+          "first_ts": "2022-09-04T20:32:00",
+          "last_ts": "2022-09-04T20:32:00",
+          "n_transfers": 1,
+          "src": "8196E1EF2",
+          "total_inr": 75368.17
+        },
+        {
+          "dst": "80EC3DCA3",
+          "first_ts": "2022-09-04T20:44:00",
+          "last_ts": "2022-09-06T07:28:00",
+          "n_transfers": 2,
+          "src": "8DA7C94D1",
+          "total_inr": 74855.6
+        },
+        {
+          "dst": "86F95600D",
+          "first_ts": "2022-09-04T18:18:00",
+          "last_ts": "2022-09-05T09:06:00",
+          "n_transfers": 1,
+          "src": "8810D5877",
+          "total_inr": 74728.26
+        },
+        {
+          "dst": "84A99B24E",
+          "first_ts": "2022-09-04T21:27:00",
+          "last_ts": "2022-09-06T18:09:00",
+          "n_transfers": 1,
+          "src": "8EC4AF591",
+          "total_inr": 74293.63
+        },
+        {
+          "dst": "8AD520658",
+          "first_ts": "2022-09-04T22:22:00",
+          "last_ts": "2022-09-06T05:14:00",
+          "n_transfers": 1,
+          "src": "8C9F314D5",
+          "total_inr": 74205.94
+        },
+        {
+          "dst": "8CFDB75B2",
+          "first_ts": "2022-09-04T13:07:00",
+          "last_ts": "2022-09-04T13:07:00",
+          "n_transfers": 1,
+          "src": "80A817C34",
+          "total_inr": 74023.51
+        },
+        {
+          "dst": "8A8159450",
+          "first_ts": "2022-09-04T13:19:00",
+          "last_ts": "2022-09-05T02:53:00",
+          "n_transfers": 3,
+          "src": "858D8F74E",
+          "total_inr": 73665.87
+        },
+        {
+          "dst": "892DE8F83",
+          "first_ts": "2022-09-04T16:16:00",
+          "last_ts": "2022-09-04T16:16:00",
+          "n_transfers": 2,
+          "src": "8F35F76EA",
+          "total_inr": 73662.29
+        },
+        {
+          "dst": "8AF4465C1",
+          "first_ts": "2022-09-04T20:44:00",
+          "last_ts": "2022-09-04T20:44:00",
+          "n_transfers": 1,
+          "src": "825C0D59C",
+          "total_inr": 73659.24
+        },
+        {
+          "dst": "8CDB2743A",
+          "first_ts": "2022-09-04T17:23:00",
+          "last_ts": "2022-09-04T22:01:00",
+          "n_transfers": 4,
+          "src": "8668781C5",
+          "total_inr": 72815.37
+        },
+        {
+          "dst": "8B3E397AD",
+          "first_ts": "2022-09-04T13:43:00",
+          "last_ts": "2022-09-04T13:43:00",
+          "n_transfers": 2,
+          "src": "832561523",
+          "total_inr": 71748.36
+        },
+        {
+          "dst": "8A4A55F14",
+          "first_ts": "2022-09-04T11:53:00",
+          "last_ts": "2022-09-05T04:31:00",
+          "n_transfers": 1,
+          "src": "8EC817611",
+          "total_inr": 71713.56
+        },
+        {
+          "dst": "81541EE58",
+          "first_ts": "2022-09-04T06:06:00",
+          "last_ts": "2022-09-06T21:42:00",
+          "n_transfers": 1,
+          "src": "8CE279614",
+          "total_inr": 71587.3
+        },
+        {
+          "dst": "8E772D193",
+          "first_ts": "2022-09-04T00:00:00",
+          "last_ts": "2022-09-05T03:00:00",
+          "n_transfers": 1,
+          "src": "841E2CE60",
+          "total_inr": 71325.11
+        },
+        {
+          "dst": "82B09213E",
+          "first_ts": "2022-09-04T10:22:00",
+          "last_ts": "2022-09-04T17:14:00",
+          "n_transfers": 1,
+          "src": "8701D0B79",
+          "total_inr": 71130.35
+        },
+        {
+          "dst": "877673431",
+          "first_ts": "2022-09-04T01:31:00",
+          "last_ts": "2022-09-05T14:17:00",
+          "n_transfers": 4,
+          "src": "882D93D2F",
+          "total_inr": 70708.65
+        },
+        {
+          "dst": "8BE7B8C7B",
+          "first_ts": "2022-09-04T07:49:00",
+          "last_ts": "2022-09-04T08:23:00",
+          "n_transfers": 2,
+          "src": "867DC89CD",
+          "total_inr": 70490.62
+        },
+        {
+          "dst": "838CB70E2",
+          "first_ts": "2022-09-04T03:33:00",
+          "last_ts": "2022-09-04T12:51:00",
+          "n_transfers": 1,
+          "src": "8C551075A",
+          "total_inr": 70412.7
+        },
+        {
+          "dst": "8F40C719A",
+          "first_ts": "2022-09-04T06:06:00",
+          "last_ts": "2022-09-04T21:42:00",
+          "n_transfers": 1,
+          "src": "8185586D1",
+          "total_inr": 70404.69
+        },
+        {
+          "dst": "81AE69EC4",
+          "first_ts": "2022-09-04T21:03:00",
+          "last_ts": "2022-09-04T21:03:00",
+          "n_transfers": 1,
+          "src": "81C552897",
+          "total_inr": 70020.72
+        },
+        {
+          "dst": "86F95600D",
+          "first_ts": "2022-09-04T08:32:00",
+          "last_ts": "2022-09-05T19:04:00",
+          "n_transfers": 1,
+          "src": "8B4D6E41E",
+          "total_inr": 69210.79
+        },
+        {
+          "dst": "8AE288510",
+          "first_ts": "2022-09-04T11:17:00",
+          "last_ts": "2022-09-05T04:19:00",
+          "n_transfers": 1,
+          "src": "852344711",
+          "total_inr": 69208.71
+        },
+        {
+          "dst": "8FB26CA2A",
+          "first_ts": "2022-09-04T10:34:00",
+          "last_ts": "2022-09-04T17:38:00",
+          "n_transfers": 2,
+          "src": "8BD7307A0",
+          "total_inr": 68749.11
+        },
+        {
+          "dst": "867DC89CD",
+          "first_ts": "2022-09-04T13:19:00",
+          "last_ts": "2022-09-04T13:19:00",
+          "n_transfers": 1,
+          "src": "81930695D",
+          "total_inr": 68438.85
+        },
+        {
+          "dst": "84A253CE7",
+          "first_ts": "2022-09-04T22:22:00",
+          "last_ts": "2022-09-06T05:14:00",
+          "n_transfers": 3,
+          "src": "853AB9450",
+          "total_inr": 68394.71
+        },
+        {
+          "dst": "8A8D601D4",
+          "first_ts": "2022-09-04T00:48:00",
+          "last_ts": "2022-09-06T03:36:00",
+          "n_transfers": 4,
+          "src": "8B0A78328",
+          "total_inr": 68271.63
+        },
+        {
+          "dst": "812E52056",
+          "first_ts": "2022-09-04T17:11:00",
+          "last_ts": "2022-09-05T22:37:00",
+          "n_transfers": 3,
+          "src": "8CF331C84",
+          "total_inr": 68158.68
+        },
+        {
+          "dst": "8AD1E538C",
+          "first_ts": "2022-09-04T21:03:00",
+          "last_ts": "2022-09-05T18:21:00",
+          "n_transfers": 1,
+          "src": "89C1F41D4",
+          "total_inr": 67652.75
+        },
+        {
+          "dst": "86BBE6711",
+          "first_ts": "2022-09-04T16:52:00",
+          "last_ts": "2022-09-05T11:44:00",
+          "n_transfers": 1,
+          "src": "8A4633B04",
+          "total_inr": 67081.51
+        },
+        {
+          "dst": "877673431",
+          "first_ts": "2022-09-04T01:31:00",
+          "last_ts": "2022-09-04T14:17:00",
+          "n_transfers": 2,
+          "src": "805951DB7",
+          "total_inr": 66922.51
+        },
+        {
+          "dst": "84467CEEE",
+          "first_ts": "2022-09-04T02:26:00",
+          "last_ts": "2022-09-05T01:22:00",
+          "n_transfers": 2,
+          "src": "8208466F5",
+          "total_inr": 66508.04
+        },
+        {
+          "dst": "8A6165F57",
+          "first_ts": "2022-09-04T13:55:00",
+          "last_ts": "2022-09-06T02:05:00",
+          "n_transfers": 3,
+          "src": "83F36D67D",
+          "total_inr": 66234.23
+        },
+        {
+          "dst": "83052BCDE",
+          "first_ts": "2022-09-04T19:25:00",
+          "last_ts": "2022-09-06T20:35:00",
+          "n_transfers": 4,
+          "src": "86DC6BD87",
+          "total_inr": 66048.27
+        },
+        {
+          "dst": "817BDEB0E",
+          "first_ts": "2022-09-04T05:47:00",
+          "last_ts": "2022-09-05T10:49:00",
+          "n_transfers": 1,
+          "src": "8619C68C7",
+          "total_inr": 66016.83
+        },
+        {
+          "dst": "8EC4AF591",
+          "first_ts": "2022-09-04T21:27:00",
+          "last_ts": "2022-09-04T21:27:00",
+          "n_transfers": 4,
+          "src": "8347F169B",
+          "total_inr": 65853.75
+        },
+        {
+          "dst": "85E1BA470",
+          "first_ts": "2022-09-04T03:33:00",
+          "last_ts": "2022-09-04T12:51:00",
+          "n_transfers": 1,
+          "src": "80EC3DCA3",
+          "total_inr": 65708.4
+        },
+        {
+          "dst": "845851112",
+          "first_ts": "2022-09-04T22:22:00",
+          "last_ts": "2022-09-06T05:14:00",
+          "n_transfers": 2,
+          "src": "891F5F438",
+          "total_inr": 65675.89
+        },
+        {
+          "dst": "8C9BE9214",
+          "first_ts": "2022-09-04T18:54:00",
+          "last_ts": "2022-09-05T09:18:00",
+          "n_transfers": 1,
+          "src": "8E22C2811",
+          "total_inr": 65536.18
+        },
+        {
+          "dst": "885A0C0EA",
+          "first_ts": "2022-09-04T18:06:00",
+          "last_ts": "2022-09-04T18:06:00",
+          "n_transfers": 3,
+          "src": "8B3E397AD",
+          "total_inr": 65080.12
+        },
+        {
+          "dst": "86DAC9A3A",
+          "first_ts": "2022-09-04T06:54:00",
+          "last_ts": "2022-09-05T21:18:00",
+          "n_transfers": 1,
+          "src": "88762412A",
+          "total_inr": 65020.34
+        },
+        {
+          "dst": "82B09213E",
+          "first_ts": "2022-09-04T18:30:00",
+          "last_ts": "2022-09-06T09:30:00",
+          "n_transfers": 4,
+          "src": "812E52056",
+          "total_inr": 64953.33
+        },
+        {
+          "dst": "846077F2E",
+          "first_ts": "2022-09-04T01:07:00",
+          "last_ts": "2022-09-06T14:29:00",
+          "n_transfers": 1,
+          "src": "8697BBDDF",
+          "total_inr": 64776.06
+        },
+        {
+          "dst": "8B3E397AD",
+          "first_ts": "2022-09-04T00:12:00",
+          "last_ts": "2022-09-06T03:24:00",
+          "n_transfers": 1,
+          "src": "88BEA95C7",
+          "total_inr": 64502.53
+        },
+        {
+          "dst": "8B80512E4",
+          "first_ts": "2022-09-04T10:46:00",
+          "last_ts": "2022-09-05T17:02:00",
+          "n_transfers": 1,
+          "src": "84D7F0819",
+          "total_inr": 64308.84
+        },
+        {
+          "dst": "8AE288510",
+          "first_ts": "2022-09-04T07:01:00",
+          "last_ts": "2022-09-04T08:47:00",
+          "n_transfers": 1,
+          "src": "8B1AF2017",
+          "total_inr": 64163.88
+        },
+        {
+          "dst": "8EC817611",
+          "first_ts": "2022-09-04T20:20:00",
+          "last_ts": "2022-09-06T07:40:00",
+          "n_transfers": 1,
+          "src": "80C4E5CDD",
+          "total_inr": 64059.9
+        },
+        {
+          "dst": "89946A936",
+          "first_ts": "2022-09-04T18:54:00",
+          "last_ts": "2022-09-04T18:54:00",
+          "n_transfers": 2,
+          "src": "8695987BC",
+          "total_inr": 63753.93
+        },
+        {
+          "dst": "863B19137",
+          "first_ts": "2022-09-04T02:50:00",
+          "last_ts": "2022-09-05T01:10:00",
+          "n_transfers": 4,
+          "src": "8B813FE59",
+          "total_inr": 63222.76
+        },
+        {
+          "dst": "848FC904E",
+          "first_ts": "2022-09-04T10:10:00",
+          "last_ts": "2022-09-05T17:50:00",
+          "n_transfers": 2,
+          "src": "8DC6E07EB",
+          "total_inr": 63012.48
+        },
+        {
+          "dst": "886ED10F3",
+          "first_ts": "2022-09-04T05:59:00",
+          "last_ts": "2022-09-05T10:13:00",
+          "n_transfers": 3,
+          "src": "86AC717C1",
+          "total_inr": 62972.53
+        },
+        {
+          "dst": "8A8D601D4",
+          "first_ts": "2022-09-04T11:05:00",
+          "last_ts": "2022-09-06T04:55:00",
+          "n_transfers": 2,
+          "src": "80257D898",
+          "total_inr": 62956.27
+        },
+        {
+          "dst": "84A253CE7",
+          "first_ts": "2022-09-04T22:10:00",
+          "last_ts": "2022-09-05T05:50:00",
+          "n_transfers": 3,
+          "src": "8FB26CA2A",
+          "total_inr": 62952.51
+        },
+        {
+          "dst": "825753D99",
+          "first_ts": "2022-09-04T06:06:00",
+          "last_ts": "2022-09-04T21:42:00",
+          "n_transfers": 1,
+          "src": "857D1D5C1",
+          "total_inr": 62784.11
+        },
+        {
+          "dst": "8CF331C84",
+          "first_ts": "2022-09-04T16:52:00",
+          "last_ts": "2022-09-05T11:44:00",
+          "n_transfers": 2,
+          "src": "863A5768B",
+          "total_inr": 61586.33
+        },
+        {
+          "dst": "8439B5E23",
+          "first_ts": "2022-09-04T07:01:00",
+          "last_ts": "2022-09-05T08:47:00",
+          "n_transfers": 1,
+          "src": "83474A881",
+          "total_inr": 61517.88
+        },
+        {
+          "dst": "88718BAA1",
+          "first_ts": "2022-09-04T10:46:00",
+          "last_ts": "2022-09-06T17:02:00",
+          "n_transfers": 2,
+          "src": "889CD3531",
+          "total_inr": 61190.67
+        },
+        {
+          "dst": "8B973DAE1",
+          "first_ts": "2022-09-04T11:05:00",
+          "last_ts": "2022-09-06T04:55:00",
+          "n_transfers": 4,
+          "src": "880C7B2EA",
+          "total_inr": 60735.04
+        },
+        {
+          "dst": "8C630626A",
+          "first_ts": "2022-09-04T21:51:00",
+          "last_ts": "2022-09-05T18:57:00",
+          "n_transfers": 1,
+          "src": "88D043673",
+          "total_inr": 60347.88
+        },
+        {
+          "dst": "86EFD8B9E",
+          "first_ts": "2022-09-04T04:28:00",
+          "last_ts": "2022-09-05T23:56:00",
+          "n_transfers": 1,
+          "src": "8E1DDEFC3",
+          "total_inr": 60311.36
+        },
+        {
+          "dst": "84603F4E1",
+          "first_ts": "2022-09-04T13:43:00",
+          "last_ts": "2022-09-06T02:41:00",
+          "n_transfers": 1,
+          "src": "8AE6FB8D5",
+          "total_inr": 60217.93
+        },
+        {
+          "dst": "81F6DCDD0",
+          "first_ts": "2022-09-04T16:28:00",
+          "last_ts": "2022-09-06T11:56:00",
+          "n_transfers": 1,
+          "src": "8C4578BC5",
+          "total_inr": 60138.91
+        },
+        {
+          "dst": "8C2A476A7",
+          "first_ts": "2022-09-04T21:51:00",
+          "last_ts": "2022-09-06T18:57:00",
+          "n_transfers": 1,
+          "src": "81079DE6A",
+          "total_inr": 60005.69
+        },
+        {
+          "dst": "867DC89CD",
+          "first_ts": "2022-09-04T13:31:00",
+          "last_ts": "2022-09-06T02:17:00",
+          "n_transfers": 1,
+          "src": "8640D2F6B",
+          "total_inr": 59902.77
+        },
+        {
+          "dst": "8E7DFA06E",
+          "first_ts": "2022-09-04T06:30:00",
+          "last_ts": "2022-09-06T21:30:00",
+          "n_transfers": 1,
+          "src": "832218348",
+          "total_inr": 59230.68
+        },
+        {
+          "dst": "86BBE6711",
+          "first_ts": "2022-09-04T20:56:00",
+          "last_ts": "2022-09-05T07:52:00",
+          "n_transfers": 1,
+          "src": "8E97C115A",
+          "total_inr": 58870.48
+        },
+        {
+          "dst": "885A0C0EA",
+          "first_ts": "2022-09-04T09:51:00",
+          "last_ts": "2022-09-04T09:51:00",
+          "n_transfers": 1,
+          "src": "83058B565",
+          "total_inr": 58601.08
+        },
+        {
+          "dst": "86DAC9A3A",
+          "first_ts": "2022-09-04T04:40:00",
+          "last_ts": "2022-09-05T23:20:00",
+          "n_transfers": 1,
+          "src": "8B3805322",
+          "total_inr": 58271.86
+        },
+        {
+          "dst": "8EA3D57B1",
+          "first_ts": "2022-09-04T19:37:00",
+          "last_ts": "2022-09-05T20:59:00",
+          "n_transfers": 1,
+          "src": "8B80512E4",
+          "total_inr": 57935.05
+        },
+        {
+          "dst": "838CB70E2",
+          "first_ts": "2022-09-04T08:20:00",
+          "last_ts": "2022-09-06T19:40:00",
+          "n_transfers": 4,
+          "src": "8AB349B38",
+          "total_inr": 57791.37
+        },
+        {
+          "dst": "8C393D55A",
+          "first_ts": "2022-09-04T19:37:00",
+          "last_ts": "2022-09-04T20:59:00",
+          "n_transfers": 1,
+          "src": "83B307A0D",
+          "total_inr": 57509.78
+        },
+        {
+          "dst": "81F6DCDD0",
+          "first_ts": "2022-09-04T17:35:00",
+          "last_ts": "2022-09-04T22:25:00",
+          "n_transfers": 4,
+          "src": "870C9F042",
+          "total_inr": 57416.25
+        },
+        {
+          "dst": "8AD520658",
+          "first_ts": "2022-09-04T21:27:00",
+          "last_ts": "2022-09-06T18:09:00",
+          "n_transfers": 2,
+          "src": "8725BFCFB",
+          "total_inr": 57265.42
+        },
+        {
+          "dst": "8D646CD28",
+          "first_ts": "2022-09-04T13:31:00",
+          "last_ts": "2022-09-05T02:17:00",
+          "n_transfers": 3,
+          "src": "825753D99",
+          "total_inr": 54996.03
+        },
+        {
+          "dst": "8AE288510",
+          "first_ts": "2022-09-04T20:08:00",
+          "last_ts": "2022-09-05T07:16:00",
+          "n_transfers": 1,
+          "src": "87918DDEE",
+          "total_inr": 54918.99
+        },
+        {
+          "dst": "89DC89D0E",
+          "first_ts": "2022-09-04T05:59:00",
+          "last_ts": "2022-09-06T10:13:00",
+          "n_transfers": 2,
+          "src": "82D8E9F2B",
+          "total_inr": 54789.52
+        },
+        {
+          "dst": "89C625ECC",
+          "first_ts": "2022-09-04T05:23:00",
+          "last_ts": "2022-09-06T10:01:00",
+          "n_transfers": 1,
+          "src": "8C2B64E25",
+          "total_inr": 54510.88
+        },
+        {
+          "dst": "87B96223A",
+          "first_ts": "2022-09-04T16:04:00",
+          "last_ts": "2022-09-06T11:08:00",
+          "n_transfers": 2,
+          "src": "8E7DFA06E",
+          "total_inr": 54484.11
+        },
+        {
+          "dst": "82F41C9B3",
+          "first_ts": "2022-09-04T14:26:00",
+          "last_ts": "2022-09-05T13:22:00",
+          "n_transfers": 2,
+          "src": "87CD85492",
+          "total_inr": 53647.51
+        },
+        {
+          "dst": "8E289CFBA",
+          "first_ts": "2022-09-04T05:11:00",
+          "last_ts": "2022-09-04T10:37:00",
+          "n_transfers": 1,
+          "src": "8B76DC6CF",
+          "total_inr": 53567.26
+        },
+        {
+          "dst": "8C9BE9214",
+          "first_ts": "2022-09-04T05:23:00",
+          "last_ts": "2022-09-04T10:01:00",
+          "n_transfers": 1,
+          "src": "8473BCFBB",
+          "total_inr": 53401.48
+        },
+        {
+          "dst": "8D646CD28",
+          "first_ts": "2022-09-04T21:15:00",
+          "last_ts": "2022-09-04T21:15:00",
+          "n_transfers": 2,
+          "src": "8E1CB405E",
+          "total_inr": 53321.79
+        },
+        {
+          "dst": "8F40C719A",
+          "first_ts": "2022-09-04T22:34:00",
+          "last_ts": "2022-09-06T05:38:00",
+          "n_transfers": 4,
+          "src": "81DFEF364",
+          "total_inr": 53102.72
+        },
+        {
+          "dst": "8A8D601D4",
+          "first_ts": "2022-09-04T20:08:00",
+          "last_ts": "2022-09-05T07:16:00",
+          "n_transfers": 3,
+          "src": "8400BE53D",
+          "total_inr": 53053.41
+        },
+        {
+          "dst": "8EA3D57B1",
+          "first_ts": "2022-09-04T04:04:00",
+          "last_ts": "2022-09-04T23:08:00",
+          "n_transfers": 4,
+          "src": "851E46E45",
+          "total_inr": 52916.23
+        },
+        {
+          "dst": "814593721",
+          "first_ts": "2022-09-04T04:40:00",
+          "last_ts": "2022-09-05T23:20:00",
+          "n_transfers": 3,
+          "src": "8349C8D21",
+          "total_inr": 52588.34
+        },
+        {
+          "dst": "87611AE18",
+          "first_ts": "2022-09-04T07:37:00",
+          "last_ts": "2022-09-04T08:59:00",
+          "n_transfers": 1,
+          "src": "81AE69EC4",
+          "total_inr": 52493.79
+        },
+        {
+          "dst": "84A253CE7",
+          "first_ts": "2022-09-04T05:35:00",
+          "last_ts": "2022-09-05T10:25:00",
+          "n_transfers": 1,
+          "src": "814BE6159",
+          "total_inr": 52064.47
+        },
+        {
+          "dst": "845851112",
+          "first_ts": "2022-09-04T08:32:00",
+          "last_ts": "2022-09-06T19:04:00",
+          "n_transfers": 2,
+          "src": "838B41FF0",
+          "total_inr": 52003.91
+        },
+        {
+          "dst": "8F4799101",
+          "first_ts": "2022-09-04T07:49:00",
+          "last_ts": "2022-09-06T08:23:00",
+          "n_transfers": 2,
+          "src": "8E0059FAB",
+          "total_inr": 51888.53
+        },
+        {
+          "dst": "8CFDB75B2",
+          "first_ts": "2022-09-04T09:27:00",
+          "last_ts": "2022-09-04T09:27:00",
+          "n_transfers": 1,
+          "src": "8CC0806ED",
+          "total_inr": 51615.12
+        },
+        {
+          "dst": "81F6DCDD0",
+          "first_ts": "2022-09-04T00:48:00",
+          "last_ts": "2022-09-04T03:36:00",
+          "n_transfers": 1,
+          "src": "870DC5AC8",
+          "total_inr": 51424.65
+        },
+        {
+          "dst": "80C5CE86C",
+          "first_ts": "2022-09-04T14:50:00",
+          "last_ts": "2022-09-05T13:10:00",
+          "n_transfers": 2,
+          "src": "85CCEAD2D",
+          "total_inr": 50876.5
+        },
+        {
+          "dst": "8C40871D3",
+          "first_ts": "2022-09-04T21:39:00",
+          "last_ts": "2022-09-06T18:33:00",
+          "n_transfers": 1,
+          "src": "8F7358D78",
+          "total_inr": 50470.66
+        },
+        {
+          "dst": "8701D0B79",
+          "first_ts": "2022-09-04T21:15:00",
+          "last_ts": "2022-09-05T18:45:00",
+          "n_transfers": 3,
+          "src": "8A8C99331",
+          "total_inr": 49384.15
+        },
+        {
+          "dst": "81930695D",
+          "first_ts": "2022-09-04T23:41:00",
+          "last_ts": "2022-09-06T16:07:00",
+          "n_transfers": 2,
+          "src": "88718BAA1",
+          "total_inr": 49339.88
+        },
+        {
+          "dst": "8725BFCFB",
+          "first_ts": "2022-09-04T11:05:00",
+          "last_ts": "2022-09-05T04:55:00",
+          "n_transfers": 1,
+          "src": "8F89423E6",
+          "total_inr": 49017.34
+        },
+        {
+          "dst": "8A4A55F14",
+          "first_ts": "2022-09-04T19:01:00",
+          "last_ts": "2022-09-05T20:47:00",
+          "n_transfers": 1,
+          "src": "8CAFA6980",
+          "total_inr": 48203.82
+        },
+        {
+          "dst": "8FB26CA2A",
+          "first_ts": "2022-09-04T05:23:00",
+          "last_ts": "2022-09-04T10:01:00",
+          "n_transfers": 2,
+          "src": "8851FF8B1",
+          "total_inr": 47348.23
+        },
+        {
+          "dst": "88718BAA1",
+          "first_ts": "2022-09-04T04:52:00",
+          "last_ts": "2022-09-05T23:44:00",
+          "n_transfers": 1,
+          "src": "8BE7F892D",
+          "total_inr": 47249.31
+        },
+        {
+          "dst": "884A1D4F6",
+          "first_ts": "2022-09-04T10:34:00",
+          "last_ts": "2022-09-04T17:38:00",
+          "n_transfers": 1,
+          "src": "8F507AC7B",
+          "total_inr": 46171.55
+        },
+        {
+          "dst": "8F61B36D2",
+          "first_ts": "2022-09-04T15:57:00",
+          "last_ts": "2022-09-06T00:39:00",
+          "n_transfers": 2,
+          "src": "8FA1C5982",
+          "total_inr": 46153.33
+        },
+        {
+          "dst": "86EF9555E",
+          "first_ts": "2022-09-04T00:00:00",
+          "last_ts": "2022-09-06T03:00:00",
+          "n_transfers": 3,
+          "src": "8BDA14169",
+          "total_inr": 45980.35
+        },
+        {
+          "dst": "84BC7F1BB",
+          "first_ts": "2022-09-04T01:43:00",
+          "last_ts": "2022-09-04T14:41:00",
+          "n_transfers": 3,
+          "src": "89156A4A5",
+          "total_inr": 45791.62
+        },
+        {
+          "dst": "88A3F7E12",
+          "first_ts": "2022-09-04T20:44:00",
+          "last_ts": "2022-09-04T20:44:00",
+          "n_transfers": 3,
+          "src": "8650FB0DD",
+          "total_inr": 44361.38
+        },
+        {
+          "dst": "86D277815",
+          "first_ts": "2022-09-04T09:03:00",
+          "last_ts": "2022-09-06T06:21:00",
+          "n_transfers": 2,
+          "src": "8B876154E",
+          "total_inr": 44027.81
+        },
+        {
+          "dst": "89AD13417",
+          "first_ts": "2022-09-04T03:21:00",
+          "last_ts": "2022-09-05T12:27:00",
+          "n_transfers": 3,
+          "src": "8406443F5",
+          "total_inr": 43689.33
+        },
+        {
+          "dst": "812E52056",
+          "first_ts": "2022-09-04T14:14:00",
+          "last_ts": "2022-09-04T14:14:00",
+          "n_transfers": 2,
+          "src": "871EF2201",
+          "total_inr": 42663.5
+        },
+        {
+          "dst": "86BBE6711",
+          "first_ts": "2022-09-04T16:28:00",
+          "last_ts": "2022-09-05T11:56:00",
+          "n_transfers": 1,
+          "src": "849EFA992",
+          "total_inr": 42471.06
+        },
+        {
+          "dst": "8F9814016",
+          "first_ts": "2022-09-04T03:33:00",
+          "last_ts": "2022-09-06T12:51:00",
+          "n_transfers": 2,
+          "src": "84C701202",
+          "total_inr": 41733.63
+        },
+        {
+          "dst": "81F6DCDD0",
+          "first_ts": "2022-09-04T13:19:00",
+          "last_ts": "2022-09-05T02:53:00",
+          "n_transfers": 1,
+          "src": "897CAA258",
+          "total_inr": 41393.73
+        },
+        {
+          "dst": "8A8D601D4",
+          "first_ts": "2022-09-04T12:24:00",
+          "last_ts": "2022-09-05T15:48:00",
+          "n_transfers": 4,
+          "src": "83AE9FCCA",
+          "total_inr": 41185.13
+        },
+        {
+          "dst": "8B80512E4",
+          "first_ts": "2022-09-04T06:18:00",
+          "last_ts": "2022-09-05T21:06:00",
+          "n_transfers": 4,
+          "src": "8A59B0AC8",
+          "total_inr": 40955.4
+        },
+        {
+          "dst": "8FB26CA2A",
+          "first_ts": "2022-09-04T08:44:00",
+          "last_ts": "2022-09-06T19:28:00",
+          "n_transfers": 1,
+          "src": "8062FF1C1",
+          "total_inr": 40667.44
+        },
+        {
+          "dst": "892DE8F83",
+          "first_ts": "2022-09-04T14:38:00",
+          "last_ts": "2022-09-06T13:46:00",
+          "n_transfers": 1,
+          "src": "810304F7B",
+          "total_inr": 39669.9
+        },
+        {
+          "dst": "8D37F8F08",
+          "first_ts": "2022-09-04T15:33:00",
+          "last_ts": "2022-09-06T00:51:00",
+          "n_transfers": 1,
+          "src": "82B09213E",
+          "total_inr": 39597.72
+        },
+        {
+          "dst": "863B19137",
+          "first_ts": "2022-09-04T18:30:00",
+          "last_ts": "2022-09-06T09:30:00",
+          "n_transfers": 1,
+          "src": "88FF87644",
+          "total_inr": 39158.83
+        },
+        {
+          "dst": "89DC89D0E",
+          "first_ts": "2022-09-04T14:38:00",
+          "last_ts": "2022-09-05T13:46:00",
+          "n_transfers": 1,
+          "src": "8C7817E44",
+          "total_inr": 39031.34
+        },
+        {
+          "dst": "8E772D193",
+          "first_ts": "2022-09-04T09:15:00",
+          "last_ts": "2022-09-04T09:15:00",
+          "n_transfers": 1,
+          "src": "8FF13F44A",
+          "total_inr": 38628.47
+        },
+        {
+          "dst": "8AF4465C1",
+          "first_ts": "2022-09-04T05:11:00",
+          "last_ts": "2022-09-05T10:37:00",
+          "n_transfers": 2,
+          "src": "83A7D95E5",
+          "total_inr": 38555.77
+        },
+        {
+          "dst": "83474A881",
+          "first_ts": "2022-09-04T11:17:00",
+          "last_ts": "2022-09-04T11:17:00",
+          "n_transfers": 4,
+          "src": "8C9035B29",
+          "total_inr": 38104.29
+        },
+        {
+          "dst": "84EA0A0BA",
+          "first_ts": "2022-09-04T03:57:00",
+          "last_ts": "2022-09-05T12:39:00",
+          "n_transfers": 1,
+          "src": "8DBD7B6C7",
+          "total_inr": 37564.31
+        },
+        {
+          "dst": "87B7AB409",
+          "first_ts": "2022-09-04T00:24:00",
+          "last_ts": "2022-09-06T03:48:00",
+          "n_transfers": 3,
+          "src": "89AAC22B7",
+          "total_inr": 37502.4
+        },
+        {
+          "dst": "8AD520658",
+          "first_ts": "2022-09-04T23:29:00",
+          "last_ts": "2022-09-05T16:43:00",
+          "n_transfers": 1,
+          "src": "83DE6FB44",
+          "total_inr": 37014.73
+        },
+        {
+          "dst": "8EC4AF591",
+          "first_ts": "2022-09-04T01:31:00",
+          "last_ts": "2022-09-06T14:17:00",
+          "n_transfers": 2,
+          "src": "846077F2E",
+          "total_inr": 36880.45
+        },
+        {
+          "dst": "8CDB2743A",
+          "first_ts": "2022-09-04T17:47:00",
+          "last_ts": "2022-09-05T22:49:00",
+          "n_transfers": 3,
+          "src": "84162D52C",
+          "total_inr": 36846.23
+        },
+        {
+          "dst": "825753D99",
+          "first_ts": "2022-09-04T22:58:00",
+          "last_ts": "2022-09-05T05:26:00",
+          "n_transfers": 2,
+          "src": "8EF6D0C44",
+          "total_inr": 36565.8
+        },
+        {
+          "dst": "84603F4E1",
+          "first_ts": "2022-09-04T04:04:00",
+          "last_ts": "2022-09-06T23:08:00",
+          "n_transfers": 2,
+          "src": "88D2B26F9",
+          "total_inr": 35452.17
+        },
+        {
+          "dst": "82EE9C198",
+          "first_ts": "2022-09-04T14:50:00",
+          "last_ts": "2022-09-04T14:50:00",
+          "n_transfers": 1,
+          "src": "81BD585EF",
+          "total_inr": 35392.81
+        },
+        {
+          "dst": "8798A1246",
+          "first_ts": "2022-09-04T10:34:00",
+          "last_ts": "2022-09-06T17:38:00",
+          "n_transfers": 2,
+          "src": "87AA81103",
+          "total_inr": 34963.07
+        },
+        {
+          "dst": "8B80512E4",
+          "first_ts": "2022-09-04T01:19:00",
+          "last_ts": "2022-09-05T14:53:00",
+          "n_transfers": 2,
+          "src": "8B42A31CB",
+          "total_inr": 34311.56
+        },
+        {
+          "dst": "838CB70E2",
+          "first_ts": "2022-09-04T09:39:00",
+          "last_ts": "2022-09-06T06:33:00",
+          "n_transfers": 1,
+          "src": "8235275AD",
+          "total_inr": 34205.71
+        },
+        {
+          "dst": "83F36D67D",
+          "first_ts": "2022-09-04T03:09:00",
+          "last_ts": "2022-09-04T12:03:00",
+          "n_transfers": 2,
+          "src": "8EA3D57B1",
+          "total_inr": 34109.29
+        },
+        {
+          "dst": "8F2C2E879",
+          "first_ts": "2022-09-04T13:43:00",
+          "last_ts": "2022-09-04T13:43:00",
+          "n_transfers": 3,
+          "src": "86F9D39AE",
+          "total_inr": 33364.53
+        },
+        {
+          "dst": "83F36D67D",
+          "first_ts": "2022-09-04T17:35:00",
+          "last_ts": "2022-09-06T22:25:00",
+          "n_transfers": 4,
+          "src": "833D4A00D",
+          "total_inr": 33328.36
+        },
+        {
+          "dst": "8A8D601D4",
+          "first_ts": "2022-09-04T10:10:00",
+          "last_ts": "2022-09-06T17:50:00",
+          "n_transfers": 3,
+          "src": "82779BB79",
+          "total_inr": 33313.08
+        },
+        {
+          "dst": "87611AE18",
+          "first_ts": "2022-09-04T14:50:00",
+          "last_ts": "2022-09-05T13:10:00",
+          "n_transfers": 1,
+          "src": "8D0A95524",
+          "total_inr": 33248.04
+        },
+        {
+          "dst": "8EA3D57B1",
+          "first_ts": "2022-09-04T15:57:00",
+          "last_ts": "2022-09-04T15:57:00",
+          "n_transfers": 4,
+          "src": "8C21A3E94",
+          "total_inr": 33243.22
+        },
+        {
+          "dst": "8AD1E538C",
+          "first_ts": "2022-09-04T09:27:00",
+          "last_ts": "2022-09-05T06:09:00",
+          "n_transfers": 2,
+          "src": "8161A4AF0",
+          "total_inr": 32317.27
+        },
+        {
+          "dst": "8A4A55F14",
+          "first_ts": "2022-09-04T16:40:00",
+          "last_ts": "2022-09-05T11:20:00",
+          "n_transfers": 1,
+          "src": "8CCBC35DE",
+          "total_inr": 31975.46
+        },
+        {
+          "dst": "8CFDB75B2",
+          "first_ts": "2022-09-04T18:06:00",
+          "last_ts": "2022-09-06T09:42:00",
+          "n_transfers": 1,
+          "src": "8ED231EA0",
+          "total_inr": 31531.33
+        },
+        {
+          "dst": "8F29FCB77",
+          "first_ts": "2022-09-04T21:39:00",
+          "last_ts": "2022-09-04T21:39:00",
+          "n_transfers": 2,
+          "src": "8BE7B8C7B",
+          "total_inr": 31435.81
+        },
+        {
+          "dst": "87611AE18",
+          "first_ts": "2022-09-04T13:31:00",
+          "last_ts": "2022-09-04T13:31:00",
+          "n_transfers": 4,
+          "src": "8D9EFBAC3",
+          "total_inr": 30929.63
+        },
+        {
+          "dst": "8D646CD28",
+          "first_ts": "2022-09-04T00:24:00",
+          "last_ts": "2022-09-06T03:48:00",
+          "n_transfers": 4,
+          "src": "8D091C312",
+          "total_inr": 29427.8
+        },
+        {
+          "dst": "8CF331C84",
+          "first_ts": "2022-09-04T18:42:00",
+          "last_ts": "2022-09-05T09:54:00",
+          "n_transfers": 4,
+          "src": "89C8B4403",
+          "total_inr": 29095.29
+        },
+        {
+          "dst": "8B3E397AD",
+          "first_ts": "2022-09-04T11:41:00",
+          "last_ts": "2022-09-06T04:07:00",
+          "n_transfers": 1,
+          "src": "8A8EB820D",
+          "total_inr": 28703.73
+        },
+        {
+          "dst": "8E7DFA06E",
+          "first_ts": "2022-09-04T07:25:00",
+          "last_ts": "2022-09-05T08:35:00",
+          "n_transfers": 2,
+          "src": "84E5FFE79",
+          "total_inr": 27636.09
+        },
+        {
+          "dst": "884A1D4F6",
+          "first_ts": "2022-09-04T21:15:00",
+          "last_ts": "2022-09-04T21:15:00",
+          "n_transfers": 2,
+          "src": "86873709A",
+          "total_inr": 27557.17
+        },
+        {
+          "dst": "8C9BE9214",
+          "first_ts": "2022-09-04T18:18:00",
+          "last_ts": "2022-09-06T09:06:00",
+          "n_transfers": 1,
+          "src": "8053C49BB",
+          "total_inr": 27433.93
+        },
+        {
+          "dst": "81F6DCDD0",
+          "first_ts": "2022-09-04T16:40:00",
+          "last_ts": "2022-09-04T16:40:00",
+          "n_transfers": 2,
+          "src": "817BDEB0E",
+          "total_inr": 26895.65
+        },
+        {
+          "dst": "8BEAA67C8",
+          "first_ts": "2022-09-04T11:29:00",
+          "last_ts": "2022-09-06T04:43:00",
+          "n_transfers": 2,
+          "src": "81CE2B5E2",
+          "total_inr": 26367.41
+        },
+        {
+          "dst": "8C40871D3",
+          "first_ts": "2022-09-04T12:12:00",
+          "last_ts": "2022-09-06T15:24:00",
+          "n_transfers": 4,
+          "src": "82EE9C198",
+          "total_inr": 26350.28
+        },
+        {
+          "dst": "87F95FC69",
+          "first_ts": "2022-09-04T07:49:00",
+          "last_ts": "2022-09-05T08:23:00",
+          "n_transfers": 2,
+          "src": "8A8159450",
+          "total_inr": 24996.55
+        },
+        {
+          "dst": "8FB26CA2A",
+          "first_ts": "2022-09-04T07:13:00",
+          "last_ts": "2022-09-06T08:11:00",
+          "n_transfers": 1,
+          "src": "80120EDC1",
+          "total_inr": 24052.51
+        },
+        {
+          "dst": "846077F2E",
+          "first_ts": "2022-09-04T19:37:00",
+          "last_ts": "2022-09-05T20:59:00",
+          "n_transfers": 2,
+          "src": "87680022A",
+          "total_inr": 23985.45
+        },
+        {
+          "dst": "89BAD7BD0",
+          "first_ts": "2022-09-04T23:17:00",
+          "last_ts": "2022-09-04T23:17:00",
+          "n_transfers": 1,
+          "src": "83203B1F5",
+          "total_inr": 23844.19
+        },
+        {
+          "dst": "8EA3D57B1",
+          "first_ts": "2022-09-04T04:52:00",
+          "last_ts": "2022-09-06T23:44:00",
+          "n_transfers": 2,
+          "src": "8F87248A9",
+          "total_inr": 23652.63
+        },
+        {
+          "dst": "8F4799101",
+          "first_ts": "2022-09-04T15:57:00",
+          "last_ts": "2022-09-04T15:57:00",
+          "n_transfers": 2,
+          "src": "806DA9D86",
+          "total_inr": 23362.63
+        },
+        {
+          "dst": "89BAD7BD0",
+          "first_ts": "2022-09-04T12:12:00",
+          "last_ts": "2022-09-05T15:24:00",
+          "n_transfers": 4,
+          "src": "8ABD43F40",
+          "total_inr": 23091.32
+        },
+        {
+          "dst": "845851112",
+          "first_ts": "2022-09-04T09:03:00",
+          "last_ts": "2022-09-04T09:03:00",
+          "n_transfers": 1,
+          "src": "83C2170B7",
+          "total_inr": 22640.56
+        },
+        {
+          "dst": "80F4965EA",
+          "first_ts": "2022-09-04T13:43:00",
+          "last_ts": "2022-09-06T02:41:00",
+          "n_transfers": 1,
+          "src": "8E925C935",
+          "total_inr": 22465.43
+        },
+        {
+          "dst": "8A4A55F14",
+          "first_ts": "2022-09-04T16:04:00",
+          "last_ts": "2022-09-05T11:08:00",
+          "n_transfers": 2,
+          "src": "8ADD54EF1",
+          "total_inr": 21955.36
+        },
+        {
+          "dst": "82B09213E",
+          "first_ts": "2022-09-04T19:13:00",
+          "last_ts": "2022-09-06T20:11:00",
+          "n_transfers": 1,
+          "src": "86242F185",
+          "total_inr": 21476.7
+        },
+        {
+          "dst": "8C98B1AEB",
+          "first_ts": "2022-09-04T12:12:00",
+          "last_ts": "2022-09-05T15:24:00",
+          "n_transfers": 1,
+          "src": "8E53E7D5C",
+          "total_inr": 21387.15
+        },
+        {
+          "dst": "865A1FB78",
+          "first_ts": "2022-09-04T16:52:00",
+          "last_ts": "2022-09-06T11:44:00",
+          "n_transfers": 2,
+          "src": "8D9302E03",
+          "total_inr": 21358.29
+        },
+        {
+          "dst": "88718BAA1",
+          "first_ts": "2022-09-04T02:50:00",
+          "last_ts": "2022-09-04T02:50:00",
+          "n_transfers": 3,
+          "src": "876B1D017",
+          "total_inr": 21333.85
+        },
+        {
+          "dst": "8AE288510",
+          "first_ts": "2022-09-04T07:25:00",
+          "last_ts": "2022-09-04T08:35:00",
+          "n_transfers": 1,
+          "src": "88C211D9D",
+          "total_inr": 21285.78
+        },
+        {
+          "dst": "83EFAC118",
+          "first_ts": "2022-09-04T10:46:00",
+          "last_ts": "2022-09-06T17:02:00",
+          "n_transfers": 2,
+          "src": "80F189164",
+          "total_inr": 20808.8
+        },
+        {
+          "dst": "885A0C0EA",
+          "first_ts": "2022-09-04T17:59:00",
+          "last_ts": "2022-09-04T22:13:00",
+          "n_transfers": 3,
+          "src": "8C649CF98",
+          "total_inr": 20661.35
+        },
+        {
+          "dst": "83EFAC118",
+          "first_ts": "2022-09-04T00:00:00",
+          "last_ts": "2022-09-04T03:00:00",
+          "n_transfers": 3,
+          "src": "87B96223A",
+          "total_inr": 20406.98
+        },
+        {
+          "dst": "8C98B1AEB",
+          "first_ts": "2022-09-04T20:56:00",
+          "last_ts": "2022-09-05T07:52:00",
+          "n_transfers": 2,
+          "src": "86FD05A2F",
+          "total_inr": 20272.05
+        },
+        {
+          "dst": "870DC5AC8",
+          "first_ts": "2022-09-04T23:05:00",
+          "last_ts": "2022-09-06T16:55:00",
+          "n_transfers": 3,
+          "src": "8A4A55F14",
+          "total_inr": 18774.09
+        },
+        {
+          "dst": "8F35F76EA",
+          "first_ts": "2022-09-04T09:39:00",
+          "last_ts": "2022-09-06T06:33:00",
+          "n_transfers": 1,
+          "src": "8A4509818",
+          "total_inr": 17331.24
+        },
+        {
+          "dst": "84BC7F1BB",
+          "first_ts": "2022-09-04T00:12:00",
+          "last_ts": "2022-09-04T03:24:00",
+          "n_transfers": 1,
+          "src": "84E4E8403",
+          "total_inr": 17214.0
+        },
+        {
+          "dst": "8725BFCFB",
+          "first_ts": "2022-09-04T10:10:00",
+          "last_ts": "2022-09-05T17:50:00",
+          "n_transfers": 3,
+          "src": "865A1FB78",
+          "total_inr": 16986.7
+        },
+        {
+          "dst": "81AE69EC4",
+          "first_ts": "2022-09-04T16:16:00",
+          "last_ts": "2022-09-06T11:32:00",
+          "n_transfers": 1,
+          "src": "83D0B36A6",
+          "total_inr": 16485.85
+        },
+        {
+          "dst": "8640D2F6B",
+          "first_ts": "2022-09-04T11:29:00",
+          "last_ts": "2022-09-06T04:43:00",
+          "n_transfers": 1,
+          "src": "89C625ECC",
+          "total_inr": 16198.76
+        },
+        {
+          "dst": "891AAE1EF",
+          "first_ts": "2022-09-04T14:38:00",
+          "last_ts": "2022-09-05T13:46:00",
+          "n_transfers": 1,
+          "src": "84EA0A0BA",
+          "total_inr": 16102.59
+        },
+        {
+          "dst": "84BC7F1BB",
+          "first_ts": "2022-09-04T05:47:00",
+          "last_ts": "2022-09-05T10:49:00",
+          "n_transfers": 1,
+          "src": "8D5A5B9C2",
+          "total_inr": 15972.19
+        },
+        {
+          "dst": "8CC0806ED",
+          "first_ts": "2022-09-04T07:13:00",
+          "last_ts": "2022-09-04T08:11:00",
+          "n_transfers": 3,
+          "src": "842B84B0C",
+          "total_inr": 15842.75
+        },
+        {
+          "dst": "8F40C719A",
+          "first_ts": "2022-09-04T09:51:00",
+          "last_ts": "2022-09-05T06:57:00",
+          "n_transfers": 3,
+          "src": "86EF3D4D6",
+          "total_inr": 15700.73
+        },
+        {
+          "dst": "85E1BA470",
+          "first_ts": "2022-09-04T06:54:00",
+          "last_ts": "2022-09-05T21:18:00",
+          "n_transfers": 1,
+          "src": "84A8DF29B",
+          "total_inr": 15358.97
+        },
+        {
+          "dst": "865A1FB78",
+          "first_ts": "2022-09-04T03:09:00",
+          "last_ts": "2022-09-04T12:03:00",
+          "n_transfers": 1,
+          "src": "832929885",
+          "total_inr": 15062.34
+        },
+        {
+          "dst": "83EFAC118",
+          "first_ts": "2022-09-04T11:53:00",
+          "last_ts": "2022-09-05T04:31:00",
+          "n_transfers": 1,
+          "src": "8B3C324F5",
+          "total_inr": 14548.92
+        },
+        {
+          "dst": "8E7DFA06E",
+          "first_ts": "2022-09-04T12:00:00",
+          "last_ts": "2022-09-06T15:00:00",
+          "n_transfers": 4,
+          "src": "8D5D4E5C1",
+          "total_inr": 14106.76
+        },
+        {
+          "dst": "8F40C719A",
+          "first_ts": "2022-09-04T16:40:00",
+          "last_ts": "2022-09-06T11:20:00",
+          "n_transfers": 3,
+          "src": "8563C8578",
+          "total_inr": 13983.69
+        },
+        {
+          "dst": "8640D2F6B",
+          "first_ts": "2022-09-04T15:33:00",
+          "last_ts": "2022-09-06T00:51:00",
+          "n_transfers": 3,
+          "src": "869A2E756",
+          "total_inr": 13920.79
+        },
+        {
+          "dst": "8CCBC35DE",
+          "first_ts": "2022-09-04T19:01:00",
+          "last_ts": "2022-09-06T20:47:00",
+          "n_transfers": 4,
+          "src": "815812D8A",
+          "total_inr": 13227.04
+        },
+        {
+          "dst": "84849EF40",
+          "first_ts": "2022-09-04T16:28:00",
+          "last_ts": "2022-09-05T11:56:00",
+          "n_transfers": 1,
+          "src": "8FF5D4C8C",
+          "total_inr": 13221.83
+        },
+        {
+          "dst": "8B3E397AD",
+          "first_ts": "2022-09-04T05:47:00",
+          "last_ts": "2022-09-05T10:49:00",
+          "n_transfers": 1,
+          "src": "8A11D2429",
+          "total_inr": 13144.79
+        },
+        {
+          "dst": "84603F4E1",
+          "first_ts": "2022-09-04T02:38:00",
+          "last_ts": "2022-09-05T01:46:00",
+          "n_transfers": 2,
+          "src": "8AC9F72E0",
+          "total_inr": 12764.27
+        },
+        {
+          "dst": "8F29FCB77",
+          "first_ts": "2022-09-04T18:54:00",
+          "last_ts": "2022-09-05T09:18:00",
+          "n_transfers": 4,
+          "src": "8A9309D58",
+          "total_inr": 12088.82
+        },
+        {
+          "dst": "8C6998837",
+          "first_ts": "2022-09-04T13:07:00",
+          "last_ts": "2022-09-06T02:29:00",
+          "n_transfers": 1,
+          "src": "8C4F46705",
+          "total_inr": 11417.35
+        },
+        {
+          "dst": "8FCA53241",
+          "first_ts": "2022-09-04T08:20:00",
+          "last_ts": "2022-09-06T19:40:00",
+          "n_transfers": 3,
+          "src": "82AD22AD8",
+          "total_inr": 11200.41
+        },
+        {
+          "dst": "8DEE8BAE8",
+          "first_ts": "2022-09-04T15:21:00",
+          "last_ts": "2022-09-06T00:27:00",
+          "n_transfers": 4,
+          "src": "81DDF8EA4",
+          "total_inr": 10888.96
+        },
+        {
+          "dst": "86F95600D",
+          "first_ts": "2022-09-04T18:42:00",
+          "last_ts": "2022-09-05T09:54:00",
+          "n_transfers": 2,
+          "src": "81CEF886D",
+          "total_inr": 10480.07
+        },
+        {
+          "dst": "8B973DAE1",
+          "first_ts": "2022-09-04T17:47:00",
+          "last_ts": "2022-09-04T22:49:00",
+          "n_transfers": 2,
+          "src": "87B7AB409",
+          "total_inr": 9165.43
+        },
+        {
+          "dst": "8C7D05953",
+          "first_ts": "2022-09-04T04:04:00",
+          "last_ts": "2022-09-06T23:08:00",
+          "n_transfers": 4,
+          "src": "8C88C31E3",
+          "total_inr": 8506.32
+        },
+        {
+          "dst": "8F507AC7B",
+          "first_ts": "2022-09-04T08:32:00",
+          "last_ts": "2022-09-04T19:04:00",
+          "n_transfers": 4,
+          "src": "8EEB276D5",
+          "total_inr": 8082.19
+        },
+        {
+          "dst": "8C9F314D5",
+          "first_ts": "2022-09-04T23:41:00",
+          "last_ts": "2022-09-05T16:07:00",
+          "n_transfers": 1,
+          "src": "8FF71D55C",
+          "total_inr": 7892.29
+        },
+        {
+          "dst": "8C393D55A",
+          "first_ts": "2022-09-04T11:29:00",
+          "last_ts": "2022-09-06T04:43:00",
+          "n_transfers": 2,
+          "src": "8D1D0AF0B",
+          "total_inr": 7820.0
+        },
+        {
+          "dst": "8EC817611",
+          "first_ts": "2022-09-04T21:39:00",
+          "last_ts": "2022-09-05T18:33:00",
+          "n_transfers": 1,
+          "src": "801D3EC96",
+          "total_inr": 7490.04
+        },
+        {
+          "dst": "812E52056",
+          "first_ts": "2022-09-04T05:35:00",
+          "last_ts": "2022-09-05T10:25:00",
+          "n_transfers": 3,
+          "src": "854367BFF",
+          "total_inr": 7428.02
+        },
+        {
+          "dst": "870C9F042",
+          "first_ts": "2022-09-04T06:42:00",
+          "last_ts": "2022-09-05T21:54:00",
+          "n_transfers": 1,
+          "src": "8F3A1A880",
+          "total_inr": 7151.98
+        },
+        {
+          "dst": "8381DFF95",
+          "first_ts": "2022-09-04T05:23:00",
+          "last_ts": "2022-09-05T10:01:00",
+          "n_transfers": 1,
+          "src": "807954290",
+          "total_inr": 6820.74
+        },
+        {
+          "dst": "80C5CE86C",
+          "first_ts": "2022-09-04T22:58:00",
+          "last_ts": "2022-09-06T05:26:00",
+          "n_transfers": 2,
+          "src": "875051D98",
+          "total_inr": 6725.63
+        },
+        {
+          "dst": "87F95FC69",
+          "first_ts": "2022-09-04T22:10:00",
+          "last_ts": "2022-09-04T22:10:00",
+          "n_transfers": 1,
+          "src": "884A1D4F6",
+          "total_inr": 6014.06
+        },
+        {
+          "dst": "86EF9555E",
+          "first_ts": "2022-09-04T22:10:00",
+          "last_ts": "2022-09-06T05:50:00",
+          "n_transfers": 1,
+          "src": "84731AD65",
+          "total_inr": 5425.66
+        },
+        {
+          "dst": "838CB70E2",
+          "first_ts": "2022-09-04T10:46:00",
+          "last_ts": "2022-09-04T17:02:00",
+          "n_transfers": 1,
+          "src": "8C630626A",
+          "total_inr": 5345.06
+        },
+        {
+          "dst": "8439B5E23",
+          "first_ts": "2022-09-04T15:57:00",
+          "last_ts": "2022-09-05T00:39:00",
+          "n_transfers": 1,
+          "src": "882EC230B",
+          "total_inr": 5230.54
+        },
+        {
+          "dst": "82A8B7EC7",
+          "first_ts": "2022-09-04T09:15:00",
+          "last_ts": "2022-09-05T06:45:00",
+          "n_transfers": 2,
+          "src": "848FC904E",
+          "total_inr": 5184.66
+        },
+        {
+          "dst": "8F4799101",
+          "first_ts": "2022-09-04T06:54:00",
+          "last_ts": "2022-09-06T21:18:00",
+          "n_transfers": 1,
+          "src": "8C4E27EE3",
+          "total_inr": 4812.65
+        },
+        {
+          "dst": "83052BCDE",
+          "first_ts": "2022-09-04T11:41:00",
+          "last_ts": "2022-09-05T04:07:00",
+          "n_transfers": 1,
+          "src": "8E2071464",
+          "total_inr": 4454.87
+        },
+        {
+          "dst": "85474DA43",
+          "first_ts": "2022-09-04T15:09:00",
+          "last_ts": "2022-09-04T15:09:00",
+          "n_transfers": 1,
+          "src": "891AAE1EF",
+          "total_inr": 4389.69
+        },
+        {
+          "dst": "8EC4AF591",
+          "first_ts": "2022-09-04T14:26:00",
+          "last_ts": "2022-09-04T14:26:00",
+          "n_transfers": 2,
+          "src": "801307735",
+          "total_inr": 4388.08
+        },
+        {
+          "dst": "8AD1E538C",
+          "first_ts": "2022-09-04T18:06:00",
+          "last_ts": "2022-09-06T09:42:00",
+          "n_transfers": 1,
+          "src": "834DDA404",
+          "total_inr": 3620.67
+        },
+        {
+          "dst": "8A9309D58",
+          "first_ts": "2022-09-04T04:52:00",
+          "last_ts": "2022-09-04T23:44:00",
+          "n_transfers": 1,
+          "src": "843B14B78",
+          "total_inr": 3604.47
+        },
+        {
+          "dst": "83052BCDE",
+          "first_ts": "2022-09-04T19:49:00",
+          "last_ts": "2022-09-06T20:23:00",
+          "n_transfers": 1,
+          "src": "88598AC0D",
+          "total_inr": 3124.38
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": true,
+      "expected_value_inr": 45625733.73,
+      "members": [
+        "800B9946F",
+        "80120EDC1",
+        "801307735",
+        "801D3EC96",
+        "80255031B",
+        "80257D898",
+        "8053C49BB",
+        "805951DB7",
+        "8062FF1C1",
+        "806DA9D86",
+        "8070089BB",
+        "807954290",
+        "808490096",
+        "80868C875",
+        "8086E7B97",
+        "8089DE0C4",
+        "808C27596",
+        "808CB5A89",
+        "809ABE7C5",
+        "80A817C34",
+        "80C4E5CDD",
+        "80EC3DCA3",
+        "80F189164",
+        "80F3D95D1",
+        "80F4965EA",
+        "80F9ED90D",
+        "810304F7B",
+        "81079DE6A",
+        "81136FE20",
+        "811AD0CBC",
+        "812E52056",
+        "812EB210C",
+        "812EE6A26",
+        "8136209B0",
+        "814593721",
+        "814BE6159",
+        "81541EE58",
+        "815812D8A",
+        "8158A98D7",
+        "8161A4AF0",
+        "817BDEB0E",
+        "81830296E",
+        "8185586D1",
+        "81930695D",
+        "8196E1EF2",
+        "8199E6BD7",
+        "819AA43E5",
+        "81A1457D5",
+        "81AB58582",
+        "81AE69EC4",
+        "81BD585EF",
+        "81C552897",
+        "81CA41074",
+        "81CE2B5E2",
+        "81CEF886D",
+        "81D85C46F",
+        "81D8BF0B7",
+        "81DDF8EA4",
+        "81DFEF364",
+        "81E0A3EA2",
+        "81F6DCDD0",
+        "82010A243",
+        "8208466F5",
+        "8235275AD",
+        "823EB9E7A",
+        "824542AA9",
+        "824F2D379",
+        "825753D99",
+        "825C0D59C",
+        "826C342ED",
+        "82779BB79",
+        "828D1E879",
+        "82936A45E",
+        "829441A48",
+        "82982A39A",
+        "8298BB6C9",
+        "82A174256",
+        "82A40F48F",
+        "82A750F64",
+        "82A8B7EC7",
+        "82AD22AD8",
+        "82B09213E",
+        "82C37B404",
+        "82D8E9F2B",
+        "82EE9C198",
+        "82F26F0BA",
+        "82F41C9B3",
+        "83058B565",
+        "831A7273C",
+        "83203B1F5",
+        "832218348",
+        "832561523",
+        "8326E937D",
+        "832929885",
+        "833466335",
+        "833D4A00D",
+        "833DBC3C0",
+        "83474A881",
+        "834794937",
+        "8347F169B",
+        "8349C8D21",
+        "834C0AD01",
+        "834DDA404",
+        "8381DFF95",
+        "838B41FF0",
+        "839005517",
+        "83A138DE9",
+        "83A7D95E5",
+        "83AE9FCCA",
+        "83B307A0D",
+        "83BFA7CA9",
+        "83C2170B7",
+        "83D0B36A6",
+        "83DE6FB44",
+        "83EFAC118",
+        "83F36D67D",
+        "8400BE53D",
+        "8406443F5",
+        "84133419D",
+        "84162D52C",
+        "841E2CE60",
+        "842B84B0C",
+        "84394EB9B",
+        "8439B5E23",
+        "843B14B78",
+        "84467CEEE",
+        "8454D69D6",
+        "846077F2E",
+        "84637543C",
+        "8468BE221",
+        "84731AD65",
+        "8473BCFBB",
+        "847F94599",
+        "84849EF40",
+        "848854C7E",
+        "848FC904E",
+        "849EFA992",
+        "849F5CD87",
+        "84A8DF29B",
+        "84A99B24E",
+        "84B51BDD1",
+        "84C701202",
+        "84D7F0819",
+        "84E4A0EAE",
+        "84E4E8403",
+        "84E5FFE79",
+        "84EA0A0BA",
+        "84ED615B1",
+        "851E46E45",
+        "852344711",
+        "85262BFF9",
+        "852D474CD",
+        "852DFC617",
+        "853388623",
+        "853AB9450",
+        "854367BFF",
+        "85474DA43",
+        "8548AFA8A",
+        "85587153A",
+        "855BB8E99",
+        "8563C8578",
+        "857C56CC3",
+        "857D1D5C1",
+        "858D8F74E",
+        "8592D04F2",
+        "85940E129",
+        "8598EF0DE",
+        "85AA68D91",
+        "85BB118E6",
+        "85CB9A5BF",
+        "85CCEAD2D",
+        "85DAA6B74",
+        "85E1BA470",
+        "85E64E6EE",
+        "85F50F454",
+        "85F645DDD",
+        "85F7745ED",
+        "85FD80C78",
+        "86192858A",
+        "8619C68C7",
+        "861A6BCA0",
+        "86242F185",
+        "8626CBB46",
+        "862C25B00",
+        "863A5768B",
+        "863B19137",
+        "863FCAF71",
+        "8640D2F6B",
+        "8650FB0DD",
+        "86580E5AA",
+        "865A1FB78",
+        "8668781C5",
+        "8670ADF24",
+        "867DC89CD",
+        "867E7B2AD",
+        "86873709A",
+        "8690F073D",
+        "86912ACC4",
+        "8695987BC",
+        "8697BBDDF",
+        "86991E8D5",
+        "869A2E756",
+        "86A2F670F",
+        "86AC717C1",
+        "86CBC49CA",
+        "86DC6BD87",
+        "86E9D24A3",
+        "86EF3D4D6",
+        "86EFD8B9E",
+        "86F0A6733",
+        "86F95600D",
+        "86F9D39AE",
+        "86FD05A2F",
+        "86FE69B5A",
+        "8701D0B79",
+        "870C9F042",
+        "870DC5AC8",
+        "871A0E1A0",
+        "871EF2201",
+        "8725BFCFB",
+        "872E20BC4",
+        "873360998",
+        "8739C25DD",
+        "873A0F935",
+        "87409AFD1",
+        "8747E4175",
+        "875051D98",
+        "87546778E",
+        "87614ACAA",
+        "87680022A",
+        "876B1D017",
+        "8774491EA",
+        "877673431",
+        "877DAA2C6",
+        "878572B18",
+        "8790A1433",
+        "87918DDEE",
+        "8798A1246",
+        "87AA81103",
+        "87B7AB409",
+        "87B96223A",
+        "87BE67392",
+        "87CD85492",
+        "87D1BE65F",
+        "87D244FFD",
+        "880C7B2EA",
+        "8810D5877",
+        "882D93D2F",
+        "882DE7DC9",
+        "882EC230B",
+        "884A1D4F6",
+        "8851FF8B1",
+        "8858CB7ED",
+        "88598AC0D",
+        "885A0C0EA",
+        "8863A57F3",
+        "886ED10F3",
+        "88718BAA1",
+        "88762412A",
+        "88884B617",
+        "888FB08C8",
+        "889637B01",
+        "889CD3531",
+        "88A3F7E12",
+        "88BEA95C7",
+        "88C211D9D",
+        "88C27FDF7",
+        "88D043673",
+        "88D2B26F9",
+        "88F6AE47B",
+        "88FF87644",
+        "89156A4A5",
+        "891A52E86",
+        "891AAE1EF",
+        "891F5F438",
+        "89263FE00",
+        "89486B945",
+        "894FF624C",
+        "8956B98F0",
+        "89629834B",
+        "89671A1FA",
+        "896DB6565",
+        "896F65ECF",
+        "897CAA258",
+        "8986CD2C2",
+        "89946A936",
+        "899783AF2",
+        "899B397E8",
+        "89AAC22B7",
+        "89AD13417",
+        "89BAD7BD0",
+        "89C1F41D4",
+        "89C4BB31D",
+        "89C625ECC",
+        "89C8B4403",
+        "89DDD02E9",
+        "89E53CBCC",
+        "89EAB3675",
+        "8A0669538",
+        "8A11D2429",
+        "8A21710FF",
+        "8A32D6DBF",
+        "8A35985D2",
+        "8A4509818",
+        "8A4633B04",
+        "8A4A55F14",
+        "8A59B0AC8",
+        "8A6008658",
+        "8A6165F57",
+        "8A64F73B3",
+        "8A6627A4A",
+        "8A6EC7A34",
+        "8A71CD0BB",
+        "8A8159450",
+        "8A8C4B87D",
+        "8A8C99331",
+        "8A8D601D4",
+        "8A8EB820D",
+        "8A9309D58",
+        "8A95196C9",
+        "8AB349B38",
+        "8AB482550",
+        "8AB979635",
+        "8ABD2FD79",
+        "8ABD43F40",
+        "8AC0759FB",
+        "8AC9F72E0",
+        "8ADB8FA38",
+        "8ADD54EF1",
+        "8AE288510",
+        "8AE507392",
+        "8AE6FB8D5",
+        "8AEFE4B36",
+        "8AF4465C1",
+        "8B0530B1D",
+        "8B09C4B47",
+        "8B0A78328",
+        "8B1AF2017",
+        "8B2DBBD1B",
+        "8B32CC80D",
+        "8B3805322",
+        "8B3C324F5",
+        "8B3E397AD",
+        "8B42A31CB",
+        "8B4D6E41E",
+        "8B5F42F05",
+        "8B62393F1",
+        "8B76DC6CF",
+        "8B7C68E44",
+        "8B80512E4",
+        "8B813FE59",
+        "8B876154E",
+        "8BA42DE5B",
+        "8BA5D42B0",
+        "8BBEA90ED",
+        "8BC4D84C3",
+        "8BC88599D",
+        "8BCAA2CBA",
+        "8BD7307A0",
+        "8BD8F6E9C",
+        "8BDA14169",
+        "8BDB1CD78",
+        "8BE1520D0",
+        "8BE7B8C7B",
+        "8BE7F892D",
+        "8BEAA67C8",
+        "8BF751C59",
+        "8BF7C5A26",
+        "8BF96228A",
+        "8C21A3E94",
+        "8C2A476A7",
+        "8C2B64E25",
+        "8C2CB18AE",
+        "8C40871D3",
+        "8C424ADBD",
+        "8C4329CD9",
+        "8C4578BC5",
+        "8C4C7BB47",
+        "8C4E27EE3",
+        "8C4F46705",
+        "8C54DED01",
+        "8C551075A",
+        "8C630626A",
+        "8C649CF98",
+        "8C6998837",
+        "8C6D1BB0F",
+        "8C7817E44",
+        "8C7D05953",
+        "8C88C31E3",
+        "8C9035B29",
+        "8C96AC994",
+        "8C98B1AEB",
+        "8C9BE9214",
+        "8C9EFD704",
+        "8C9F314D5",
+        "8C9FAAF75",
+        "8CAF24540",
+        "8CAFA6980",
+        "8CB1BAB5C",
+        "8CC0806ED",
+        "8CCBC35DE",
+        "8CDB2743A",
+        "8CE279614",
+        "8CE47CB28",
+        "8CE93A02F",
+        "8CF0D9292",
+        "8CF1B6828",
+        "8CF331C84",
+        "8D091C312",
+        "8D09EB805",
+        "8D0A95524",
+        "8D0E447B1",
+        "8D1395B7D",
+        "8D1D0AF0B",
+        "8D2B1391C",
+        "8D2D4930B",
+        "8D37C1F7F",
+        "8D37F8F08",
+        "8D446994E",
+        "8D5A5B9C2",
+        "8D5D4E5C1",
+        "8D646CD28",
+        "8D7D8C0E9",
+        "8D8319847",
+        "8D9302E03",
+        "8D9854E28",
+        "8D9A60410",
+        "8D9EFBAC3",
+        "8DA7C94D1",
+        "8DBD7B6C7",
+        "8DC6E07EB",
+        "8DC73D29A",
+        "8DF81AEF5",
+        "8E0059FAB",
+        "8E0CF83CA",
+        "8E1CB405E",
+        "8E1DDEFC3",
+        "8E2071464",
+        "8E22C2811",
+        "8E289CFBA",
+        "8E4425254",
+        "8E4B0D4BB",
+        "8E4CCD3C9",
+        "8E53E74AC",
+        "8E53E7D5C",
+        "8E68B2519",
+        "8E772D193",
+        "8E7DBC476",
+        "8E7DFA06E",
+        "8E81D254C",
+        "8E90FB012",
+        "8E925C935",
+        "8E97C115A",
+        "8EA3D57B1",
+        "8EB3290B0",
+        "8EB66E1B9",
+        "8EBA5643A",
+        "8EBB293F4",
+        "8EBB6210E",
+        "8EC4AF591",
+        "8EC738AE4",
+        "8EC817611",
+        "8ED231EA0",
+        "8EE73B2FC",
+        "8EEB276D5",
+        "8EF1BFE3A",
+        "8EF6D0C44",
+        "8F163D6AB",
+        "8F1B72F9F",
+        "8F29FCB77",
+        "8F2A12F9E",
+        "8F2C2E879",
+        "8F35F76EA",
+        "8F38306B6",
+        "8F3A1A880",
+        "8F3B5396B",
+        "8F3E79E60",
+        "8F4799101",
+        "8F507AC7B",
+        "8F5E8F56A",
+        "8F610DA9F",
+        "8F61B36D2",
+        "8F6923684",
+        "8F7358D78",
+        "8F87248A9",
+        "8F89423E6",
+        "8F8B0684E",
+        "8F94A2EDA",
+        "8F9814016",
+        "8FA1C5982",
+        "8FB26CA2A",
+        "8FCA53241",
+        "8FDC9C0D2",
+        "8FE93F23E",
+        "8FF08DE8B",
+        "8FF13F44A",
+        "8FF5D4C8C",
+        "8FF71D55C",
+        "8FF9F2D18",
+        "8FFB8E1B0"
+      ],
+      "members_truncated": true,
+      "n_members": 640,
+      "n_transfers": 1658,
+      "oversized": true,
+      "rank": 1,
+      "ring_id": "R-5fc06cd4c7a7",
+      "score": 0.74,
+      "top_features": [
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-693cdc9fea19": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 772002.68,
+      "edges": [
+        {
+          "dst": "8B2728F81",
+          "first_ts": "2022-09-05T11:05:00",
+          "last_ts": "2022-09-05T11:05:00",
+          "n_transfers": 4,
+          "src": "8C021038A",
+          "total_inr": 291172.42
+        },
+        {
+          "dst": "8C021038A",
+          "first_ts": "2022-09-05T04:52:00",
+          "last_ts": "2022-09-07T23:44:00",
+          "n_transfers": 4,
+          "src": "8116686E1",
+          "total_inr": 246640.82
+        },
+        {
+          "dst": "8CEF33613",
+          "first_ts": "2022-09-05T00:00:00",
+          "last_ts": "2022-09-05T03:00:00",
+          "n_transfers": 4,
+          "src": "8ED72DFE0",
+          "total_inr": 92366.03
+        },
+        {
+          "dst": "8483A0D3B",
+          "first_ts": "2022-09-05T07:13:00",
+          "last_ts": "2022-09-06T08:11:00",
+          "n_transfers": 1,
+          "src": "8CEF33613",
+          "total_inr": 55446.62
+        },
+        {
+          "dst": "84FD03C33",
+          "first_ts": "2022-09-05T14:26:00",
+          "last_ts": "2022-09-06T13:22:00",
+          "n_transfers": 1,
+          "src": "8483A0D3B",
+          "total_inr": 10305.8
+        },
+        {
+          "dst": "8116686E1",
+          "first_ts": "2022-09-05T21:39:00",
+          "last_ts": "2022-09-06T18:33:00",
+          "n_transfers": 1,
+          "src": "84FD03C33",
+          "total_inr": 5888.93
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 616652.14,
+      "members": [
+        "8116686E1",
+        "8483A0D3B",
+        "84FD03C33",
+        "8B2728F81",
+        "8C021038A",
+        "8CEF33613",
+        "8ED72DFE0"
+      ],
+      "members_truncated": false,
+      "n_members": 7,
+      "n_transfers": 15,
+      "oversized": false,
+      "rank": 9,
+      "ring_id": "R-693cdc9fea19",
+      "score": 0.8,
+      "top_features": [
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-913710343136": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 1902825.05,
+      "edges": [
+        {
+          "dst": "826E15A0E",
+          "first_ts": "2022-09-06T22:10:00",
+          "last_ts": "2022-09-07T05:50:00",
+          "n_transfers": 4,
+          "src": "841BF1CDA",
+          "total_inr": 296125.96
+        },
+        {
+          "dst": "8FC015A9E",
+          "first_ts": "2022-09-06T00:00:00",
+          "last_ts": "2022-09-06T03:00:00",
+          "n_transfers": 4,
+          "src": "8A566A9AA",
+          "total_inr": 289297.3
+        },
+        {
+          "dst": "826E15A0E",
+          "first_ts": "2022-09-06T01:31:00",
+          "last_ts": "2022-09-06T14:17:00",
+          "n_transfers": 4,
+          "src": "857E03153",
+          "total_inr": 274033.9
+        },
+        {
+          "dst": "8FC015A9E",
+          "first_ts": "2022-09-06T12:36:00",
+          "last_ts": "2022-09-06T15:12:00",
+          "n_transfers": 2,
+          "src": "8AB908DCA",
+          "total_inr": 150701.73
+        },
+        {
+          "dst": "8F8CC3527",
+          "first_ts": "2022-09-06T14:26:00",
+          "last_ts": "2022-09-06T14:26:00",
+          "n_transfers": 3,
+          "src": "8A566A9AA",
+          "total_inr": 113614.23
+        },
+        {
+          "dst": "8FC015A9E",
+          "first_ts": "2022-09-06T21:39:00",
+          "last_ts": "2022-09-08T18:33:00",
+          "n_transfers": 1,
+          "src": "83E5E8FDE",
+          "total_inr": 88538.73
+        },
+        {
+          "dst": "8F8CC3527",
+          "first_ts": "2022-09-06T11:05:00",
+          "last_ts": "2022-09-06T11:05:00",
+          "n_transfers": 2,
+          "src": "83E5E8FDE",
+          "total_inr": 85656.26
+        },
+        {
+          "dst": "8F8CC3527",
+          "first_ts": "2022-09-06T02:02:00",
+          "last_ts": "2022-09-07T01:34:00",
+          "n_transfers": 1,
+          "src": "8AB908DCA",
+          "total_inr": 76045.69
+        },
+        {
+          "dst": "8FC015A9E",
+          "first_ts": "2022-09-06T15:57:00",
+          "last_ts": "2022-09-06T15:57:00",
+          "n_transfers": 1,
+          "src": "841BF1CDA",
+          "total_inr": 67982.84
+        },
+        {
+          "dst": "826E15A0E",
+          "first_ts": "2022-09-06T07:13:00",
+          "last_ts": "2022-09-06T08:11:00",
+          "n_transfers": 1,
+          "src": "8A566A9AA",
+          "total_inr": 63286.75
+        },
+        {
+          "dst": "8F8CC3527",
+          "first_ts": "2022-09-06T08:44:00",
+          "last_ts": "2022-09-08T19:28:00",
+          "n_transfers": 3,
+          "src": "857E03153",
+          "total_inr": 57334.65
+        },
+        {
+          "dst": "8F8CC3527",
+          "first_ts": "2022-09-06T05:23:00",
+          "last_ts": "2022-09-08T10:01:00",
+          "n_transfers": 1,
+          "src": "841BF1CDA",
+          "total_inr": 49757.19
+        },
+        {
+          "dst": "8FC015A9E",
+          "first_ts": "2022-09-06T18:18:00",
+          "last_ts": "2022-09-06T18:18:00",
+          "n_transfers": 1,
+          "src": "857E03153",
+          "total_inr": 42700.66
+        },
+        {
+          "dst": "826E15A0E",
+          "first_ts": "2022-09-06T04:52:00",
+          "last_ts": "2022-09-08T23:44:00",
+          "n_transfers": 2,
+          "src": "83E5E8FDE",
+          "total_inr": 39688.35
+        },
+        {
+          "dst": "826E15A0E",
+          "first_ts": "2022-09-06T19:49:00",
+          "last_ts": "2022-09-07T20:23:00",
+          "n_transfers": 3,
+          "src": "8AB908DCA",
+          "total_inr": 35076.71
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 1463775.29,
+      "members": [
+        "824BFA060",
+        "826E15A0E",
+        "83E5E8FDE",
+        "841BF1CDA",
+        "857E03153",
+        "8A566A9AA",
+        "8AB908DCA",
+        "8F431FEB7",
+        "8F8CC3527",
+        "8FC015A9E"
+      ],
+      "members_truncated": false,
+      "n_members": 10,
+      "n_transfers": 33,
+      "oversized": false,
+      "rank": 4,
+      "ring_id": "R-913710343136",
+      "score": 0.77,
+      "top_features": [
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-9ad2f1590069": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 1211817.07,
+      "edges": [
+        {
+          "dst": "8C1593F53",
+          "first_ts": "2022-09-03T21:39:00",
+          "last_ts": "2022-09-05T18:33:00",
+          "n_transfers": 4,
+          "src": "8A9DF7035",
+          "total_inr": 321472.33
+        },
+        {
+          "dst": "8C1593F53",
+          "first_ts": "2022-09-03T01:31:00",
+          "last_ts": "2022-09-05T14:17:00",
+          "n_transfers": 4,
+          "src": "8444E2FEC",
+          "total_inr": 278764.67
+        },
+        {
+          "dst": "8C1593F53",
+          "first_ts": "2022-09-03T11:05:00",
+          "last_ts": "2022-09-05T04:55:00",
+          "n_transfers": 4,
+          "src": "83EE48D24",
+          "total_inr": 154854.45
+        },
+        {
+          "dst": "8C1593F53",
+          "first_ts": "2022-09-03T07:13:00",
+          "last_ts": "2022-09-03T08:11:00",
+          "n_transfers": 2,
+          "src": "8DAAF39CF",
+          "total_inr": 113583.16
+        },
+        {
+          "dst": "8C1593F53",
+          "first_ts": "2022-09-03T14:26:00",
+          "last_ts": "2022-09-03T14:26:00",
+          "n_transfers": 1,
+          "src": "8E155E1AB",
+          "total_inr": 63918.27
+        },
+        {
+          "dst": "8C1593F53",
+          "first_ts": "2022-09-03T00:00:00",
+          "last_ts": "2022-09-04T03:00:00",
+          "n_transfers": 1,
+          "src": "886C1A522",
+          "total_inr": 63805.1
+        },
+        {
+          "dst": "8C1593F53",
+          "first_ts": "2022-09-03T04:52:00",
+          "last_ts": "2022-09-03T23:44:00",
+          "n_transfers": 1,
+          "src": "853329B3A",
+          "total_inr": 59378.91
+        },
+        {
+          "dst": "8C1593F53",
+          "first_ts": "2022-09-03T18:18:00",
+          "last_ts": "2022-09-04T09:06:00",
+          "n_transfers": 1,
+          "src": "83DAC7046",
+          "total_inr": 45874.99
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 1065609.02,
+      "members": [
+        "83DAC7046",
+        "83EE48D24",
+        "8444E2FEC",
+        "853329B3A",
+        "886C1A522",
+        "8A9DF7035",
+        "8C1593F53",
+        "8DAAF39CF",
+        "8E155E1AB"
+      ],
+      "members_truncated": false,
+      "n_members": 9,
+      "n_transfers": 18,
+      "oversized": false,
+      "rank": 5,
+      "ring_id": "R-9ad2f1590069",
+      "score": 0.88,
+      "top_features": [
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-af691dffe255": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 1144924.37,
+      "edges": [
+        {
+          "dst": "8BF0F4B42",
+          "first_ts": "2022-09-02T07:13:00",
+          "last_ts": "2022-09-04T08:11:00",
+          "n_transfers": 4,
+          "src": "8EA0D62A2",
+          "total_inr": 350649.0
+        },
+        {
+          "dst": "8EA0D62A2",
+          "first_ts": "2022-09-02T00:00:00",
+          "last_ts": "2022-09-02T03:00:00",
+          "n_transfers": 4,
+          "src": "8B638C3F7",
+          "total_inr": 224573.34
+        },
+        {
+          "dst": "839E63AEE",
+          "first_ts": "2022-09-02T14:26:00",
+          "last_ts": "2022-09-02T14:26:00",
+          "n_transfers": 4,
+          "src": "8BF0F4B42",
+          "total_inr": 190338.3
+        },
+        {
+          "dst": "8B638C3F7",
+          "first_ts": "2022-09-02T11:05:00",
+          "last_ts": "2022-09-04T04:55:00",
+          "n_transfers": 4,
+          "src": "8E0FCD6B1",
+          "total_inr": 175862.34
+        },
+        {
+          "dst": "80BB18B08",
+          "first_ts": "2022-09-02T21:39:00",
+          "last_ts": "2022-09-03T18:33:00",
+          "n_transfers": 1,
+          "src": "839E63AEE",
+          "total_inr": 67551.76
+        },
+        {
+          "dst": "8E0FCD6B1",
+          "first_ts": "2022-09-02T04:52:00",
+          "last_ts": "2022-09-03T23:44:00",
+          "n_transfers": 2,
+          "src": "80BB18B08",
+          "total_inr": 31865.6
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 1041361.18,
+      "members": [
+        "80BB18B08",
+        "839E63AEE",
+        "8B638C3F7",
+        "8BF0F4B42",
+        "8E0FCD6B1",
+        "8EA0D62A2"
+      ],
+      "members_truncated": false,
+      "n_members": 6,
+      "n_transfers": 19,
+      "oversized": false,
+      "rank": 6,
+      "ring_id": "R-af691dffe255",
+      "score": 0.91,
+      "top_features": [
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-ba93ce19dbf1": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 807202.83,
+      "edges": [
+        {
+          "dst": "8CB22E5C3",
+          "first_ts": "2022-09-08T14:26:00",
+          "last_ts": "2022-09-10T13:22:00",
+          "n_transfers": 4,
+          "src": "8908AD09C",
+          "total_inr": 281810.23
+        },
+        {
+          "dst": "8CB22E5C3",
+          "first_ts": "2022-09-08T21:39:00",
+          "last_ts": "2022-09-10T18:33:00",
+          "n_transfers": 4,
+          "src": "8758818A9",
+          "total_inr": 220183.3
+        },
+        {
+          "dst": "8CB22E5C3",
+          "first_ts": "2022-09-08T07:13:00",
+          "last_ts": "2022-09-09T08:11:00",
+          "n_transfers": 3,
+          "src": "8AABCCE02",
+          "total_inr": 139767.91
+        },
+        {
+          "dst": "8CB22E5C3",
+          "first_ts": "2022-09-08T04:52:00",
+          "last_ts": "2022-09-10T23:44:00",
+          "n_transfers": 4,
+          "src": "874668C08",
+          "total_inr": 77900.22
+        },
+        {
+          "dst": "8CB22E5C3",
+          "first_ts": "2022-09-08T00:00:00",
+          "last_ts": "2022-09-10T03:00:00",
+          "n_transfers": 3,
+          "src": "84504995D",
+          "total_inr": 14159.09
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 531483.87,
+      "members": [
+        "84504995D",
+        "874668C08",
+        "8758818A9",
+        "8908AD09C",
+        "8AABCCE02",
+        "8CB22E5C3"
+      ],
+      "members_truncated": false,
+      "n_members": 6,
+      "n_transfers": 18,
+      "oversized": false,
+      "rank": 10,
+      "ring_id": "R-ba93ce19dbf1",
+      "score": 0.66,
+      "top_features": [
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-edea28935ff7": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 634093.7,
+      "edges": [
+        {
+          "dst": "873B1123A",
+          "first_ts": "2022-09-02T14:26:00",
+          "last_ts": "2022-09-03T13:22:00",
+          "n_transfers": 4,
+          "src": "8EFFA716C",
+          "total_inr": 261346.75
+        },
+        {
+          "dst": "891735D5A",
+          "first_ts": "2022-09-02T21:39:00",
+          "last_ts": "2022-09-03T18:33:00",
+          "n_transfers": 4,
+          "src": "8EFFA716C",
+          "total_inr": 208400.16
+        },
+        {
+          "dst": "837E05AB8",
+          "first_ts": "2022-09-02T07:13:00",
+          "last_ts": "2022-09-04T08:11:00",
+          "n_transfers": 2,
+          "src": "8EFFA716C",
+          "total_inr": 95566.24
+        },
+        {
+          "dst": "8B21168E7",
+          "first_ts": "2022-09-02T00:00:00",
+          "last_ts": "2022-09-03T03:00:00",
+          "n_transfers": 1,
+          "src": "8EFFA716C",
+          "total_inr": 11135.67
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 296449.04,
+      "members": [
+        "837E05AB8",
+        "873B1123A",
+        "891735D5A",
+        "8B21168E7",
+        "8EFFA716C"
+      ],
+      "members_truncated": false,
+      "n_members": 5,
+      "n_transfers": 11,
+      "oversized": false,
+      "rank": 11,
+      "ring_id": "R-edea28935ff7",
+      "score": 0.47,
+      "top_features": [
+        {
+          "feature": "pagerank",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-f2ee83fe438a": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 419257.22,
+      "edges": [
+        {
+          "dst": "8D19AB9EE",
+          "first_ts": "2022-09-09T14:26:00",
+          "last_ts": "2022-09-11T13:22:00",
+          "n_transfers": 4,
+          "src": "82C0E8C07",
+          "total_inr": 146613.06
+        },
+        {
+          "dst": "8209B1108",
+          "first_ts": "2022-09-09T00:00:00",
+          "last_ts": "2022-09-11T03:00:00",
+          "n_transfers": 2,
+          "src": "8DA5E2D98",
+          "total_inr": 96533.62
+        },
+        {
+          "dst": "82C0E8C07",
+          "first_ts": "2022-09-09T07:13:00",
+          "last_ts": "2022-09-09T08:11:00",
+          "n_transfers": 1,
+          "src": "8209B1108",
+          "total_inr": 81641.19
+        },
+        {
+          "dst": "833E63818",
+          "first_ts": "2022-09-09T21:39:00",
+          "last_ts": "2022-09-09T21:39:00",
+          "n_transfers": 3,
+          "src": "8D19AB9EE",
+          "total_inr": 56355.06
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 241869.19,
+      "members": [
+        "8209B1108",
+        "82C0E8C07",
+        "833E63818",
+        "8D19AB9EE",
+        "8DA5E2D98"
+      ],
+      "members_truncated": false,
+      "n_members": 5,
+      "n_transfers": 10,
+      "oversized": false,
+      "rank": 12,
+      "ring_id": "R-f2ee83fe438a",
+      "score": 0.58,
+      "top_features": [
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.1636
+        }
+      ]
+    },
+    "R-f4342be029f8": {
+      "ai": {
+        "benign_explanation": null,
+        "built_in_stage": "06",
+        "investigator": null,
+        "status": "not_built",
+        "verifier": null
+      },
+      "amount_inr": 1395556.35,
+      "edges": [
+        {
+          "dst": "85D7AE178",
+          "first_ts": "2022-09-01T18:18:00",
+          "last_ts": "2022-09-02T09:06:00",
+          "n_transfers": 4,
+          "src": "8C7206602",
+          "total_inr": 322397.75
+        },
+        {
+          "dst": "8365BEEEE",
+          "first_ts": "2022-09-01T14:26:00",
+          "last_ts": "2022-09-02T13:22:00",
+          "n_transfers": 3,
+          "src": "875F95C93",
+          "total_inr": 231872.75
+        },
+        {
+          "dst": "8520BE8DB",
+          "first_ts": "2022-09-01T11:05:00",
+          "last_ts": "2022-09-01T11:05:00",
+          "n_transfers": 4,
+          "src": "875F95C93",
+          "total_inr": 223764.76
+        },
+        {
+          "dst": "8C7206602",
+          "first_ts": "2022-09-01T00:00:00",
+          "last_ts": "2022-09-02T03:00:00",
+          "n_transfers": 4,
+          "src": "875F95C93",
+          "total_inr": 151285.35
+        },
+        {
+          "dst": "85D7AE178",
+          "first_ts": "2022-09-01T22:10:00",
+          "last_ts": "2022-09-01T22:10:00",
+          "n_transfers": 2,
+          "src": "86328E669",
+          "total_inr": 108276.52
+        },
+        {
+          "dst": "85D7AE178",
+          "first_ts": "2022-09-01T05:23:00",
+          "last_ts": "2022-09-01T10:01:00",
+          "n_transfers": 1,
+          "src": "8520BE8DB",
+          "total_inr": 66381.64
+        },
+        {
+          "dst": "85D7AE178",
+          "first_ts": "2022-09-01T08:44:00",
+          "last_ts": "2022-09-03T19:28:00",
+          "n_transfers": 3,
+          "src": "8365BEEEE",
+          "total_inr": 46034.3
+        },
+        {
+          "dst": "85D7AE178",
+          "first_ts": "2022-09-01T15:57:00",
+          "last_ts": "2022-09-03T00:39:00",
+          "n_transfers": 1,
+          "src": "88CA4476A",
+          "total_inr": 41760.11
+        },
+        {
+          "dst": "85D7AE178",
+          "first_ts": "2022-09-01T01:31:00",
+          "last_ts": "2022-09-03T14:17:00",
+          "n_transfers": 1,
+          "src": "8C21E4D66",
+          "total_inr": 38694.06
+        },
+        {
+          "dst": "8C21E4D66",
+          "first_ts": "2022-09-01T07:13:00",
+          "last_ts": "2022-09-01T08:11:00",
+          "n_transfers": 2,
+          "src": "875F95C93",
+          "total_inr": 26391.27
+        },
+        {
+          "dst": "86328E669",
+          "first_ts": "2022-09-01T04:52:00",
+          "last_ts": "2022-09-02T23:44:00",
+          "n_transfers": 1,
+          "src": "875F95C93",
+          "total_inr": 7442.38
+        },
+        {
+          "dst": "88CA4476A",
+          "first_ts": "2022-09-01T21:39:00",
+          "last_ts": "2022-09-02T18:33:00",
+          "n_transfers": 2,
+          "src": "875F95C93",
+          "total_inr": 4386.7
+        }
+      ],
+      "edges_available": true,
+      "edges_truncated": false,
+      "expected_value_inr": 723519.3,
+      "members": [
+        "8365BEEEE",
+        "8520BE8DB",
+        "85D7AE178",
+        "86328E669",
+        "875F95C93",
+        "88CA4476A",
+        "8C21E4D66",
+        "8C7206602"
+      ],
+      "members_truncated": false,
+      "n_members": 8,
+      "n_transfers": 28,
+      "oversized": false,
+      "rank": 8,
+      "ring_id": "R-f4342be029f8",
+      "score": 0.52,
+      "top_features": [
+        {
+          "feature": "comm_size",
+          "mean_contribution": 0.6
+        },
+        {
+          "feature": "comm_density",
+          "mean_contribution": 0.36
+        },
+        {
+          "feature": "fan_ratio",
+          "mean_contribution": 0.2571
+        },
+        {
+          "feature": "burst_share",
+          "mean_contribution": 0.2
+        },
+        {
+          "feature": "cycles3",
+          "mean_contribution": 0.1636
+        }
+      ]
+    }
+  },
+  "schema_version": "1"
+}

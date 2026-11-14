@@ -1,6 +1,6 @@
 # Architecture
 
-Status at Stage 04: the data side (C1 to C3), the graph builder and feature extractor (C4, C5), the detectors, ring extractor and evaluation harness (C6 to C8), and the snapshot exporter, backend API and audit store (C10 to C12) are built. Stages 03 and 04 have been tested on synthetic or hand-made data only. The status column says what is built.
+Status at Stage 05: the analyst interface (C15) is built for the queue, case, metrics and audit pages. Status at Stage 04: the data side (C1 to C3), the graph builder and feature extractor (C4, C5), the detectors, ring extractor and evaluation harness (C6 to C8), and the snapshot exporter, backend API and audit store (C10 to C12) are built. Stages 03 and 04 have been tested on synthetic or hand-made data only. The status column says what is built.
 
 ## Principles
 
@@ -29,7 +29,7 @@ Status at Stage 04: the data side (C1 to C3), the graph builder and feature extr
 | C12 | Audit store | Append-only hash-chained log | Built (Stage 04): `backend/app/audit.py` (SQLite) |
 | C13 | Drift monitor | Population stability index per window | Stage 07 [planned] |
 | C14 | Replay engine | Time-ordered playback with latency | Stage 07 [planned] |
-| C15 | Frontend | Queue, case view, metrics, audit, replay | Stage 05 and Stage 07; shell only: `frontend/package.json` |
+| C15 | Frontend | Queue, case view, metrics, audit, replay | Built (Stage 05, read-only): `frontend/src/lib/source.ts`, `frontend/src/lib/graph.ts`, `frontend/src/lib/metricsView.ts`, `frontend/src/components/QueueView.tsx`, `frontend/src/components/CaseView.tsx`, `frontend/src/components/MetricsView.tsx`, `frontend/src/components/AuditView.tsx`; actions and replay are Stage 07 |
 | C16 | LLM provider | Groq (development), Gemini (production) | Stage 06 [planned] |
 | Config | Settings and variant switch | Single source of configuration | Built: `backend/ringsentinel/config.py` |
 
@@ -84,6 +84,10 @@ Caption: the LLM explains evidence; it never changes a score or acts.
 - Stage 03: every detector scores each transfer; a transfer uses the graph features of its sender and receiver from the window of its own split. Train fits, validation chooses every threshold, test is scored once per detector (`SplitVault`). Rings come from the flagged transfers (components, then Louvain above the cap); ring match is Jaccard, one-to-one, on pattern rings only. The net-value cost model counts a ring as caught on any illicit hit and charges for legitimate accounts inside flagged rings. Defaults are planning assumptions (INR 250 per review, INR 500 per wrongly included account); see `docs/EVALUATION.md`.
 
 - Stage 04: the bundle is six JSON files validated by JSON Schema and tied together by SHA-256 hashes; the API loads it into memory at start and refuses a bundle that fails any check. Drift, replay and the AI case file are exported as explicit placeholders until Stages 06 and 07. The queue is ranked by an expected-value heuristic that uses the uncalibrated model score. Analyst actions go to a hash-chained SQLite log with idempotency keys; a decided ring is closed.
+
+## Frontend (Stage 05)
+
+A static-export Next.js app. In the browser, `createSource` reads the API if `NEXT_PUBLIC_API_BASE_URL` is set and it answers within the timeout; otherwise it reads the six bundle files from `frontend/public/snapshots` [generated], and if those are absent, from the committed demo bundle `frontend/public/demo-snapshots`. The dotted arrow in the diagram above is this fallback. The graph is capped at 500 accounts by a deterministic volume rule (`capGraph`). Details, limits and the open gap (no neighbour nodes in the bundle): `docs/STAGE_05.md`.
 
 ## API (Stage 04)
 
