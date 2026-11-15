@@ -3,10 +3,111 @@
     "R-21c8e2a50d07": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "c3f43ef92756a522f56ed7996150e22eb0cea88aec322f2418446712d3449480",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 1892857.06
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 10
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 30
+                }
+              ],
+              "nodes": [],
+              "text": "10 accounts made 30 transfers worth INR 1,892,857.06."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "8151ADB9F",
+                  "metric": "account_out_inr",
+                  "value_inr": 1720779.15
+                },
+                {
+                  "account": "8151ADB9F",
+                  "metric": "account_in_inr",
+                  "value_inr": 0.0
+                }
+              ],
+              "counts": [
+                {
+                  "account": "8151ADB9F",
+                  "metric": "out_degree",
+                  "value": 9
+                },
+                {
+                  "account": "8151ADB9F",
+                  "metric": "in_degree",
+                  "value": 0
+                }
+              ],
+              "nodes": [
+                "8151ADB9F"
+              ],
+              "text": "8151ADB9F is the busiest account: it sent INR 1,720,779.15 to 9 accounts and received INR 0.00 from 0."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "8151ADB9F",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "source"
+            },
+            {
+              "account": "827D6E53B",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "sink"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "fan_out",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 10 accounts and 30 transfers moving INR 1,892,857.06. The retained transfers show one account sends to many.",
+          "suspicion": "high",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 1892857.06,
       "edges": [
@@ -131,10 +232,111 @@
     "R-2af2891f1602": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "0e43a06b7b4f3b2d0e40b0f41fe284686721de5be68db11176a5cfd7ab341ad0",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 438758.58
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 4
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 13
+                }
+              ],
+              "nodes": [],
+              "text": "4 accounts made 13 transfers worth INR 438,758.58."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "8A09A3B26",
+                  "metric": "account_out_inr",
+                  "value_inr": 186124.05
+                },
+                {
+                  "account": "8A09A3B26",
+                  "metric": "account_in_inr",
+                  "value_inr": 72872.94
+                }
+              ],
+              "counts": [
+                {
+                  "account": "8A09A3B26",
+                  "metric": "out_degree",
+                  "value": 1
+                },
+                {
+                  "account": "8A09A3B26",
+                  "metric": "in_degree",
+                  "value": 1
+                }
+              ],
+              "nodes": [
+                "8A09A3B26"
+              ],
+              "text": "8A09A3B26 is the busiest account: it sent INR 186,124.05 to 1 accounts and received INR 72,872.94 from 1."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "8A09A3B26",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            },
+            {
+              "account": "85C0C7E36",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "cycle",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 4 accounts and 13 transfers moving INR 438,758.58. The retained transfers show money returning along a cycle.",
+          "suspicion": "medium",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 438758.58,
       "edges": [
@@ -213,10 +415,111 @@
     "R-2cb4e8f99a12": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "8d58cf68509645f56ef71db6c5a071145eaeb2482417d7be20337ba0e87ca273",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 1150519.98
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 8
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 19
+                }
+              ],
+              "nodes": [],
+              "text": "8 accounts made 19 transfers worth INR 1,150,519.98."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "875842522",
+                  "metric": "account_out_inr",
+                  "value_inr": 169173.1
+                },
+                {
+                  "account": "875842522",
+                  "metric": "account_in_inr",
+                  "value_inr": 337100.21
+                }
+              ],
+              "counts": [
+                {
+                  "account": "875842522",
+                  "metric": "out_degree",
+                  "value": 1
+                },
+                {
+                  "account": "875842522",
+                  "metric": "in_degree",
+                  "value": 1
+                }
+              ],
+              "nodes": [
+                "875842522"
+              ],
+              "text": "875842522 is the busiest account: it sent INR 169,173.10 to 1 accounts and received INR 337,100.21 from 1."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "875842522",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            },
+            {
+              "account": "84E2292ED",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "cycle",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 8 accounts and 19 transfers moving INR 1,150,519.98. The retained transfers show money returning along a cycle.",
+          "suspicion": "high",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 1150519.98,
       "edges": [
@@ -331,10 +634,111 @@
     "R-37a9c041c9ff": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "c5ea7b16a7ba4f05094c6bdb604bc26668f1fd35f5f5e902be66e5b54d1b4e48",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 2280082.37
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 12
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 45
+                }
+              ],
+              "nodes": [],
+              "text": "12 accounts made 45 transfers worth INR 2,280,082.37."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "8109031C0",
+                  "metric": "account_out_inr",
+                  "value_inr": 1188944.12
+                },
+                {
+                  "account": "8109031C0",
+                  "metric": "account_in_inr",
+                  "value_inr": 0.0
+                }
+              ],
+              "counts": [
+                {
+                  "account": "8109031C0",
+                  "metric": "out_degree",
+                  "value": 10
+                },
+                {
+                  "account": "8109031C0",
+                  "metric": "in_degree",
+                  "value": 0
+                }
+              ],
+              "nodes": [
+                "8109031C0"
+              ],
+              "text": "8109031C0 is the busiest account: it sent INR 1,188,944.12 to 10 accounts and received INR 0.00 from 0."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "8109031C0",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "source"
+            },
+            {
+              "account": "82F796790",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "sink"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "other",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 12 accounts and 45 transfers moving INR 2,280,082.37. The retained transfers show no single textbook shape.",
+          "suspicion": "high",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 2280082.37,
       "edges": [
@@ -549,10 +953,111 @@
     "R-526b3f09f290": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "dd8bae647153b1102103bc273346aeca7e8ee38ad77db0ae37edf66c82684151",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 287479.57
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 4
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 5
+                }
+              ],
+              "nodes": [],
+              "text": "4 accounts made 5 transfers worth INR 287,479.57."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "86AD058A9",
+                  "metric": "account_out_inr",
+                  "value_inr": 79769.4
+                },
+                {
+                  "account": "86AD058A9",
+                  "metric": "account_in_inr",
+                  "value_inr": 140772.0
+                }
+              ],
+              "counts": [
+                {
+                  "account": "86AD058A9",
+                  "metric": "out_degree",
+                  "value": 1
+                },
+                {
+                  "account": "86AD058A9",
+                  "metric": "in_degree",
+                  "value": 1
+                }
+              ],
+              "nodes": [
+                "86AD058A9"
+              ],
+              "text": "86AD058A9 is the busiest account: it sent INR 79,769.40 to 1 accounts and received INR 140,772.00 from 1."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "86AD058A9",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            },
+            {
+              "account": "8D1F5B538",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "chain",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 4 accounts and 5 transfers moving INR 287,479.57. The retained transfers show a chain of hand-offs.",
+          "suspicion": "medium",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 287479.57,
       "edges": [
@@ -623,10 +1128,113 @@
     "R-5fc06cd4c7a7": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "c06b1785bac2f9c0d77d158479fff0f1dae7ebf1ca876ae46ee36a1c6d1f9be8",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 61769167.2
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 640
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 1658
+                }
+              ],
+              "nodes": [],
+              "text": "640 accounts made 1658 transfers worth INR 61,769,167.20."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "86A2F670F",
+                  "metric": "account_out_inr",
+                  "value_inr": 182900.46
+                },
+                {
+                  "account": "86A2F670F",
+                  "metric": "account_in_inr",
+                  "value_inr": 1039920.08
+                }
+              ],
+              "counts": [
+                {
+                  "account": "86A2F670F",
+                  "metric": "out_degree",
+                  "value": 1
+                },
+                {
+                  "account": "86A2F670F",
+                  "metric": "in_degree",
+                  "value": 5
+                }
+              ],
+              "nodes": [
+                "86A2F670F"
+              ],
+              "text": "In the retained transfers, 86A2F670F is the busiest account: it sent INR 182,900.46 to 1 accounts and received INR 1,039,920.08 from 5."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "86A2F670F",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            },
+            {
+              "account": "87B96223A",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not. Edge data is partial.",
+          "pattern": "cycle",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 640 accounts and 1658 transfers moving INR 61,769,167.20. The retained transfers show money returning along a cycle.",
+          "suspicion": "high",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 9
+          },
+          "coverage": "partial",
+          "issues": [],
+          "status": "verified",
+          "warnings": [
+            "edge data is partial: claims were checked against retained edges only"
+          ]
+        }
       },
       "amount_inr": 61769167.2,
       "edges": [
@@ -5169,10 +5777,111 @@
     "R-693cdc9fea19": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "1bca357a9f4bb0ffa3b426c4575cdba033583a33747daed26c47896bad4d6675",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 772002.68
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 7
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 15
+                }
+              ],
+              "nodes": [],
+              "text": "7 accounts made 15 transfers worth INR 772,002.68."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "8C021038A",
+                  "metric": "account_out_inr",
+                  "value_inr": 291172.42
+                },
+                {
+                  "account": "8C021038A",
+                  "metric": "account_in_inr",
+                  "value_inr": 246640.82
+                }
+              ],
+              "counts": [
+                {
+                  "account": "8C021038A",
+                  "metric": "out_degree",
+                  "value": 1
+                },
+                {
+                  "account": "8C021038A",
+                  "metric": "in_degree",
+                  "value": 1
+                }
+              ],
+              "nodes": [
+                "8C021038A"
+              ],
+              "text": "8C021038A is the busiest account: it sent INR 291,172.42 to 1 accounts and received INR 246,640.82 from 1."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "8C021038A",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            },
+            {
+              "account": "8B2728F81",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "sink"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "chain",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 7 accounts and 15 transfers moving INR 772,002.68. The retained transfers show a chain of hand-offs.",
+          "suspicion": "high",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 772002.68,
       "edges": [
@@ -5270,10 +5979,111 @@
     "R-913710343136": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "0981debda043e339a9b4aded311883f56db09ca1f89cd70ae5ddcb73d39678e0",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 1902825.05
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 10
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 33
+                }
+              ],
+              "nodes": [],
+              "text": "10 accounts made 33 transfers worth INR 1,902,825.05."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "826E15A0E",
+                  "metric": "account_out_inr",
+                  "value_inr": 0.0
+                },
+                {
+                  "account": "826E15A0E",
+                  "metric": "account_in_inr",
+                  "value_inr": 708211.67
+                }
+              ],
+              "counts": [
+                {
+                  "account": "826E15A0E",
+                  "metric": "out_degree",
+                  "value": 0
+                },
+                {
+                  "account": "826E15A0E",
+                  "metric": "in_degree",
+                  "value": 5
+                }
+              ],
+              "nodes": [
+                "826E15A0E"
+              ],
+              "text": "826E15A0E is the busiest account: it sent INR 0.00 to 0 accounts and received INR 708,211.67 from 5."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "826E15A0E",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "sink"
+            },
+            {
+              "account": "8FC015A9E",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "sink"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "other",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 10 accounts and 33 transfers moving INR 1,902,825.05. The retained transfers show no single textbook shape.",
+          "suspicion": "high",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 1902825.05,
       "edges": [
@@ -5446,10 +6256,111 @@
     "R-9ad2f1590069": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "4db4cad864ebfa9b81bb4919b9a73f2fb3905bd67771d3c064c97ae08a851fb6",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 1211817.07
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 9
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 18
+                }
+              ],
+              "nodes": [],
+              "text": "9 accounts made 18 transfers worth INR 1,211,817.07."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "8C1593F53",
+                  "metric": "account_out_inr",
+                  "value_inr": 0.0
+                },
+                {
+                  "account": "8C1593F53",
+                  "metric": "account_in_inr",
+                  "value_inr": 1101651.88
+                }
+              ],
+              "counts": [
+                {
+                  "account": "8C1593F53",
+                  "metric": "out_degree",
+                  "value": 0
+                },
+                {
+                  "account": "8C1593F53",
+                  "metric": "in_degree",
+                  "value": 8
+                }
+              ],
+              "nodes": [
+                "8C1593F53"
+              ],
+              "text": "8C1593F53 is the busiest account: it sent INR 0.00 to 0 accounts and received INR 1,101,651.88 from 8."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "8C1593F53",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "sink"
+            },
+            {
+              "account": "8A9DF7035",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "source"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "fan_in",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 9 accounts and 18 transfers moving INR 1,211,817.07. The retained transfers show many accounts send to one.",
+          "suspicion": "high",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 1211817.07,
       "edges": [
@@ -5565,10 +6476,111 @@
     "R-af691dffe255": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "c9d2a9e0e41e725fc638c94f40bc7be75bfac287d9b9629572c74adb202a64e3",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 1144924.37
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 6
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 19
+                }
+              ],
+              "nodes": [],
+              "text": "6 accounts made 19 transfers worth INR 1,144,924.37."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "8EA0D62A2",
+                  "metric": "account_out_inr",
+                  "value_inr": 350649.0
+                },
+                {
+                  "account": "8EA0D62A2",
+                  "metric": "account_in_inr",
+                  "value_inr": 224573.34
+                }
+              ],
+              "counts": [
+                {
+                  "account": "8EA0D62A2",
+                  "metric": "out_degree",
+                  "value": 1
+                },
+                {
+                  "account": "8EA0D62A2",
+                  "metric": "in_degree",
+                  "value": 1
+                }
+              ],
+              "nodes": [
+                "8EA0D62A2"
+              ],
+              "text": "8EA0D62A2 is the busiest account: it sent INR 350,649.00 to 1 accounts and received INR 224,573.34 from 1."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "8EA0D62A2",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            },
+            {
+              "account": "8BF0F4B42",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "cycle",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 6 accounts and 19 transfers moving INR 1,144,924.37. The retained transfers show money returning along a cycle.",
+          "suspicion": "high",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 1144924.37,
       "edges": [
@@ -5665,10 +6677,111 @@
     "R-ba93ce19dbf1": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "fdfe2a6fa909ea580af1ca874f7ab759adb517fe9991780f3ea0116e35bd0e4b",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 807202.83
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 6
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 18
+                }
+              ],
+              "nodes": [],
+              "text": "6 accounts made 18 transfers worth INR 807,202.83."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "8CB22E5C3",
+                  "metric": "account_out_inr",
+                  "value_inr": 0.0
+                },
+                {
+                  "account": "8CB22E5C3",
+                  "metric": "account_in_inr",
+                  "value_inr": 733820.75
+                }
+              ],
+              "counts": [
+                {
+                  "account": "8CB22E5C3",
+                  "metric": "out_degree",
+                  "value": 0
+                },
+                {
+                  "account": "8CB22E5C3",
+                  "metric": "in_degree",
+                  "value": 5
+                }
+              ],
+              "nodes": [
+                "8CB22E5C3"
+              ],
+              "text": "8CB22E5C3 is the busiest account: it sent INR 0.00 to 0 accounts and received INR 733,820.75 from 5."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "8CB22E5C3",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "sink"
+            },
+            {
+              "account": "8908AD09C",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "source"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "fan_in",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 6 accounts and 18 transfers moving INR 807,202.83. The retained transfers show many accounts send to one.",
+          "suspicion": "medium",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 807202.83,
       "edges": [
@@ -5757,10 +6870,111 @@
     "R-edea28935ff7": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "a49ca2423e3aafea9200fc912ffa9744f7c039686f8daef6f02dc92adc16b3ff",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 634093.7
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 5
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 11
+                }
+              ],
+              "nodes": [],
+              "text": "5 accounts made 11 transfers worth INR 634,093.70."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "8EFFA716C",
+                  "metric": "account_out_inr",
+                  "value_inr": 576448.82
+                },
+                {
+                  "account": "8EFFA716C",
+                  "metric": "account_in_inr",
+                  "value_inr": 0.0
+                }
+              ],
+              "counts": [
+                {
+                  "account": "8EFFA716C",
+                  "metric": "out_degree",
+                  "value": 4
+                },
+                {
+                  "account": "8EFFA716C",
+                  "metric": "in_degree",
+                  "value": 0
+                }
+              ],
+              "nodes": [
+                "8EFFA716C"
+              ],
+              "text": "8EFFA716C is the busiest account: it sent INR 576,448.82 to 4 accounts and received INR 0.00 from 0."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "8EFFA716C",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "source"
+            },
+            {
+              "account": "873B1123A",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "sink"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "fan_out",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 5 accounts and 11 transfers moving INR 634,093.70. The retained transfers show one account sends to many.",
+          "suspicion": "medium",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 634093.7,
       "edges": [
@@ -5840,10 +7054,111 @@
     "R-f2ee83fe438a": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "d27652b7ddb5e25087f3e76ca20cb54eca7d2b36ad3762b28c37e9c624d3fc63",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 419257.22
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 5
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 10
+                }
+              ],
+              "nodes": [],
+              "text": "5 accounts made 10 transfers worth INR 419,257.22."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "82C0E8C07",
+                  "metric": "account_out_inr",
+                  "value_inr": 146613.06
+                },
+                {
+                  "account": "82C0E8C07",
+                  "metric": "account_in_inr",
+                  "value_inr": 81641.19
+                }
+              ],
+              "counts": [
+                {
+                  "account": "82C0E8C07",
+                  "metric": "out_degree",
+                  "value": 1
+                },
+                {
+                  "account": "82C0E8C07",
+                  "metric": "in_degree",
+                  "value": 1
+                }
+              ],
+              "nodes": [
+                "82C0E8C07"
+              ],
+              "text": "82C0E8C07 is the busiest account: it sent INR 146,613.06 to 1 accounts and received INR 81,641.19 from 1."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "82C0E8C07",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            },
+            {
+              "account": "8D19AB9EE",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "relay"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "chain",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 5 accounts and 10 transfers moving INR 419,257.22. The retained transfers show a chain of hand-offs.",
+          "suspicion": "medium",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 419257.22,
       "edges": [
@@ -5923,10 +7238,111 @@
     "R-f4342be029f8": {
       "ai": {
         "benign_explanation": null,
+        "benign_failure_reason": null,
+        "benign_verifier": null,
         "built_in_stage": "06",
-        "investigator": null,
-        "status": "not_built",
-        "verifier": null
+        "contested": false,
+        "contested_reason": null,
+        "fallback_kind": "no_provider",
+        "fallback_reason": "no provider configured; offline template used",
+        "input_hash": "8f9a779454125457661179a64b728142ff845d31e2d3c3f0ced6f9d05dbf8a36",
+        "investigator": {
+          "findings": [
+            {
+              "amounts": [
+                {
+                  "metric": "ring_total_inr",
+                  "value_inr": 1395556.35
+                }
+              ],
+              "counts": [
+                {
+                  "metric": "n_members",
+                  "value": 8
+                },
+                {
+                  "metric": "n_transfers",
+                  "value": 28
+                }
+              ],
+              "nodes": [],
+              "text": "8 accounts made 28 transfers worth INR 1,395,556.35."
+            },
+            {
+              "amounts": [
+                {
+                  "account": "875F95C93",
+                  "metric": "account_out_inr",
+                  "value_inr": 645143.21
+                },
+                {
+                  "account": "875F95C93",
+                  "metric": "account_in_inr",
+                  "value_inr": 0.0
+                }
+              ],
+              "counts": [
+                {
+                  "account": "875F95C93",
+                  "metric": "out_degree",
+                  "value": 6
+                },
+                {
+                  "account": "875F95C93",
+                  "metric": "in_degree",
+                  "value": 0
+                }
+              ],
+              "nodes": [
+                "875F95C93"
+              ],
+              "text": "875F95C93 is the busiest account: it sent INR 645,143.21 to 6 accounts and received INR 0.00 from 0."
+            }
+          ],
+          "key_accounts": [
+            {
+              "account": "875F95C93",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "source"
+            },
+            {
+              "account": "85D7AE178",
+              "reason": "One of the two accounts with the largest transfer volume.",
+              "role": "sink"
+            }
+          ],
+          "limits": "Offline template: no language model was used, and the suspicion level is a band of the detector score, not an independent reading. Only transfers between accounts are known; owners, devices and intent are not.",
+          "pattern": "other",
+          "suggested_checks": [
+            "Check whether the listed accounts share an owner, address or onboarding documents.",
+            "Review the largest transfers first."
+          ],
+          "summary": "Ring of 8 accounts and 28 transfers moving INR 1,395,556.35. The retained transfers show no single textbook shape.",
+          "suspicion": "medium",
+          "type": "case_file"
+        },
+        "prompt_version": "1",
+        "provider": null,
+        "source": "template",
+        "status": "ready",
+        "trace": {
+          "llm_calls": 0,
+          "tool_calls": []
+        },
+        "verifier": {
+          "attempts": 1,
+          "checked": {
+            "amounts": 3,
+            "counts": 4,
+            "dates": 0,
+            "nodes": 4,
+            "numbers": 8
+          },
+          "coverage": "full",
+          "issues": [],
+          "status": "verified",
+          "warnings": []
+        }
       },
       "amount_inr": 1395556.35,
       "edges": [

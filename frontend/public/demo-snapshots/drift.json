@@ -1,7 +1,163 @@
 {
+  "bins": {
+    "epsilon": 0.0001,
+    "inner_edges": [
+      0.010064850150216475,
+      0.018182970673314435,
+      0.027873607397929243,
+      0.03816654213495187,
+      0.04901669006144332,
+      0.0626702174173902,
+      0.07916955264074058,
+      0.10129632915501591,
+      0.13694160150706408
+    ],
+    "method": "reference quantiles, tied edges merged",
+    "n_bins": 10
+  },
   "built_in_stage": "07",
-  "psi_alert_level": null,
+  "detector": "demo_detector",
+  "notes": [
+    "Reference = the validation split's scores. Scores of training rows were not kept and would be in-sample; the plan's 'training distribution' is therefore not used.",
+    "PSI levels follow a rule of thumb (stable < warn, shift >= alert); they are settings, not statistical tests.",
+    "Per-window precision uses the dataset's labels, which a live system would only learn late. Windows are equal-width in time, so their sizes differ."
+  ],
+  "psi_alert_level": 0.25,
+  "psi_warn_level": 0.1,
+  "reference": {
+    "n_events": 3000,
+    "split": "val"
+  },
   "schema_version": "1",
-  "status": "not_built",
-  "windows": []
+  "status": "ready",
+  "summary": {
+    "alert_windows": [
+      6,
+      7
+    ],
+    "first_alert_index": 6,
+    "max_psi": 1.7103189320559615,
+    "n_alert": 2,
+    "n_reference": 3000,
+    "n_scored": 8,
+    "n_test": 6000,
+    "n_warn": 1,
+    "n_windows": 8,
+    "test_psi": 0.14173154832922163
+  },
+  "threshold": 0.3,
+  "windows": [
+    {
+      "end_ts": "2022-09-02T15:01:35.894314550",
+      "flagged_rate": 0.0,
+      "index": 0,
+      "level": "ok",
+      "mean_score": 0.06206637959682933,
+      "n_events": 725,
+      "n_flagged": 0,
+      "n_positives": 7,
+      "precision_at_threshold": null,
+      "psi": 0.010764696771924105,
+      "recall_at_threshold": 0.0,
+      "start_ts": "2022-09-01T00:02:05.065569424"
+    },
+    {
+      "end_ts": "2022-09-04T06:01:06.723059676",
+      "flagged_rate": 0.0013531799729364006,
+      "index": 1,
+      "level": "ok",
+      "mean_score": 0.06492660158761317,
+      "n_events": 739,
+      "n_flagged": 1,
+      "n_positives": 6,
+      "precision_at_threshold": 0.0,
+      "psi": 0.010679475163479255,
+      "recall_at_threshold": 0.0,
+      "start_ts": "2022-09-02T15:01:35.894314550"
+    },
+    {
+      "end_ts": "2022-09-05T21:00:37.551804802",
+      "flagged_rate": 0.005121638924455826,
+      "index": 2,
+      "level": "ok",
+      "mean_score": 0.05944422494310061,
+      "n_events": 781,
+      "n_flagged": 4,
+      "n_positives": 4,
+      "precision_at_threshold": 0.0,
+      "psi": 0.022823144868243696,
+      "recall_at_threshold": 0.0,
+      "start_ts": "2022-09-04T06:01:06.723059676"
+    },
+    {
+      "end_ts": "2022-09-07T12:00:08.380549928",
+      "flagged_rate": 0.004076086956521739,
+      "index": 3,
+      "level": "ok",
+      "mean_score": 0.06346216444245695,
+      "n_events": 736,
+      "n_flagged": 3,
+      "n_positives": 6,
+      "precision_at_threshold": 0.0,
+      "psi": 0.005874689701392732,
+      "recall_at_threshold": 0.0,
+      "start_ts": "2022-09-05T21:00:37.551804802"
+    },
+    {
+      "end_ts": "2022-09-09T02:59:39.209295054",
+      "flagged_rate": 0.0013333333333333333,
+      "index": 4,
+      "level": "ok",
+      "mean_score": 0.06261417057691904,
+      "n_events": 750,
+      "n_flagged": 1,
+      "n_positives": 6,
+      "precision_at_threshold": 0.0,
+      "psi": 0.019536382298724238,
+      "recall_at_threshold": 0.0,
+      "start_ts": "2022-09-07T12:00:08.380549928"
+    },
+    {
+      "end_ts": "2022-09-10T17:59:10.038040180",
+      "flagged_rate": 0.05787348586810229,
+      "index": 5,
+      "level": "warn",
+      "mean_score": 0.10178293735380492,
+      "n_events": 743,
+      "n_flagged": 43,
+      "n_positives": 5,
+      "precision_at_threshold": 0.046511627906976744,
+      "psi": 0.20062598297769957,
+      "recall_at_threshold": 0.4,
+      "start_ts": "2022-09-09T02:59:39.209295054"
+    },
+    {
+      "end_ts": "2022-09-12T08:58:40.866785306",
+      "flagged_rate": 0.1302149178255373,
+      "index": 6,
+      "level": "alert",
+      "mean_score": 0.15380798031601958,
+      "n_events": 791,
+      "n_flagged": 103,
+      "n_positives": 16,
+      "precision_at_threshold": 0.04854368932038835,
+      "psi": 0.8315799003771384,
+      "recall_at_threshold": 0.3125,
+      "start_ts": "2022-09-10T17:59:10.038040180"
+    },
+    {
+      "end_ts": "2022-09-13T23:58:11.695530433",
+      "flagged_rate": 0.19727891156462585,
+      "index": 7,
+      "level": "alert",
+      "mean_score": 0.19579328059449824,
+      "n_events": 735,
+      "n_flagged": 145,
+      "n_positives": 20,
+      "precision_at_threshold": 0.0896551724137931,
+      "psi": 1.7103189320559615,
+      "recall_at_threshold": 0.65,
+      "start_ts": "2022-09-12T08:58:40.866785306"
+    }
+  ]
 }
