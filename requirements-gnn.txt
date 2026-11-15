@@ -1,0 +1,6 @@
+# OPTIONAL (Stage 08): only for the GraphSAGE detector. The rest of RingSentinel does not need it.
+#   pip install -r requirements-gnn.txt
+# Pinned to the version the builder tested (Linux, Python 3.13, CPU run). On Windows the PyPI
+# wheel is the CPU build. If pip cannot find this exact version for your Python, install the
+# nearest one and tell the builder; the code uses only torch.sparse.mm and torch.nn.
+torch==2.15.0
