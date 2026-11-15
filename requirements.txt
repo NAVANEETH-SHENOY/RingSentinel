@@ -10,7 +10,7 @@ pydantic==2.12.5
 python-dotenv==1.2.4
 numpy==2.3.5
 pandas==2.3.3
-pyarrow==22.0.0
+pyarrow==23.0.1
 scikit-learn==1.7.2
 xgboost==3.1.1
 pytest==9.0.3
@@ -26,3 +26,6 @@ uvicorn==0.54.0
 httpx2==2.16.0
 jsonschema==4.26.0
 # Stage 06 (AI layer) adds no dependency: the Groq and Gemini clients use the standard library.
+# Stage 08: pyarrow raised 22.0.0 -> 23.0.1 (pip-audit: CVE-2026-25087, fixed in 23.0.1; the project
+# only reads its own parquet files, so it was not exploitable here). PyTorch for the optional
+# GraphSAGE detector is NOT here: see requirements-gnn.txt.
