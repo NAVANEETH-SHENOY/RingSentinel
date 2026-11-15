@@ -2,18 +2,22 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { EmptyState, OriginNote, Resource } from "./DataState";
+import { FeedbackCard } from "./FeedbackCard";
 import { StatusChip } from "./StatusChip";
 import { formatInr, formatScore } from "@/lib/format";
+import { hasLive, liveLabel } from "@/lib/liveQueue";
 import { useSource } from "@/lib/SourceContext";
 import { useResource } from "@/lib/useResource";
-import type { QueueItem, RingStatus } from "@/lib/types";
+import type { FeedbackState, QueueItem, QueueOrder, RingStatus } from "@/lib/types";
 
 const PAGE_SIZE = 25;
 type StatusFilter = "all" | RingStatus;
 
 export function QueueView() {
   const source = useSource();
-  const { state, reload } = useResource(() => source.queue(), [source]);
+  const hasApi = source.config.apiBase !== "";
+  const [order, setOrder] = useState<QueueOrder>("live");
+  const { state, reload } = useResource(() => source.queue(hasApi ? order : "export"), [source, order, hasApi]);
   const [text, setText] = useState("");
   const [status, setStatus] = useState<StatusFilter>("all");
   const [page, setPage] = useState(0);
@@ -22,6 +26,17 @@ export function QueueView() {
     <>
       <h1>Review queue</h1>
       <p className="muted">Rings ordered by expected value of a review. A human confirms, dismisses or holds each one; nothing is blocked automatically.</p>
+      {hasApi && (
+        <div className="toolbar">
+          <label className="field">
+            Order
+            <select value={order} onChange={(e) => setOrder(e.target.value as QueueOrder)}>
+              <option value="live">Live (after analyst feedback)</option>
+              <option value="export">As exported</option>
+            </select>
+          </label>
+        </div>
+      )}
       <Resource state={state} onRetry={reload} loadingLabel="Loading the review queue">
         {(loaded) => {
           const q = loaded.data;
@@ -30,6 +45,7 @@ export function QueueView() {
               items={q.items}
               origin={loaded}
               header={q}
+              feedback={q.feedback}
               text={text}
               setText={(v) => {
                 setText(v);
@@ -53,6 +69,7 @@ export function QueueView() {
 function QueueBody(props: {
   items: QueueItem[];
   origin: { origin: "api" | "snapshot" | "demo"; fallbackReason?: string };
+  feedback?: FeedbackState;
   header: { value_formula: string; cost_assumptions: { review_cost_inr: number; fp_cost_inr: number; loss_capture_rate: number }; score_calibrated: false; threshold: number | null; threshold_kind: string; note?: string };
   text: string;
   setText: (v: string) => void;
@@ -61,7 +78,8 @@ function QueueBody(props: {
   page: number;
   setPage: (n: number) => void;
 }) {
-  const { items, origin, header, text, status, page } = props;
+  const { items, origin, header, feedback, text, status, page } = props;
+  const live = hasLive(items);
   const statusKnown = origin.origin === "api";
   const filtered = useMemo(() => {
     const t = text.trim().toLowerCase();
@@ -76,6 +94,7 @@ function QueueBody(props: {
   return (
     <>
       <OriginNote loaded={origin} />
+      {feedback && <FeedbackCard state={feedback} />}
       <details className="card soft">
         <summary>How the order is computed</summary>
         <p className="small">{header.value_formula}</p>
@@ -131,6 +150,8 @@ function QueueBody(props: {
                     <th scope="col" className="num">Accounts</th>
                     <th scope="col" className="num">Transfers</th>
                     <th scope="col" className="num">Amount</th>
+                    {live && <th scope="col" className="num">Adjusted value</th>}
+                    {live && <th scope="col">Live order</th>}
                     <th scope="col">Top signals</th>
                     <th scope="col">Status</th>
                   </tr>
@@ -150,6 +171,8 @@ function QueueBody(props: {
                       <td className="num">{r.n_members}</td>
                       <td className="num">{r.n_transfers}</td>
                       <td className="num">{formatInr(r.amount_inr)}</td>
+                      {live && <td className="num">{r.live ? formatInr(r.live.adjusted_expected_value_inr) : "n/a"}</td>}
+                      {live && <td className="small">{liveLabel(r)}</td>}
                       <td className="small">{r.top_features.map((f) => f.feature).join(", ") || "n/a"}</td>
                       <td>
                         <StatusChip status={statusKnown ? (r.status ?? "pending") : undefined} />

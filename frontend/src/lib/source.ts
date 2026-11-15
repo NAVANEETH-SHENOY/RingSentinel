@@ -2,18 +2,23 @@
  *  Every result says which source answered, so the UI never shows stale data as live. */
 
 import { API_PREFIX, DEMO_PATH, SNAPSHOT_PATH, type RuntimeConfig, config as defaultConfig } from "./config";
-import { getJson, HttpError } from "./http";
+import { getJson, HttpError, postJson } from "./http";
 import {
   SUPPORTED_SCHEMA_VERSION,
   type AuditEntry,
+  type ActionBody,
+  type ActionResult,
   type Case,
+  type DriftDoc,
+  type FeedbackState,
   type Health,
   type Loaded,
   type Meta,
   type MetricsDoc,
   type Origin,
-  type Placeholder,
   type Queue,
+  type QueueOrder,
+  type ReplayDoc,
   type VerifyResult,
 } from "./types";
 
@@ -41,12 +46,16 @@ function checkVersion<T extends { schema_version?: string }>(doc: T): T {
 
 export interface Source {
   readonly config: RuntimeConfig;
-  queue(): Promise<Loaded<Queue>>;
+  /** `live` asks the API for the feedback-adjusted order; snapshots only have the export order. */
+  queue(order?: QueueOrder): Promise<Loaded<Queue>>;
   case(ringId: string): Promise<Loaded<Case>>;
   metrics(): Promise<Loaded<MetricsDoc>>;
   meta(): Promise<Loaded<Meta>>;
-  drift(): Promise<Loaded<Placeholder>>;
-  replay(): Promise<Loaded<Placeholder>>;
+  drift(): Promise<Loaded<DriftDoc>>;
+  replay(): Promise<Loaded<ReplayDoc>>;
+  feedback(): Promise<FeedbackState | null>;
+  /** Record a decision. Needs the API and the analyst token; never retried silently. */
+  act(ringId: string, body: ActionBody, token: string): Promise<ActionResult>;
   health(): Promise<Health | null>;
   verify(): Promise<VerifyResult>;
   audit(token: string, limit?: number): Promise<{ total: number; entries: AuditEntry[] }>;
@@ -91,10 +100,12 @@ export function createSource(cfg: RuntimeConfig = defaultConfig): Source {
   const source: Source = {
     config: cfg,
 
-    queue: () =>
+    queue: (order = "export") =>
       tiered<Queue>(
         async () => {
-          const doc = await getJson<Queue & { total?: number }>(apiUrl("/queue?limit=500"), { timeoutMs: cfg.timeoutMs });
+          const doc = await getJson<Queue & { total?: number }>(apiUrl(`/queue?limit=500&order=${order}`), {
+            timeoutMs: cfg.timeoutMs,
+          });
           return checkVersion(doc);
         },
         "queue.json",
@@ -139,18 +150,35 @@ export function createSource(cfg: RuntimeConfig = defaultConfig): Source {
     meta: () => tiered<Meta>(null, "meta.json", (doc) => checkVersion(doc as Meta)),
 
     drift: () =>
-      tiered<Placeholder>(
-        async () => checkVersion(await getJson<Placeholder>(apiUrl("/drift"), { timeoutMs: cfg.timeoutMs })),
+      tiered<DriftDoc>(
+        async () => checkVersion(await getJson<DriftDoc>(apiUrl("/drift"), { timeoutMs: cfg.timeoutMs })),
         "drift.json",
-        (doc) => checkVersion(doc as Placeholder),
+        (doc) => checkVersion(doc as DriftDoc),
       ),
 
     replay: () =>
-      tiered<Placeholder>(
-        async () => checkVersion(await getJson<Placeholder>(apiUrl("/replay"), { timeoutMs: cfg.timeoutMs })),
+      tiered<ReplayDoc>(
+        async () => checkVersion(await getJson<ReplayDoc>(apiUrl("/replay"), { timeoutMs: cfg.timeoutMs })),
         "replay.json",
-        (doc) => checkVersion(doc as Placeholder),
+        (doc) => checkVersion(doc as ReplayDoc),
       ),
+
+    async feedback() {
+      if (!hasApi) return null;
+      try {
+        return await getJson<FeedbackState>(apiUrl("/feedback"), { timeoutMs: cfg.timeoutMs });
+      } catch {
+        return null;
+      }
+    },
+
+    async act(ringId, body, token) {
+      if (!hasApi) throw new HttpError("no API configured", null);
+      return postJson<ActionResult>(apiUrl(`/cases/${encodeURIComponent(ringId)}/action`), body, {
+        timeoutMs: Math.max(cfg.timeoutMs, 8000),
+        headers: { "X-Analyst-Token": token },
+      });
+    },
 
     async health() {
       if (!hasApi) return null;
