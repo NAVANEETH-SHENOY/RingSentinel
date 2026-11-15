@@ -70,4 +70,4 @@ Set `RS_ANALYST_TOKEN` in `.env` first if you want to take actions. Then open ht
 - The expected-value ranking uses an uncalibrated score (see above).
 - `edges` in a case are rebuilt from the up to 500 transfers listed per ring in `rings.json` [generated]; larger rings are flagged `edges_truncated`.
 - Only SQLite is supported for the audit database; Postgres is a Stage 09 task (free-tier limits to be verified then).
-- The threshold feedback loop from dismissals (plan section 5.9) is not built; it is Stage 07.
+- The threshold feedback loop from dismissals (plan section 5.9) was not built in Stage 04; Stage 07 added it (`docs/STAGE_07.md`).

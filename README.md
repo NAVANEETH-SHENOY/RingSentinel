@@ -2,7 +2,7 @@
 
 A defense-only abuse-ring detection and analyst-review tool, built solo for the Razorpay AI Buildathon, Track 02 (AI Risk Manager).
 
-> **Status: Stage 05 built (read-only analyst interface) on top of Stage 04 (snapshot exporter and backend API with a hash-chained audit log) and Stage 03 (detectors, ring extraction, evaluation harness). Stages 03 to 05 are tested on synthetic, hand-made or invented demo data only; Stage 03 has not been run on the real data yet, so there are no results below.** Stage 01 is confirmed on the real data. Stage 06 (AI layer, shown in the case view) is built but has not been run against a live language model. Analyst actions in the UI, drift and replay do not exist yet. Sections marked "Planned" are filled in by the stage named next to them. Nothing in this README claims a result that has not been produced.
+> **Status: Stage 07 built (decisions in the interface, bounded threshold feedback, live queue, drift with alerts, replay), on top of Stage 06 (AI layer with verifier), Stage 05 (analyst interface), Stage 04 (snapshot exporter and backend API with a hash-chained audit log) and Stage 03 (detectors, ring extraction, evaluation harness). Stages 03 to 07 are tested on synthetic, hand-made or invented demo data only; Stage 03 has not been run on the real data yet, so no real result exists, and no live language-model call has been made. Deployment, diagram specs and the final results are still to come.**
 
 ## Problem
 
@@ -16,7 +16,7 @@ Fraud and risk analysts reviewing flagged groups of accounts. A human always dec
 
 RingSentinel links accounts through the money they move, finds groups that behave like a coordinated ring, ranks them by expected value to review, and explains each one. Every claim in an explanation is checked against the underlying data. The project is judged on honest measurement: precision and recall on a time-based held-out test, plus the rupee cost of wrongly flagging real users.
 
-Screenshots (of the built-in **demo data**, which is invented; not results): `docs/screenshots/queue.png`, `docs/screenshots/case-ring.png`, `docs/screenshots/case-capped-500.png`, `docs/screenshots/metrics-curves.png`, `docs/screenshots/audit.png`, `docs/screenshots/queue-backend-off.png`. A GIF and screenshots of real results: Planned (Stage 09).
+Screenshots (of the built-in **demo data**, which is invented; not results): `docs/screenshots/queue.png`, `docs/screenshots/case-ring.png`, `docs/screenshots/case-capped-500.png`, `docs/screenshots/metrics-curves.png`, `docs/screenshots/audit.png`, `docs/screenshots/queue-backend-off.png`, `docs/screenshots/drift.png`, `docs/screenshots/replay.png`. A GIF and screenshots of real results: Planned (Stage 09).
 
 ## Architecture summary
 
@@ -24,7 +24,7 @@ An offline, deterministic pipeline produces static JSON snapshots; a thin API an
 
 ## Core logic
 
-Written up as the stages land. Items 1 to 4 are implemented (Stage 02); items 5 to 7 are implemented (Stage 03, not yet run on the real data); item 9 is partly implemented (Stage 04); items 8 and 10 are planned.
+Written up as the stages land. Items 1 to 4 are implemented (Stage 02); items 5 to 7 are implemented (Stage 03, not yet run on the real data); item 9 is implemented (Stages 04 and 07); item 8 is implemented with a fake model only (Stage 06); item 10 is implemented (Stage 07, run on synthetic and demo data only).
 
 **1. Entity graph.** Nodes are accounts, identified by the account string. Edges are aggregated transfers (count, total INR amount, first and last time); self-transfers are counted but not linked. The IBM data has no device, IP or VPA information, so a synthetic, label-blind noise layer invents those attributes (marked derived) to test hub robustness. They are never presented as real data and never used as features.
 
@@ -59,7 +59,16 @@ NV = capture x (INR amount of illicit flagged transfers in caught rings)
 
 with planning-assumption defaults of INR 250 per review and INR 500 per wrongly included account (justification and a sensitivity sweep in `docs/EVALUATION.md`).
 
-**9. Human in the loop (built in Stage 04, local only).** The review queue is ordered by an expected-value heuristic computed from the model score and the agreed rupee costs:
+**8. AI layer with verifier (built in Stage 06; live model calls not yet run).** For each ring a language model writes a case file and a devil's advocate pass, using four read-only graph tools and a hard call budget. It sees accounts only as `acct-N` aliases. Every count and rupee amount it cites is a typed claim recomputed from the ring's own transfers:
+
+```
+claim ok  <=>  metric recomputed from the ring's edges == claimed value
+               (counts exactly; rupees within INR 1)
+```
+
+Prose is also scanned for unknown aliases, dates and numbers. Any failure falls back to a rule-based template case file built only from the data, and templates are excluded from the reported verified share. The model cannot change a score, rank or action; the bundle merge accepts only the `ai` field. "Verified" means the cited facts match the data, not that the interpretation is right. Questions to the queue become a validated JSON query (never code or SQL). See `docs/STAGE_06.md`.
+
+**9. Human in the loop, with bounded feedback (Stages 04 and 07).** The review queue is ordered by an expected-value heuristic computed from the model score and the agreed rupee costs:
 
 ```
 EV = score x capture x amount_inr - c_review - c_fp x n_members x (1 - score)
@@ -71,20 +80,28 @@ The score is not a calibrated probability, so this orders rings for review; it d
 hash_i = SHA-256( canonical_json(seq, ts, ring, action, analyst, note, idempotency_key, request_digest, hash_{i-1}) )
 ```
 
-so changing or deleting an earlier entry is detected when the chain is verified (it detects tampering; it does not prevent it, and cannot see entries cut off from the end unless the head hash is recorded elsewhere). Dismissals nudging the review threshold inside fixed bounds is planned for Stage 07.
+so changing or deleting an earlier entry is detected when the chain is verified (it detects tampering; it does not prevent it, and cannot see entries cut off from the end unless the head hash is recorded elsewhere).
 
-The analyst interface (Stage 05, `docs/STAGE_05.md`) shows this queue and each ring's transfer graph (drawn from at most 500 accounts, chosen deterministically by transfer volume) and works from the snapshot files when the backend is off. Actions in the interface arrive in Stage 07.
-
-**8. AI layer with verifier (built in Stage 06; live model calls not yet run).** For each ring a language model writes a case file and a devil's advocate pass, using four read-only graph tools and a hard call budget. It sees accounts only as `acct-N` aliases. Every count and rupee amount it cites is a typed claim recomputed from the ring's own transfers:
+Analyst decisions also steer the queue, inside fixed bounds. The review threshold is shifted in log-odds by the net number of dismissals, and the open rings are re-ranked by the expected value of the shifted score:
 
 ```
-claim ok  <=>  metric recomputed from the ring's edges == claimed value
-               (counts exactly; rupees within INR 1)
+offset = clamp(step x (dismissed - w x confirmed), 0, max_offset)           step 0.1, w 1, max 1.5 (hard ceilings 1, 5, 3)
+effective threshold = sigmoid(logit(base threshold) + offset)
+adjusted score      = sigmoid(logit(score) - offset)
 ```
 
-Prose is also scanned for unknown aliases, dates and numbers. Any failure falls back to a rule-based template case file built only from the data, and templates are excluded from the reported verified share. The model cannot change a score, rank or action; the bundle merge accepts only the `ai` field. "Verified" means the cited facts match the data, not that the interpretation is right. Questions to the queue become a validated JSON query (never code or SQL). See `docs/STAGE_06.md`.
+The shift is recomputed from the audit log on every read; stored scores, ranks and detectors never change, confirmations only cancel dismissals, holds count for nothing, and the threshold can never fall below the validated one. **This rule is a heuristic and has not been validated**; the interface says so. Details: `docs/STAGE_07.md`.
 
-Planned: drift with the population stability index (Stage 07).
+**10. Drift (Stage 07; run on synthetic and demo data only).** Each equal-width time window of the test period is compared with the validation scores using the population stability index over reference-quantile bins:
+
+```
+PSI = sum over bins of (test share - reference share) x ln(test share / reference share)      (shares floored at 1e-4)
+```
+
+A window is ok below 0.10, warn from 0.10 and alert from 0.25 (a rule of thumb, set in `RS_PSI_WARN_LEVEL` and `RS_PSI_ALERT_LEVEL`, not a statistical test); windows with fewer than 500 events get no value. The plan compares with the training distribution; training scores were not kept (and would be in-sample), so the reference is the validation split. A retrospective **replay** steps through the test period and shows when each flagged ring became detectable and, where one true ring dominates it, the latency against the truth (a lower bound, since the scores use whole-window features).
+
+The analyst interface (Stage 05, `docs/STAGE_05.md`) shows this queue and each ring's transfer graph (drawn from at most 500 accounts, chosen deterministically by transfer volume) and works from the snapshot files when the backend is off. With the backend on and an analyst token, the case page records confirm, dismiss and hold decisions (Stage 07).
+
 
 ## Data
 
@@ -119,9 +136,11 @@ Stage 04 (after Stage 03): `python scripts\export_snapshots.py` writes the snaps
 
 Stage 05 (from `frontend`; Node 22 LTS or newer): `npm ci`, then `npm run dev` and open http://localhost:3000 (demo data until a real bundle is synced). `npm run check` runs the type check, lint and tests; `npm run build` writes the static site to `frontend/out`. With the API running, put `NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000` in `frontend/.env.local` [generated]. To show real results: `python scripts\export_snapshots.py`, then `python scripts\sync_frontend_snapshots.py`.
 
+Stage 07 (after Stage 03, with the API running as above): `python scripts\export_snapshots.py` now also builds `drift.json` [generated] and `replay.json` [generated] when the scores and events tables exist (`--no-monitor` skips them); `python scripts\make_demo_bundle.py` rebuilds the demo bundle with drift, replay and template case files from invented data. In the interface (set `NEXT_PUBLIC_API_BASE_URL`, start the API with `RS_ANALYST_TOKEN` set) open a case, enter your name and the token, and confirm, dismiss or hold; the queue then shows the live order and the feedback card. See `docs/STAGE_07.md`.
+
 Stage 06 (after Stage 04): `python scripts\run_stage06.py --provider fake` runs the whole AI layer offline; for a live run put `GROQ_API_KEY` in `.env`, then `python scripts\run_stage06.py --provider groq --limit 20`. Ask the queue a question: `python scripts\ai_query.py "rings with a cycle"`. See `docs/STAGE_06.md`.
 
-Environment variables (names only): `RS_DATASET_VARIANT`, `RS_DATA_DIR`, `RS_SEED`, `RS_TRAIN_FRAC`, `RS_VAL_FRAC`, `RS_HUB_CAP`, `RS_ATTR_CAP`, `RS_COMMUNITY_CAP`, `RS_LOUVAIN_RESOLUTION`, `RS_NEG_SAMPLE_FRAC`, `RS_REVIEW_COST_INR`, `RS_FP_COST_INR`, `RS_LOSS_CAPTURE_RATE`, `RS_RING_TAU`, `RS_RING_MIN_SIZE`, `RS_GIT_COMMIT`, `RS_SNAPSHOT_DIR`, `RS_ANALYST_TOKEN`, `RS_AUDIT_DB_URL`, `RS_CORS_ORIGINS`, `RS_RATE_LIMIT_READ_PER_MIN`, `RS_RATE_LIMIT_WRITE_PER_MIN`, `RS_LLM_PROVIDER`, `RS_LLM_MODEL`, `RS_LLM_TIMEOUT_S`, `RS_LLM_MIN_INTERVAL_S`, `RS_LLM_MAX_TOOL_CALLS`, `RS_LLM_VERIFY_RETRIES`, `RS_AI_MAX_LLM_CASES`, `GROQ_API_KEY`, `GEMINI_API_KEY`; frontend: `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_API_TIMEOUT_MS`. See `.env.example` for reserved future names.
+Environment variables (names only): `RS_DATASET_VARIANT`, `RS_DATA_DIR`, `RS_SEED`, `RS_TRAIN_FRAC`, `RS_VAL_FRAC`, `RS_HUB_CAP`, `RS_ATTR_CAP`, `RS_COMMUNITY_CAP`, `RS_LOUVAIN_RESOLUTION`, `RS_NEG_SAMPLE_FRAC`, `RS_REVIEW_COST_INR`, `RS_FP_COST_INR`, `RS_LOSS_CAPTURE_RATE`, `RS_RING_TAU`, `RS_RING_MIN_SIZE`, `RS_GIT_COMMIT`, `RS_SNAPSHOT_DIR`, `RS_ANALYST_TOKEN`, `RS_AUDIT_DB_URL`, `RS_CORS_ORIGINS`, `RS_RATE_LIMIT_READ_PER_MIN`, `RS_RATE_LIMIT_WRITE_PER_MIN`, `RS_LLM_PROVIDER`, `RS_LLM_MODEL`, `RS_LLM_TIMEOUT_S`, `RS_LLM_MIN_INTERVAL_S`, `RS_LLM_MAX_TOOL_CALLS`, `RS_LLM_VERIFY_RETRIES`, `RS_AI_MAX_LLM_CASES`, `RS_FEEDBACK_STEP`, `RS_FEEDBACK_MAX_OFFSET`, `RS_FEEDBACK_CONFIRM_WEIGHT`, `RS_PSI_WARN_LEVEL`, `RS_PSI_ALERT_LEVEL`, `RS_DRIFT_WINDOWS`, `RS_DRIFT_BINS`, `RS_DRIFT_MIN_EVENTS`, `RS_REPLAY_STEPS`, `GROQ_API_KEY`, `GEMINI_API_KEY`. See `.env.example` for reserved future names.
 
 Deployment steps: Planned (Stage 09).
 

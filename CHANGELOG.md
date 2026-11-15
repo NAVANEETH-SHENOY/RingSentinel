@@ -2,6 +2,24 @@
 
 One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 
+## v0.8.0 - Stage 07: human in the loop, feedback, drift, replay (pending owner confirmation)
+
+Built on the owner's merged Stage 06 repo (main at f42a7e2, including the Groq provider changes).
+
+### Added
+- `backend/ringsentinel/review/feedback.py`: bounded threshold feedback (log-odds shift from net dismissals, hard ceilings), adjusted scores and values, live ordering; `GET /feedback` and `GET /queue?order=live` in `backend/app/routes.py`.
+- `backend/ringsentinel/monitor/drift.py` (PSI per time window against the validation scores, warn and alert levels) and `backend/ringsentinel/monitor/replay.py` (detection time, assembly time, latency against the truth, timeline); `drift.json` and `replay.json` are now built by the exporter when scores and events exist.
+- Frontend: decision panel with idempotent retry, live queue with the feedback card, drift page, replay page with a slider, quiet `refresh` in `useResource`.
+- Tests: new backend tests (feedback, drift, replay, export, API and the scripted scenario) and new frontend tests; the demo bundle now carries drift, replay and template case files.
+- `docs/STAGE_07.md`, drift and replay screenshots.
+
+### Changed
+- `backend/ringsentinel/snapshots/schemas.py`: drift and replay schemas carry the real fields when `status` is "ready"; the Stage 04 placeholders stay valid; `schema_version` is still "1".
+- Settings: `RS_FEEDBACK_*` (API), `RS_PSI_*`, `RS_DRIFT_*`, `RS_REPLAY_STEPS` (export); `.env.example` lists them.
+- `scripts/export_snapshots.py` gains `--no-monitor`; `scripts/make_demo_bundle.py` rebuilt on the real drift, replay and AI code.
+- Docs: README, ARCHITECTURE, PROJECT_EXPLAINER, HANDOVER;
+- No new dependency.
+
 ## v0.7.0 - Stage 06: AI layer (pending owner confirmation)
 
 ### Added

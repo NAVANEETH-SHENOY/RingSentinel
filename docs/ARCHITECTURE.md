@@ -1,6 +1,6 @@
 # Architecture
 
-Status at Stage 05: the analyst interface (C15) is built for the queue, case, metrics and audit pages. Status at Stage 04: the data side (C1 to C3), the graph builder and feature extractor (C4, C5), the detectors, ring extractor and evaluation harness (C6 to C8), and the snapshot exporter, backend API and audit store (C10 to C12) are built. Stages 03 and 04 have been tested on synthetic or hand-made data only. The status column says what is built.
+Status at Stage 07: every component through C16 is built; the human-in-the-loop flow (decisions, bounded threshold feedback, live queue), drift (C13), replay (C14) and the decision panel and drift and replay pages in the interface (C15) are added. Stages 03, 04, 06 and 07 have been tested on synthetic or hand-made data only (Stage 06 also with a fake model); no live model call and no real-data drift or replay run has happened. Status at Stage 04: the data side (C1 to C3), the graph builder and feature extractor (C4, C5), the detectors, ring extractor and evaluation harness (C6 to C8), and the snapshot exporter, backend API and audit store (C10 to C12) are built. Stages 03 and 04 have been tested on synthetic or hand-made data only. The status column says what is built.
 
 ## Principles
 
@@ -27,9 +27,9 @@ Status at Stage 05: the analyst interface (C15) is built for the queue, case, me
 | C10 | Snapshot exporter | Static JSON bundle with version metadata | Built (Stage 04): `backend/ringsentinel/snapshots/export.py`, `backend/ringsentinel/snapshots/bundle.py`, `backend/ringsentinel/snapshots/schemas.py`, `scripts/export_snapshots.py` |
 | C11 | Backend API | Serves snapshots, accepts analyst actions | Built (Stage 04): `backend/app/main.py`, `backend/app/routes.py`, `backend/app/ratelimit.py`, `backend/app/config.py`, `backend/app/schemas.py`, `backend/app/store.py` |
 | C12 | Audit store | Append-only hash-chained log | Built (Stage 04): `backend/app/audit.py` (SQLite) |
-| C13 | Drift monitor | Population stability index per window | Stage 07 [planned] |
-| C14 | Replay engine | Time-ordered playback with latency | Stage 07 [planned] |
-| C15 | Frontend | Queue, case view, metrics, audit, replay | Built (Stage 05, read-only): `frontend/src/lib/source.ts`, `frontend/src/lib/graph.ts`, `frontend/src/lib/metricsView.ts`, `frontend/src/components/QueueView.tsx`, `frontend/src/components/CaseView.tsx`, `frontend/src/components/MetricsView.tsx`, `frontend/src/components/AuditView.tsx`; actions and replay are Stage 07 |
+| C13 | Drift monitor | Population stability index per window | Built (Stage 07): `backend/ringsentinel/monitor/drift.py` |
+| C14 | Replay engine | Time-ordered playback with latency | Built (Stage 07, retrospective): `backend/ringsentinel/monitor/replay.py` |
+| C15 | Frontend | Queue, case view, decisions, AI panel, metrics, audit, drift, replay | Built (Stages 05 and 07): `frontend/src/lib/source.ts`, `frontend/src/lib/graph.ts`, `frontend/src/lib/metricsView.ts`, `frontend/src/lib/replayView.ts`, `frontend/src/components/QueueView.tsx`, `frontend/src/components/CaseView.tsx`, `frontend/src/components/ActionPanel.tsx`, `frontend/src/components/FeedbackCard.tsx`, `frontend/src/components/DriftView.tsx`, `frontend/src/components/ReplayView.tsx`, `frontend/src/components/MetricsView.tsx`, `frontend/src/components/AuditView.tsx` |
 | C16 | LLM provider | Groq (development), Gemini (production), fake (tests) | Built (Stage 06), live calls not yet run: `backend/ringsentinel/ai/provider.py`, `backend/ringsentinel/ai/fake.py` |
 | Config | Settings and variant switch | Single source of configuration | Built: `backend/ringsentinel/config.py` |
 
@@ -95,11 +95,12 @@ All routes are under the prefix /api/v1. Read routes are open; the action route 
 
 ```
 GET  /health                      bundle id, git commit, counts, whether actions are enabled
-GET  /queue?status=&limit=&offset=   ranked rings with status
+GET  /queue?status=&order=&limit=&offset=   rings with status; order=export (bundle rank) or live (feedback-adjusted)
+GET  /feedback                    bounded threshold shift and the counts behind it
 GET  /cases/{ring_id}             one case: members, edges, top features, ai placeholder, status
 GET  /metrics                     Stage 03 metrics, cost sweep, ablations, robustness, latency
-GET  /drift                       placeholder until Stage 07
-GET  /replay                      placeholder until Stage 07
+GET  /drift                       PSI per time window against the validation scores (placeholder when not built)
+GET  /replay                      per-ring detection time and latency, timeline (placeholder when not built)
 POST /cases/{ring_id}/action      body: action, analyst, note, idempotency_key   (token)
 GET  /audit?limit=&offset=        newest first                                    (token)
 GET  /audit/verify                walks the hash chain
@@ -108,6 +109,26 @@ GET  /audit/verify                walks the hash chain
 Status codes: 200 and 201 success (200 with replayed true for a repeated submission), 401 bad or missing token, 404 unknown ring, 409 key reuse for a different request or an action the ring's status does not allow, 422 invalid input, 429 rate limited (Retry-After header), 503 when no analyst token is configured. Request and response details, the audit log design and its limits: `docs/STAGE_04.md`.
 
 The full decision log is in `docs/PROJECT_EXPLAINER.md`.
+
+## Human in the loop, feedback and monitoring (Stage 07)
+
+```
+analyst (UI: ActionPanel) -- POST action + token + idempotency key --> C11 API --> C12 audit store (hash chain)
+                                                                           |
+                       statuses (latest per ring) <-----------------------+
+                                  |
+                 count confirmed / dismissed
+                                  v
+     offset = clamp(step * (dismissed - w * confirmed), 0, max)      (hard ceilings in code)
+                                  |
+     effective threshold = sigmoid(logit(base) + offset)      adjusted score = sigmoid(logit(score) - offset)
+                                  v
+          GET /queue?order=live  (open rings above the threshold first, by adjusted expected value)
+
+offline export:  scores (val, test) + events --> C13 drift (PSI per window)  --> drift.json  \
+                 exported rings + events     --> C14 replay (detection time) --> replay.json  /-> C10 bundle
+```
+The shift is computed on read from the audit log; no score, rank or detector output is ever rewritten, and the language model has no part in it. Drift compares each equal-width time window of the test period with the validation scores; replay is retrospective. Details and limits: `docs/STAGE_07.md`.
 
 ## AI layer (Stage 06)
 
@@ -119,4 +140,4 @@ ranked cases (D12) -> CaseFacts (aliases acct-N) -> cache? -> investigator loop 
                                           |
                           ai_cases.json (D10) -> merge_ai_into_bundle -> cases.json `ai` field only
 ```
-The model only explains. It has no access to scores, ranks or actions, and the merge refuses any field except `ai`. The case view (C15) shows the block with its verifier status and source. Details: `docs/STAGE_06.md`.
+The model only explains. It has no access to scores, ranks or actions, and the merge refuses any field except `ai`. Details: `docs/STAGE_06.md`.
