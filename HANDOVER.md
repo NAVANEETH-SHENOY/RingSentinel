@@ -1,4 +1,6 @@
-# HANDOVER (end of Stage 07 build; read before continuing in a new chat)
+# HANDOVER (end of Stage 08 build; read before continuing in a new chat)
+
+Stage 08 (Elliptic second dataset, optional GraphSAGE, API hardening, secrets and dependency review; `docs/STAGE_08.md`) is built on the owner's Stage 07 repository. Stage 07 below is unchanged in behaviour.
 
 Stage 07 is built on the owner's merged Stage 06 repository (main at f42a7e2, with the owner's Groq provider changes and the owner's `AiCard` in `frontend/src/components/CaseView.tsx`). The zip contains only Stage 07 files.
 
@@ -31,7 +33,8 @@ See `docs/ARCHITECTURE.md`, `docs/STAGE_04.md`, `docs/STAGE_07.md`, `docs/EVALUA
 | M5 | 05 frontend core | Merged in the owner's repo (PR #5) |
 | M6 | 06 AI layer | Merged in the owner's repo (PR #6), with the owner's Groq changes; the owner says everything works after fixing the Groq call handling (output not seen by the builder) |
 | M7 | 07 HITL, feedback, drift, replay | Built and tested in the sandbox; owner's run, merge and tag v0.8.0 pending |
-| M8, M9 | 08 to 09 | Not started |
+| M8 | 08 Elliptic, hardening | Built and tested in the sandbox (Elliptic on synthetic files only); owner's run, real Elliptic run, merge and tag v0.9.0 pending |
+| M9 | 09 deploy, docs, demo | Not started |
 
 ## Repo structure
 
@@ -84,6 +87,12 @@ IBM AML (Altman et al., NeurIPS 2023 Datasets and Benchmarks): authors, title an
 - Stage 05 items remain: metrics key names unobserved, no neighbour nodes in case graphs, offline snapshot size on real data.
 - CI never observed on GitHub. Timestamps run to 18 Sep although the data is described as 10 days.
 
+## Stage 08 status (real results only)
+
+- Builder, Linux sandbox, Python 3.13: backend `pytest` 665 passed, 8 skipped (5 are GraphSAGE tests that need torch); in a separate venv with torch 2.15.0 the 7 GraphSAGE tests passed; `ruff check .` clean; `python scripts/check_docs.py` OK; `scripts/secrets_scan.py` found nothing in the working tree or 39 commits; `pip-audit` on the installed environment clean after the pyarrow bump; `npm audit --omit=dev` 0, all deps 8 moderate (dev-only, eslint-config-next chain).
+- **NOT EXECUTED**: any run on the real Elliptic files (no real Elliptic number exists); Windows; CI on GitHub (including the new audit workflow); frontend `npm run check` and `npm run build` (no frontend file changed); torch wheel on Windows.
+- Open: Elliptic licence and column facts unverified; evaluation-pack items from the Stage 07 plan (feedback-rule experiment, robustness tables) moved to Stage 09 or later; no Elliptic page in the UI.
+
 ## Pending from the owner
 
 1. Apply the Stage 07 zip over your repo, `pip install -r requirements.txt`, then `pytest`, `ruff check .`, `python scripts\check_docs.py`, and in `frontend`: `npm ci`, `npm run check`, `npm run build`. Paste the outputs.
@@ -92,14 +101,18 @@ IBM AML (Altman et al., NeurIPS 2023 Datasets and Benchmarks): authors, title an
 4. Git (Git Bash): branch `stage-07-hitl-drift-replay`, merge, tag v0.8.0. Confirm earlier tags.
 5. Confirm the buildathon deadline and FX rates.
 
-## Next: Stage 08 (per plan M8) then Stage 09
+## Next: Stage 09 (plan M9: deploy, docs, diagrams, demo)
+
+Stage 09 candidates: deployment (Render or Fly, Vercel, Postgres) with `RS_TRUSTED_PROXY_HOPS` and `RS_API_DOCS=0`; the diagram specs document (to be created); full README pass; the evaluation pack deferred from Stage 08; an Elliptic page in the UI if wanted. The old Stage 08 text below is kept for reference.
+
+### Old text (Stage 08 plan, superseded)
 
 Stage 08: finish the evaluation pack. Ablations and robustness tables in `docs/EVALUATION.md`, a validation experiment for the feedback rule (simulate analyst labels from truth on the validation period, report effect on ring precision and review cost), the documented negative finding, and `scripts/reproduce.py` extended to cover drift and replay numbers. Files to touch: `scripts/reproduce.py`, `docs/EVALUATION.md`, `backend/ringsentinel/review/feedback.py` (only if the experiment motivates it), new Stage 08 tests. Stage 09: deployment (free-tier host, Postgres decision), the diagram specs document, final README, demo script. Do not start until the owner says "begin Stage 08".
 
 ## Continue-from-here prompt (paste into a new chat, with the project zip and this file attached)
 
 ```
-You are my pair-programmer on RingSentinel (Razorpay AI Buildathon, Track 02, defense-only). First read HANDOVER.md, docs/PROJECT_EXPLAINER.md, docs/STAGE_07.md and docs/EVALUATION.md from the attached project zip, then follow the stage rules in the project instructions (prerequisites first, incremental zip with CHANGES_STAGE_NN.md containing only added or modified files, exact cmd commands, tests marked PASSED only if actually run else NOT EXECUTED, docs and explainer updated, git workflow, caveats at the end).
-State: Stages 00 to 07 are built (Stage 07 folds in 05 and 06); I will paste test outputs and the real Stage 03 results. Wait for me to say "begin Stage 08", unless I paste results first, in which case help me interpret them.
+You are my pair-programmer on RingSentinel (Razorpay AI Buildathon, Track 02, defense-only). First read HANDOVER.md, docs/PROJECT_EXPLAINER.md, docs/STAGE_08.md and docs/EVALUATION.md from the attached project zip, then follow the stage rules in the project instructions (prerequisites first, incremental zip with CHANGES_STAGE_NN.md containing only added or modified files, exact cmd commands, tests marked PASSED only if actually run else NOT EXECUTED, docs and explainer updated, git workflow, caveats at the end).
+State: Stages 00 to 08 are built; I will paste test outputs and the real Stage 03 results. Wait for me to say "begin Stage 09", unless I paste results first, in which case help me interpret them.
 Environment: Windows, cmd for everything except git (Git Bash), Python 3.13.3, dataset HI-Small. Your sandbox cannot reach Kaggle. Incremental zips do not contain earlier stages' sources: ask me for any file you need rather than guessing signatures.
 ```

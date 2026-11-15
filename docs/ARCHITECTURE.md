@@ -141,3 +141,9 @@ ranked cases (D12) -> CaseFacts (aliases acct-N) -> cache? -> investigator loop 
                           ai_cases.json (D10) -> merge_ai_into_bundle -> cases.json `ai` field only
 ```
 The model only explains. It has no access to scores, ranks or actions, and the merge refuses any field except `ai`. Details: `docs/STAGE_06.md`.
+
+## Second dataset and hardening (Stage 08)
+
+The Elliptic path (`backend/ringsentinel/elliptic/`) reuses the same shared pieces as the IBM pipeline: `build_window_features` (graph, hub control), `fit_xgb`, `ImputedIsolationForest`, `SplitVault`, the metric functions and the PSI drift code. It adds a loader, a time-step split, an allow-list of graph columns and an optional plain-PyTorch GraphSAGE. It writes only to data/processed/elliptic and does not touch the snapshot bundle or the API.
+
+API middleware order: rate limit (auth-failure bucket first, client address from `client_address()`), body-size limit, security headers. Details: `docs/STAGE_08.md`.

@@ -27,6 +27,8 @@ A web interface shows the ranked queue, each ring as a graph of transfers, the e
 
 ## 3. Current state
 
+**Stage 08 (M8, built in the sandbox; owner's run pending):** a second dataset path (Elliptic, transaction level), an optional GraphSAGE, API hardening and a secrets and dependency review. Elliptic has never run on the real files (not downloadable from the sandbox): every Elliptic number so far comes from SYNTHETIC files. See the Stage 08 rows added to sections 4 to 13 and `docs/STAGE_08.md`.
+
 | Item | State |
 | --- | --- |
 | Milestone | M0 and M1 (Stage 01) done and confirmed on the owner's Windows machine, pushed. M2 / Stage 02 built; builder ran it on the real data; owner's run not seen. M3 / Stage 03 built and tested on synthetic data in the builder's sandbox; owner's run and the real-data run are pending. M4 / Stage 04 built on top of it and tested in the builder's sandbox; owner's run pending. M5 / Stage 05 and M6 / Stage 06 built in the builder's sandbox (the owner had not run them); M7 / Stage 07 folds both in and is tested in the builder's sandbox; owner's run, merge and tag v0.8.0 pending |
@@ -169,6 +171,24 @@ Stage 07 files:
 
 Planned (created in the stage named): `docs/DIAGRAM_SPECS.md` [planned, Stage 09]. Note the two metric packages: `backend/ringsentinel/evaluation/metrics.py` is Stage 01's (used by the Stage 01 baselines); `backend/ringsentinel/evaluate/metrics.py` and its neighbours are Stage 03's. Stage 03 code does not import the Stage 01 package.
 
+### Stage 08 additions
+
+| Path | What it does | Called by / calls |
+| --- | --- | --- |
+| `backend/ringsentinel/elliptic/settings.py` | `EllipticSettings`, `load_elliptic_settings()`: split steps, hub cap, paths | called by every Elliptic module and `scripts/run_stage08.py`; wraps core `Settings` |
+| `backend/ringsentinel/elliptic/schema.py` | Expected file names, column counts, class codes (all VERIFY) | used by the loader |
+| `backend/ringsentinel/elliptic/load.py` | `read_features`, `read_classes`, `read_edges`, `assemble`, `load_elliptic` -> `EllipticData` | calls the schema module; called by the pipeline module |
+| `backend/ringsentinel/elliptic/split.py` | `assign`, `split_nodes`, `step_to_ts` (pseudo date so `check_no_overlap` can run) | calls `ringsentinel.split` |
+| `backend/ringsentinel/elliptic/graph.py` | `edge_table`, `window_frames`, `graph_matrix`, `GRAPH_COLUMNS` allow-list | calls `features.build.build_window_features` |
+| `backend/ringsentinel/elliptic/pipeline.py` | `run_elliptic()`, `fit_detector`, `evaluate_detector`, per-step PSI, `cross_dataset_table()` | calls `detect.models`, `evaluate.metrics`, `monitor.drift`, `SplitVault` |
+| `backend/ringsentinel/elliptic/gnn.py` | `build_graphsage()`, `mean_adjacency()`; torch imported lazily | called by `run_elliptic(extra=...)` |
+| `backend/ringsentinel/elliptic/synthetic.py` | `write_synthetic_elliptic()` (SYNTHETIC) | tests and `run_stage08.py demo` |
+| `scripts/run_stage08.py` | `verify`, `run`, `table`, `demo` | calls the package above |
+| `scripts/secrets_scan.py` | scans working files and git history for key-shaped strings | tests; CI workflow audit.yml |
+| `backend/app/main.py` (changed) | `client_address()`, rate-limit, body-size and security-header middleware | `backend/app/ratelimit.py` (`blocked`, `record`) |
+| `.github/workflows/audit.yml` | weekly pip-audit, npm audit (production), secrets scan | CI |
+| `requirements-gnn.txt` | optional PyTorch pin | owner |
+
 ## 5. Runtime flows
 
 Stage 01 pipeline (`python scripts/run_stage01.py`, `main()` in `scripts/run_stage01.py`):
@@ -231,6 +251,18 @@ Drift and replay build (Stage 07): `export_snapshots()` calls `build_documents(.
 
 Replay in the browser: `ReplayView` holds one number, the cursor step. `detectedBy` lists the rings whose detection time is at or before the end of that step (`stepEndMs`), `eventsBy` counts the test transfers seen. Everything is a pure function of `replay.json` [generated], so the same file always replays the same way.
 
+### Stage 08: Elliptic run (`python scripts\run_stage08.py run`)
+
+1. `load_elliptic_settings()` reads `RS_ELLIPTIC_*`.
+2. `load_elliptic()` reads the three CSV files and `assemble()` validates ids, steps and classes, counts dangling and cross-step edges.
+3. `split_nodes()` assigns train, validation and test by time step.
+4. `window_frames()` builds hub-controlled graph features for three cumulative windows through `build_window_features()`.
+5. `fit_detector()` fits on labelled training rows; `evaluate_detector()` picks the F1 threshold on validation and calls `SplitVault.release_test()` once.
+6. Per-step PSI against validation scores is computed in `_step_blocks()`.
+7. metrics.json, scores.parquet, results.md are written under `data/processed/elliptic` [generated].
+
+API requests in Stage 08: `rate_limit` middleware (client from `client_address()`; `authfail` bucket checked first) -> `limit_body_size` -> `security_headers`.
+
 ## 6. Data contracts
 
 D1 `data/raw/MANIFEST.json`: `{"schema_version": 1, "datasets": {<variant>: {"files": {<name>: {"size_bytes": int, "sha256": str}}}}}`.
@@ -287,6 +319,13 @@ D11 (Stage 07) is the pair `drift.json` [generated] and `replay.json` [generated
 - `replay.json` [generated], `status: "ready"`: detector, threshold, min_ring_members, `timeline` (start_ts, end_ts, n_steps, step_minutes and three equal-length integer arrays: events, ring_transfers, detected), `events` (per exported ring: ring_id, rank, score, expected_value_inr, n_members, n_transfers, first_ts, detected_ts, partial, assembly_minutes, assembly_events and, only when one true ring supplies at least half of the ring's transfers, truth_ring_id, truth_share, truth_first_ts, latency_minutes, latency_events), `summary` (medians and 90th percentiles of assembly and latency, n_rings, n_partial, n_with_truth, n_test_events) and `notes`. Retrospective: the scores use window-level features, so latencies are a lower bound.
 - API additions (not bundle files): `GET /queue` items gain `status` and `live` (adjusted_score, adjusted_expected_value_inr, above_threshold, live_rank), and the response gains `order` and `feedback`; `GET /feedback` returns base_threshold, effective_threshold, offset_logit, max_offset_logit, step_logit, confirm_weight, at_bound, the counts, `rule`, `validated` (always false) and `note`.
 
+### Stage 08 (Elliptic)
+
+- Input elliptic_txs_features.csv: no header, 167 columns (txId, step, 165 features); VERIFY. elliptic_txs_classes.csv: `txId`, `class`. elliptic_txs_edgelist.csv: `txId1`, `txId2`.
+- `metrics.json` [generated] under data/processed/elliptic: `meta` (split steps, counts, `not_applicable`), `detectors.<name>` with `threshold`, `test` metrics, `per_step` list (F1, PR-AUC, PSI, status).
+- `scores.parquet` [generated]: txId, step, split, label, one score column per detector.
+- `docs/RESULTS_TABLE.md` [generated]: two-dataset table; IBM cells say "not run" until Stage 03 output exists.
+
 ## 7. Configuration
 
 | Variable | Default | If wrong |
@@ -335,6 +374,18 @@ Stage 05 (frontend, read at build time and baked into the browser files, so neve
 | `NEXT_PUBLIC_API_TIMEOUT_MS` | 4000 | Values outside 200 to 60000 are ignored. Too low makes a slow, waking backend look down; too high delays the fallback |
 
 Reserved for later stages and listed in `.env.example`: Kaggle credentials. `config/fx_rates_inr.json` holds the placeholder currency rates; a currency missing from it stops ingest.
+
+### Stage 08
+
+| Variable | Default | If wrong |
+| --- | --- | --- |
+| `RS_ELLIPTIC_DIR` | `<data>/raw/elliptic` | `verify` reports missing files |
+| `RS_ELLIPTIC_TRAIN_LAST_STEP` / `RS_ELLIPTIC_VAL_LAST_STEP` | 29 / 34 | validation error unless 1 <= train < val < 49 |
+| `RS_ELLIPTIC_HUB_CAP` | `RS_HUB_CAP` else 50 | must be >= 2 |
+| `RS_RATE_LIMIT_AUTHFAIL_PER_MIN` | 10 | 0 disables the lockout |
+| `RS_TRUSTED_PROXY_HOPS` | 0 | too high: forged `X-Forwarded-For` trusted; too low behind a proxy: all clients share one address |
+| `RS_MAX_BODY_BYTES` | 16384 | 1024 to 1000000 |
+| `RS_API_DOCS` | on | `0` or `off` removes the interactive docs |
 
 ## 8. Test map
 
@@ -393,6 +444,17 @@ Reserved for later stages and listed in `.env.example`: Kaggle credentials. `con
 | `frontend/tests/ai_card.test.tsx` | The Explanation card: verified, template, unverified and contested states; model text shown as plain text | AI text mislabelled or interpreted as markup |
 
 Run: `pytest` from the repo root; `npm run check` from `frontend` for the frontend.
+
+### Stage 08
+
+| File | Guards | Failure signals |
+| --- | --- | --- |
+| `backend/tests/test_stage08_load.py` | loader, schema checks, split | changed file layout, bad ids, overlap between splits |
+| `backend/tests/test_stage08_graph.py` | windows see no future edges, hub cap, allow-list | leakage or graph features changing meaning |
+| `backend/tests/test_stage08_pipeline.py` | poisoned test period leaves fits unchanged, vault, PSI alert vs quiet, determinism | test-label leakage, threshold chosen on test |
+| `backend/tests/test_stage08_gnn.py` | GraphSAGE determinism, no label access (skips without torch) | GNN changes |
+| `backend/tests/test_stage08_hardening.py` | lockout, proxy address, body size, headers | API middleware regressions |
+| `backend/tests/test_stage08_secrets_scan.py` | scanner rules, no value printed, history | scanner regressions |
 
 ## 9. Debugging playbook
 
@@ -458,6 +520,17 @@ Run: `pytest` from the repo root; `npm run check` from `frontend` for the fronte
 
 Order to rule out causes: environment (venv active, installs done), working directory, config values, input files (verify step), then code. Logs: pytest output, console output of `scripts/run_stage01.py`, and the ingest report.
 
+### Stage 08
+
+| Symptom | Likely cause | Inspect | Confirm | Usual fix |
+| --- | --- | --- | --- | --- |
+| `EllipticSchemaError` on load | real file differs from the expected layout | `backend/ringsentinel/elliptic/schema.py`, `read_features()` | `python scripts\run_stage08.py verify` | compare with the paper; update schema constants, mark VERIFY resolved |
+| Test PR-AUC much lower than validation | late-step distribution shift | `per_step` PSI in metrics.json [generated] | `python scripts\run_stage08.py table` | expected; report it, do not tune on test |
+| `GnnUnavailableError` | torch not installed | `torch_available()` | `python -c "import torch"` | `pip install -r requirements-gnn.txt` |
+| API 429 after a few wrong tokens | `authfail` bucket full | `RS_RATE_LIMIT_AUTHFAIL_PER_MIN` | wait one minute | correct the token; raise limit if shared address |
+| All users rate-limited together on a host | proxy hides client address | `RS_TRUSTED_PROXY_HOPS` | inspect `X-Forwarded-For` | set the hop count from the host docs |
+| API 413 or 411 | body too large or chunked | `RS_MAX_BODY_BYTES`, `limit_body_size` | check request size | shorten the note field |
+
 ## 10. Known issues and limits
 
 - **Labels versus rings**: labels come from the CSV `Is Laundering` column (5,177 positives); only 3,209 are in a pattern ring (see `docs/DATA.md`).
@@ -500,6 +573,10 @@ Order to rule out causes: environment (venv active, installs done), working dire
 - **The feedback rule is a heuristic and is not validated.** It is bounded (hard ceilings in code), reversible (recomputed from the audit log) and never touches stored scores, but nobody has measured whether it improves precision. The interface says so.
 - **Decisions use one shared token** and free-text names; the audit log records them but does not prove who acted.
 - The decision flow was tested with a mocked fetch in jsdom and against the real API through the test client; no browser session ran against a real uvicorn process in this stage.
+
+### Stage 08
+
+No real Elliptic run exists; dataset facts and licence are unverified; the Elliptic hub cap is untuned; no frontend page for Elliptic; ring-level metrics and rupee cost are not applicable to Elliptic; the dev-only npm advisories in the `eslint-config-next` chain remain; the evaluation-pack items from the Stage 07 handover (feedback-rule experiment, robustness tables) are still open.
 
 ## 11. Decision log
 
@@ -581,6 +658,15 @@ Order to rule out causes: environment (venv active, installs done), working dire
 | One idempotency key per decision attempt, reused on retry | A network failure after the server answered must not record the decision twice |
 | Demo drift, replay and AI blocks come from the real code on invented inputs | The interface and the demo cannot drift apart from the real documents |
 
+### Stage 08
+
+- Plan M8 scope chosen by the owner over the Stage 07 handover's evaluation-pack idea.
+- GraphSAGE in plain PyTorch instead of PyTorch Geometric: simpler install, optional dependency.
+- Razorpay webhook feed cut: needs keys and a public URL, adds attack surface, feeds no metric.
+- Elliptic gets its own settings class so core `Settings` and its tests stay unchanged.
+- Auth-failure lockout counts 401s only; `X-Forwarded-For` ignored by default because clients can forge it.
+- pyarrow raised to 23.0.1 after pip-audit (CVE-2026-25087).
+
 ## 12. Glossary
 
 - **Ring**: a group of accounts moving money in a coordinated way (here, one BEGIN/END block of the patterns file).
@@ -628,6 +714,11 @@ Order to rule out causes: environment (venv active, installs done), working dire
 - **Assembly time / detection latency**: time from a ring's first transfer to the moment its flagged transfers touch the minimum ring size / time from the true ring's first transfer to that moment.
 - **Replayed response**: the server's answer to a repeated request with the same idempotency key; `replayed: true`, nothing new recorded.
 
+- **Elliptic**: public Bitcoin transaction graph (Weber et al. 2019) with licit/illicit labels; second dataset in Stage 08.
+- **Time step**: Elliptic's two-week bucket (49 of them); used for the temporal split.
+- **GraphSAGE**: neural network that averages neighbour features; optional detector.
+- **authfail bucket**: per-client count of failed token checks.
+
 ## 13. How to regenerate every artifact
 
 Windows cmd, repo root, venv active:
@@ -651,3 +742,12 @@ python scripts\check_docs.py
 ```
 
 Individual steps: `python scripts\run_stage01.py --step ingest --force` (and `split`, `baselines`); `python scripts\run_stage02.py --step noise|tune|features|ablation --window train|val|test`. Stage 03: `python scripts\run_stage03.py --step detect|evaluate|ablate|robustness`, or `python scripts\reproduce.py` for everything plus `docs/EVALUATION_RESULTS.md` [generated] (`--evaluate-only` reuses the scores). Stage 06: `python scripts\run_stage06.py --provider fake|groq|gemini [--limit N|--all] [--refresh] [--no-apply]` writes `ai_cases.json` [generated] and `ai_report.json` [generated] and merges into the bundle; `python scripts\ai_query.py "question"`. Cached model replies live in `data/processed/<variant>/ai_cache/` [generated]; deleting it forces fresh calls. Stage 05 (from `frontend`): `npm ci`, `npm run dev`, `npm run check`, `npm run build`; from the repo root `python scripts\make_demo_bundle.py [--check]` rebuilds the demo bundle and `python scripts\sync_frontend_snapshots.py [--src DIR]` copies the real bundle into the frontend. Stage 04 and 07: `python scripts\export_snapshots.py [--git-commit SHA] [--frozen] [--max-rings N] [--no-edges] [--no-monitor] [--out DIR]` writes `data/snapshots/` [generated]; `python scripts\run_api.py [--port 8000]` serves it (set `RS_ANALYST_TOKEN` first for actions). The audit database is created on first start and is not regenerated: deleting it deletes the log.
+
+Stage 08 (after placing the Elliptic CSVs in `data\raw\elliptic`):
+
+```
+python scripts\run_stage08.py verify --write-manifest
+python scripts\run_stage08.py run
+python scripts\run_stage08.py table
+python scripts\secrets_scan.py
+```

@@ -88,3 +88,48 @@ The positive rate rises with time, so the test split is not the same distributio
 ## Node identity
 
 The graph uses the account string alone as the node id. The ingest report shows only 8 account strings that appear under more than one bank, so merging them changes almost nothing; banks stay as attributes in the event table.
+
+## Second dataset: Elliptic (Stage 08)
+
+**Elliptic Data Set:** A Bitcoin transaction graph containing transactions as nodes, directed payment flows as edges, and 49 time steps. Transactions are labelled illicit, licit, or unknown.
+
+**Dataset verification:** Verified against the downloaded Kaggle CSV files using `python scripts/run_stage08.py verify --write-manifest` on 15 November 2026.
+
+Verified dataset statistics:
+
+- Transactions (nodes): 203,769
+- Edges: 234,355
+- Illicit transactions: 4,545
+- Licit transactions: 42,019
+- Unlabelled transactions: 157,205
+- Time steps: 1–49
+- Feature columns used by the pipeline: 165 anonymised features
+- Unknown-endpoint edges dropped: 0
+- Cross-time-step edges: 0
+
+**Dataset source:** https://www.kaggle.com/datasets/ellipticco/elliptic-data-set
+
+**Paper citation:**
+
+Weber, M., Domeniconi, G., Chen, J., Weidele, D. K. I., Bellei, C., Robinson, T., and Leiserson, C. E. (2019). *Anti-Money Laundering in Bitcoin: Experimenting with Graph Convolutional Networks for Financial Forensics.* KDD '19 Workshop on Anomaly Detection in Finance, August 2019, Anchorage, Alaska, USA.
+
+arXiv:1908.02591 — https://arxiv.org/abs/1908.02591
+
+**Kaggle-requested attribution:**
+
+1. Elliptic, https://www.elliptic.co
+2. Weber et al. (2019), as cited above.
+
+**Licence:** Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0), as displayed on the Kaggle dataset page.
+
+Licence text: https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+| Field | Real or derived |
+|---|---|
+| Transaction ID, time step, 165 anonymised features (93 local, 72 aggregated), class and edge list | Real (as published) |
+| Pseudo clock (2019-01-01 plus 14 days per step), dummy edge amount 1.0 | Derived, only so shared code runs; amount- and clock-based graph columns are excluded |
+| Graph features (`graph_xgb`) | Derived from the edge list; no label is read |
+
+There are no accounts, amounts, rings or ring labels in this dataset. Consequently, ring-level metrics, the rupee cost model and the velocity rule are not applicable.
+
+**Licence restriction:** The dataset is subject to non-commercial and no-derivatives restrictions. Review the licence before redistribution, adaptation or commercial use.
