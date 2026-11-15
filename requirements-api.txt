@@ -1,0 +1,16 @@
+# Runtime dependencies of the API only (what Render installs). The full requirements.txt adds
+# the modelling stack (scikit-learn, xgboost, pyarrow, scipy, igraph) and the dev tools, which the
+# serving path never imports: the API reads the committed JSON snapshot bundle (data stage D12).
+# Keep the versions equal to requirements.txt; backend/tests/test_stage09_deploy.py checks that.
+# Verified in a clean virtual environment: the app imports, serves the real bundle, and passes
+# scripts/smoke_deployed.py with a Postgres audit log (about 136 MB resident).
+pydantic==2.12.5
+python-dotenv==1.2.4
+numpy==2.3.5
+pandas==2.3.3
+jsonschema==4.26.0
+fastapi==0.162.5
+uvicorn==0.54.0
+# Postgres audit log (RS_AUDIT_DB_URL=postgresql://...). The binary extra bundles libpq, so no
+# system packages are needed on the host.
+psycopg[binary]==3.3.9

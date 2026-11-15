@@ -1,0 +1,42 @@
+# Render Blueprint for the RingSentinel API (component C11). The frontend (C15) is a static site
+# on Vercel, see docs/DEPLOYMENT.md. Create it from the dashboard: New > Blueprint > this repo.
+#
+# Free web service: sleeps after about 15 minutes without traffic and takes about a minute to wake;
+# the disk is ephemeral, which is why the audit log lives in Postgres (Neon free tier), not on disk.
+# Render's own free Postgres is NOT used: it expires after 30 days.
+services:
+  - type: web
+    name: ringsentinel-api
+    runtime: python
+    plan: free
+    region: singapore
+    # Pull requests do not get their own copy of the service.
+    previews:
+      generation: off
+    buildCommand: pip install --upgrade pip && pip install -r requirements-api.txt
+    startCommand: python -m uvicorn --factory app.main:create_app --app-dir backend --host 0.0.0.0 --port $PORT
+    # A route that never touches the database, so health probes do not keep Neon awake.
+    healthCheckPath: /api/v1/live
+    autoDeploy: true
+    envVars:
+      # Render requires a fully qualified version here (docs: "Setting Your Python Version").
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: RS_SNAPSHOT_DIR
+        value: data/snapshots
+      - key: RS_API_DOCS
+        value: "0"
+      # Cloudflare then Render's proxy sit in front of the app; each appends one address to
+      # X-Forwarded-For, so the client is the 2nd entry from the right. Unverified against Render's
+      # documentation (it does not state this): see docs/DEPLOYMENT.md. Wrong value = rate limits
+      # apply per proxy address instead of per client; nothing else changes.
+      - key: RS_TRUSTED_PROXY_HOPS
+        value: "2"
+      # Secrets and per-account values: set in the Render dashboard, never in this file.
+      - key: RS_AUDIT_DB_URL
+        sync: false
+      - key: RS_ANALYST_TOKEN
+        sync: false
+      - key: RS_CORS_ORIGINS
+        sync: false
+      # Optional: only needed to regenerate AI case files; the deployed API never calls an LLM.
