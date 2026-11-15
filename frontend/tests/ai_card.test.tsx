@@ -59,6 +59,28 @@ describe("AI case file panel", () => {
     expect(screen.getByText(/built by fixed rules/i)).toBeInTheDocument();
   });
 
+  it("does not call the offline stand-in a language model, even when its output is cached", async () => {
+    withAi({
+      status: "ready", built_in_stage: "06", source: "cache", provider: { name: "fake", model: "heuristic-v1" },
+      investigator: CASE_FILE, verifier: { status: "verified" }, benign_explanation: null,
+    });
+    renderWith(<CaseView ringId={ringId} />);
+    const chip = await screen.findByTestId("ai-source");
+    expect(chip).toHaveTextContent(/offline stand-in, not a language model/i);
+    expect(chip).not.toHaveTextContent(/written by a language model/i);
+    expect(screen.getByText(/fixed offline routine used for testing/i)).toBeInTheDocument();
+    expect(screen.getByText(/fake \/ heuristic-v1/i)).toBeInTheDocument();
+  });
+
+  it("still calls a cached real-provider case model-written", async () => {
+    withAi({
+      status: "ready", built_in_stage: "06", source: "cache", provider: { name: "groq", model: "m" },
+      investigator: CASE_FILE, verifier: { status: "verified" }, benign_explanation: null,
+    });
+    renderWith(<CaseView ringId={ringId} />);
+    expect(await screen.findByTestId("ai-source")).toHaveTextContent(/written by a language model \(cached\)/i);
+  });
+
   it("warns when the facts did not verify", async () => {
     withAi({ status: "ready", built_in_stage: "06", source: "llm", investigator: CASE_FILE, verifier: { status: "unverified", issues: ["amount mismatch"] }, benign_explanation: null });
     renderWith(<CaseView ringId={ringId} />);

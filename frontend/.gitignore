@@ -4,7 +4,6 @@ out/
 *.tsbuildinfo
 .env
 .env.local
-# The real bundle is copied here by scripts/sync_frontend_snapshots.py. Commit it only after the
-# Stage 03 numbers are frozen (plan section 8); the demo bundle in public/demo-snapshots is committed.
-public/snapshots/*
-!public/snapshots/.gitkeep
+# Stage 09: the real bundle in public/snapshots (copied by scripts/sync_frontend_snapshots.py) is
+# now COMMITTED, because the deployed site reads it while the API is asleep. Before Stage 09 this
+# folder was ignored until the numbers were frozen. Re-sync and commit it whenever the bundle changes.

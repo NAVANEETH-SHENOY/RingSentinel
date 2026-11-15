@@ -172,6 +172,14 @@ const SOURCE_TEXT: Record<string, string> = {
   template: "Rule-based summary, no language model",
 };
 
+/** `fake` is the deterministic offline stand-in used for tests and no-key runs. Its cached output
+ *  has source "cache", so the source alone cannot tell it from a real model: check the provider. */
+export const STAND_IN_TEXT = "Offline stand-in, not a language model";
+
+export function isStandIn(ai: { provider?: { name: string } | null }): boolean {
+  return ai.provider?.name === "fake";
+}
+
 function Level({ label, level }: { label: string; level: string }) {
   return (
     <span className="chip" data-testid={`ai-${label.toLowerCase()}`}>
@@ -197,7 +205,8 @@ function AiCard({ c }: { c: Case }) {
   const file = ai.investigator;
   const benign = ai.benign_explanation;
   const verified = ai.verifier?.status === "verified";
-  const fromModel = ai.source === "llm" || ai.source === "cache";
+  const standIn = isStandIn(ai);
+  const fromModel = (ai.source === "llm" || ai.source === "cache") && !standIn;
   return (
     <section className="card" aria-labelledby="ai-h">
       <h2 id="ai-h">Explanation</h2>
@@ -206,7 +215,7 @@ function AiCard({ c }: { c: Case }) {
           {verified ? "Facts verified against the transfers" : "Not verified"}
         </span>{" "}
         <span className="chip" data-testid="ai-source">
-          {SOURCE_TEXT[ai.source ?? "template"] ?? "Unknown source"}
+          {standIn ? STAND_IN_TEXT : (SOURCE_TEXT[ai.source ?? "template"] ?? "Unknown source")}
         </span>{" "}
         {ai.contested ? (
           <span className="chip held" data-testid="ai-contested">
@@ -218,7 +227,11 @@ function AiCard({ c }: { c: Case }) {
         {verified
           ? "Verified means every count, amount and account cited matches this ring's transfers. It does not mean the interpretation is right. "
           : "Some cited facts did not match the transfers; treat this text with care. "}
-        {fromModel ? "This text does not change the score, the rank or any decision." : "This summary is built by fixed rules from the transfers."}
+        {fromModel
+          ? "This text does not change the score, the rank or any decision."
+          : standIn
+            ? "This summary comes from a fixed offline routine used for testing, not from a language model. It does not change the score, the rank or any decision."
+            : "This summary is built by fixed rules from the transfers."}
       </p>
       <p>
         <Level label="Pattern" level={file.pattern.replace(/_/g, " ")} /> <Level label="Suspicion" level={file.suspicion} />
