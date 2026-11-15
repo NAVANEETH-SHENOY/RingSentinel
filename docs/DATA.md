@@ -2,18 +2,25 @@
 
 Everything in the "observed" sections comes from the schema report the owner generated on the real HI-Small files with `scripts/inspect_schema.py` (12 Nov 2026). Items marked **verify** have not been checked against a source.
 
-## Dataset
+**Citation:**
 
-IBM synthetic anti-money-laundering transactions, variant **HI-Small** (higher illicit ratio, small), downloaded from Kaggle ("IBM Transactions for Anti-Money Laundering (AML)"). The data is synthetic; no real customer data is involved.
+Altman, E., Blanuša, J., von Niederhäusern, L., Egressy, B., Anghel, A., & Atasu, K. (2023). *Realistic Synthetic Financial Transactions for Anti-Money Laundering Models*. Advances in Neural Information Processing Systems 36 (NeurIPS 2023), Datasets and Benchmarks Track. DOI: https://doi.org/10.52202/075280-1300
 
-**Download history.** The first download had 10 columns and no label column. It was replaced on 12 Nov 2026 by the corrected download, which has an 11th column, `Is Laundering`. Everything below describes the corrected file; the checksums in `data/raw/MANIFEST.json` are for it.
+Proceedings: https://proceedings.neurips.cc/paper_files/paper/2023/hash/5f38404edff6f3f642d6fa5892479c42-Abstract.html
 
-Citation (authors, title and venue confirmed on the NeurIPS proceedings page; **verify** page numbers, URL form and BibTeX before the final README):
+**Licence:**
 
-Altman, E., Blanuša, J., von Niederhäusern, L., Egressy, B., Anghel, A., Atasu, K. (2023). Realistic Synthetic Financial Transactions for Anti-Money Laundering Models. NeurIPS 2023, Datasets and Benchmarks Track. https://proceedings.neurips.cc/paper_files/paper/2023/hash/5f38404edff6f3f642d6fa5892479c42-Abstract.html
+IBM's official AML-Data repository states that the actual dataset is released under the **Community Data License Agreement – Sharing, Version 1.0 (CDLA-Sharing-1.0)**. The Apache-2.0 licence shown for the repository applies to its code, not the dataset.
 
-Licence: the paper's supplement says the Kaggle data is published under a "Community Data License Agreement". **Not verified** which variant of that agreement applies, or what it requires of this project. The owner should copy the licence line from the Kaggle page, and the Kaggle page's own citation instructions, into this file.
+Licence agreement: https://cdla.dev/sharing-1-0/
 
+The Kaggle listing's own licence metadata and citation instructions have not been independently verified. The licence identification above is based on IBM's repository statement and should not be represented as a direct verification of the Kaggle listing.
+
+**Redistribution considerations:** Under Section 3.5 of CDLA-Sharing-1.0, the agreement imposes no obligations or restrictions on the use or publication of Results. However, Results are defined in Section 1.11 as computational outputs that do not contain more than a de minimis portion of the underlying Data.
+
+RingSentinel's aggregate evaluation metrics may qualify as Results. Its committed account-level snapshots contain account identifiers, transaction amounts, timestamps and transaction relationships. Their classification and redistribution obligations have not been legally determined. Do not assume that these snapshots are exempt under Section 3.5 or publish them publicly until their redistribution status has been assessed.
+
+If publishing Data or Enhanced Data under this agreement, observe the attribution, change-notice and licence-publication requirements in Section 3. This is not legal advice.
 ## Files (raw, not committed; checksums are in `data/raw/MANIFEST.json`)
 
 | File | Size (bytes) | Rows / lines | SHA-256 |

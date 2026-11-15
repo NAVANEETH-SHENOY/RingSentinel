@@ -1,6 +1,6 @@
 # Architecture
 
-Status at Stage 07: every component through C16 is built; the human-in-the-loop flow (decisions, bounded threshold feedback, live queue), drift (C13), replay (C14) and the decision panel and drift and replay pages in the interface (C15) are added. Stages 03, 04, 06 and 07 have been tested on synthetic or hand-made data only (Stage 06 also with a fake model); no live model call and no real-data drift or replay run has happened. Status at Stage 04: the data side (C1 to C3), the graph builder and feature extractor (C4, C5), the detectors, ring extractor and evaluation harness (C6 to C8), and the snapshot exporter, backend API and audit store (C10 to C12) are built. Stages 03 and 04 have been tested on synthetic or hand-made data only. The status column says what is built.
+Status at Stage 09 (v1.0.0): every component C1 to C16 is built and has been run on the real HI-Small data and (for the tabular and graph detectors) on Elliptic. Stage 09 adds the Postgres audit store, a database-free liveness route, deployment files and a deployed-site smoke test; none of the three hosting services has been exercised by this tool. The status column below says what is built.
 
 ## Principles
 
@@ -25,8 +25,8 @@ Status at Stage 07: every component through C16 is built; the human-in-the-loop 
 | C8 | Evaluation harness | Metrics, cost model, ablations, robustness, latency | Built: `backend/ringsentinel/evaluate/metrics.py`, `backend/ringsentinel/evaluate/ringmatch.py`, `backend/ringsentinel/evaluate/cost.py`, `backend/ringsentinel/evaluate/report.py`, orchestration `backend/ringsentinel/stage03.py`; Stage 01 metrics remain in `backend/ringsentinel/evaluation/metrics.py` |
 | C9 | AI layer | Investigator, verifier, devil's advocate, template fallback, cache, constrained query | Built (Stage 06): `backend/ringsentinel/ai/pipeline.py`, `backend/ringsentinel/ai/investigator.py`, `backend/ringsentinel/ai/verifier.py`, `backend/ringsentinel/ai/facts.py`, `backend/ringsentinel/ai/tools.py`, `backend/ringsentinel/ai/query.py`, `backend/ringsentinel/ai/cache.py`, `backend/ringsentinel/snapshots/ai_merge.py`, `backend/ringsentinel/stage06.py` |
 | C10 | Snapshot exporter | Static JSON bundle with version metadata | Built (Stage 04): `backend/ringsentinel/snapshots/export.py`, `backend/ringsentinel/snapshots/bundle.py`, `backend/ringsentinel/snapshots/schemas.py`, `scripts/export_snapshots.py` |
-| C11 | Backend API | Serves snapshots, accepts analyst actions | Built (Stage 04): `backend/app/main.py`, `backend/app/routes.py`, `backend/app/ratelimit.py`, `backend/app/config.py`, `backend/app/schemas.py`, `backend/app/store.py` |
-| C12 | Audit store | Append-only hash-chained log | Built (Stage 04): `backend/app/audit.py` (SQLite) |
+| C11 | Backend API | Serves snapshots, accepts analyst actions | Built (Stages 04 and 09; Stage 09 adds a liveness route (GET /api/v1/live) and 503 handling for an unreachable audit store): `backend/app/main.py`, `backend/app/routes.py`, `backend/app/ratelimit.py`, `backend/app/config.py`, `backend/app/schemas.py`, `backend/app/store.py` |
+| C12 | Audit store | Append-only hash-chained log | Built (Stages 04 and 09): `backend/app/audit.py` (SQLite, the factory `open_audit_log`, shared chain logic), `backend/app/audit_pg.py` (Postgres, for hosts without a persistent disk) |
 | C13 | Drift monitor | Population stability index per window | Built (Stage 07): `backend/ringsentinel/monitor/drift.py` |
 | C14 | Replay engine | Time-ordered playback with latency | Built (Stage 07, retrospective): `backend/ringsentinel/monitor/replay.py` |
 | C15 | Frontend | Queue, case view, decisions, AI panel, metrics, audit, drift, replay | Built (Stages 05 and 07): `frontend/src/lib/source.ts`, `frontend/src/lib/graph.ts`, `frontend/src/lib/metricsView.ts`, `frontend/src/lib/replayView.ts`, `frontend/src/components/QueueView.tsx`, `frontend/src/components/CaseView.tsx`, `frontend/src/components/ActionPanel.tsx`, `frontend/src/components/FeedbackCard.tsx`, `frontend/src/components/DriftView.tsx`, `frontend/src/components/ReplayView.tsx`, `frontend/src/components/MetricsView.tsx`, `frontend/src/components/AuditView.tsx` |
@@ -147,3 +147,17 @@ The model only explains. It has no access to scores, ranks or actions, and the m
 The Elliptic path (`backend/ringsentinel/elliptic/`) reuses the same shared pieces as the IBM pipeline: `build_window_features` (graph, hub control), `fit_xgb`, `ImputedIsolationForest`, `SplitVault`, the metric functions and the PSI drift code. It adds a loader, a time-step split, an allow-list of graph columns and an optional plain-PyTorch GraphSAGE. It writes only to data/processed/elliptic and does not touch the snapshot bundle or the API.
 
 API middleware order: rate limit (auth-failure bucket first, client address from `client_address()`), body-size limit, security headers. Details: `docs/STAGE_08.md`.
+
+## Deployment (Stage 09)
+
+```
+browser -> Vercel static site (C15, snapshots in frontend/public/snapshots)
+        -> Render free web service (C11, serves data/snapshots, RS_API_DOCS=0) -> Neon Postgres (C12)
+```
+
+- The API loads the committed snapshot bundle (D12) into memory at start. It needs only `requirements-api.txt`; the modelling stack is not installed on the server.
+- The audit log uses `RS_AUDIT_DB_URL`: `sqlite:///...` locally, `postgresql://...` when the disk is not persistent. `backend_of(url)` picks the backend; `open_audit_log(url)` builds it; both stores share `next_entry` and `verify_rows`, so the hash-chain format is identical.
+- The Postgres store opens one connection per operation (serverless Postgres drops idle connections) and takes `pg_advisory_xact_lock` on append so two API instances cannot fork the chain. An unreachable database raises `AuditUnavailable`, which the API answers as 503 with `Retry-After: 5`; routes that need only the snapshot (metrics, drift, replay and the liveness route) keep working.
+- The liveness route (GET /api/v1/live) never touches the database or the snapshot, so a host health probe cannot wake a scale-to-zero database.
+- The frontend falls back API, then `frontend/public/snapshots`, then `frontend/public/demo-snapshots`; a sleeping API therefore degrades the site to read-only, not to an error.
+- Steps and troubleshooting: `docs/DEPLOYMENT.md`. Diagrams as regenerable specs: `docs/DIAGRAM_SPECS.md`.

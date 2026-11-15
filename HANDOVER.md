@@ -1,4 +1,40 @@
-# HANDOVER (end of Stage 08 build; read before continuing in a new chat)
+# HANDOVER (end of Stage 09 build, release v1.0.0; read before continuing in a new chat)
+
+## Stage 09 summary (read this first)
+
+Plain language: Stage 09 makes RingSentinel deployable and finishes the paperwork. The decision log can now live in Postgres (because free hosting erases its disk), there are files to put the API on Render, the site on Vercel and the log on Neon, a script that checks the live site, a finished README with the real results and honest limitations, three diagram specs, and a voice-over script for the demo.
+
+Technical: `backend/app/audit_pg.py` (Postgres store; advisory lock; per-operation connections; `AuditUnavailable` to 503 + `Retry-After`), `open_audit_log`/`backend_of` in `backend/app/audit.py`, the liveness route and `audit_backend` in `backend/app/routes.py`, `requirements-api.txt` (slim runtime set), `render.yaml`, `frontend/vercel.json`, `scripts/smoke_deployed.py`, `scripts/sync_readme_results.py`, a label fix in `frontend/src/components/CaseView.tsx`. One new dependency: `psycopg[binary]==3.3.9`.
+
+### Test status (real results, builder's Linux sandbox; not yet run by the owner)
+
+- Backend with `RS_TEST_POSTGRES_URL` set to local Postgres 16: 733 passed, 8 skipped. Without it: 721 passed, 20 skipped.
+- Frontend: 122 passed. `ruff check .` clean. `python scripts/check_docs.py` OK. `python scripts/secrets_scan.py`: nothing found.
+- Live: API from `requirements-api.txt` + local Postgres + built static site + real bundle: `scripts/smoke_deployed.py` 44 passed, 0 failed, 1 warning (not frozen).
+- **NOT EXECUTED anywhere:** Render, Vercel, Neon, GitHub Actions (the new `postgres-audit` and `smoke-deployed` jobs), Windows, the real-data pipeline in this stage.
+
+### What you must do next, in order
+
+1. Unzip the Stage 09 zip over your repo; run the setup block below and `pytest`; paste the output back if anything fails.
+2. Confirm the IBM licence line on the Kaggle page (the committed bundle is derived data; CDLA-Sharing-1.0 is reported) and fill the citation details marked "verify" in `docs/DATA.md`.
+3. Freeze: `python scripts\export_snapshots.py --frozen --git-commit <short sha>`, then `python scripts\sync_frontend_snapshots.py`. Commit `data\snapshots` and `frontend\public\snapshots`.
+4. Create the Neon project, the Render Blueprint and the Vercel project exactly as in `docs/DEPLOYMENT.md`; then run the smoke test. Fix every FAIL.
+5. Check `RS_TRUSTED_PROXY_HOPS` (inferred value 2) as described in `docs/DEPLOYMENT.md`.
+6. Add the live URLs to the README status line; retake screenshots if you want the unfrozen banner gone; record the demo with `docs/DEMO_SCRIPT.md`.
+7. Merge, tag v1.0.0, push.
+
+### Open items and risks
+
+- Hosting behaviour is from public docs and inference only. Neon's pooled string is untested; use the direct one.
+- Licences: IBM CDLA-Sharing-1.0 (confirm; derived data is committed); Elliptic CC BY-NC-ND 4.0; Vercel Hobby non-commercial; the Groq key shared in an earlier zip must be revoked (Stage 08 note).
+- Scientific caveats stay in the README "Limitations": synthetic data, one seed, no intervals, placeholder FX, degenerate net value at capture 1.0, hub control not an accuracy gain, 1 of 500 case files from a real model, feedback rule unvalidated.
+- If you want to continue after v1.0.0, candidate work (none started): confidence intervals over several seeds; a real-model evaluation of the AI layer; individual analyst accounts; validation of the feedback rule; fixing the replay triangle-label overlap in `frontend/src/components/ReplayView.tsx`.
+
+### Ready-to-paste "continue from here" prompt
+
+> I am continuing RingSentinel (Razorpay AI Buildathon, Track 02, defense-only), solo, Windows cmd terminal (git in Git Bash). Stage 09 / v1.0.0 is built: Postgres audit store (`backend/app/audit_pg.py`), deployment files (`render.yaml`, `requirements-api.txt`, `frontend/vercel.json`), `scripts/smoke_deployed.py`, generated README tables, final docs, `docs/DEMO_SCRIPT.md`. Read `HANDOVER.md`, `docs/STAGE_09.md` and `docs/PROJECT_EXPLAINER.md` first. Rules: incremental zips with only new or changed files plus CHANGES_STAGE_NN.md; say "passed" only for tests actually run, otherwise "NOT EXECUTED"; flag deviations; never fabricate; no Co-Authored-By line and no links in commit messages or PR descriptions. I have done: [fill in: tests run / deployed / smoke result / frozen / tagged]. Today I want: [fill in].
+
+---
 
 Stage 08 (Elliptic second dataset, optional GraphSAGE, API hardening, secrets and dependency review; `docs/STAGE_08.md`) is built on the owner's Stage 07 repository. Stage 07 below is unchanged in behaviour.
 
@@ -28,13 +64,13 @@ See `docs/ARCHITECTURE.md`, `docs/STAGE_04.md`, `docs/STAGE_07.md`, `docs/EVALUA
 | M0 | 00 scaffold | Done |
 | M1 | 01 data and baselines | Done, tag v0.2.0 |
 | M2 | 02 graph and features | Built; builder ran on real files; owner output and v0.3.0 not seen |
-| M3 | 03 detectors and evaluation | Built; real-data run, merge, v0.4.0 pending |
+| M3 | 03 detectors and evaluation | Run on the real HI-Small data by the owner (results in `docs/EVALUATION_RESULTS.md`); tag status not seen |
 | M4 | 04 snapshots and backend | In the owner's repo |
 | M5 | 05 frontend core | Merged in the owner's repo (PR #5) |
 | M6 | 06 AI layer | Merged in the owner's repo (PR #6), with the owner's Groq changes; the owner says everything works after fixing the Groq call handling (output not seen by the builder) |
 | M7 | 07 HITL, feedback, drift, replay | Built and tested in the sandbox; owner's run, merge and tag v0.8.0 pending |
-| M8 | 08 Elliptic, hardening | Built and tested in the sandbox (Elliptic on synthetic files only); owner's run, real Elliptic run, merge and tag v0.9.0 pending |
-| M9 | 09 deploy, docs, demo | Not started |
+| M8 | 08 Elliptic, hardening | Built; the owner has since run Elliptic on the real files (docs/DATA.md records 15 Nov 2026); merge and tag v0.9.0 status not seen |
+| M9 | 09 deploy, docs, demo | Built and tested in the sandbox; hosting not exercised; owner's run, deployment, smoke test, freeze, merge and tag v1.0.0 pending |
 
 ## Repo structure
 

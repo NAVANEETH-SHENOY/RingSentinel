@@ -1,6 +1,6 @@
 # RingSentinel: zero-context project explainer
 
-Written for a reader (human or LLM) who has only the project zip. Current milestone: **Stage 07 (human-in-the-loop, bounded threshold feedback, live queue re-ranking, drift with alerts, replay, and the AI panel in the interface) built and tested in the builder's sandbox; it folds in Stage 05 (frontend) and Stage 06 (AI layer), which had not yet been run by the owner. Everything sits on Stage 04 (snapshot exporter and API) and Stage 03 (detectors and evaluation), which have never been run on the real data, so no real result exists yet and the snapshot bundle is marked `evaluation_frozen: false`. Stage 02 was run on the real data by the builder; Stage 01 is confirmed and tagged v0.2.0**. Anything that does not exist yet is marked [planned]. If this file and the code disagree, the code wins; run `python scripts/check_docs.py` to catch stale paths.
+Written for a reader (human or LLM) who has only the project zip. Current milestone: **Stage 09 (M9), release v1.0.0: deployment files, a Postgres audit store, a deployed-site smoke test, final docs, diagram specs and a demo script, on top of Stages 01 to 08.** The pipeline has been run on the real IBM AML HI-Small data (seed 42) and on Elliptic by the owner; the committed bundle (`data/snapshots/`, bundle id starting `af65200a`) is marked `evaluation_frozen: false` until the owner freezes it. The three hosting services (Vercel, Render, Neon) have not been exercised by the builder. Anything that does not exist is marked [planned]. If this file and the code disagree, the code wins; run `python scripts/check_docs.py` to catch stale paths.
 
 ## 1. Plain-language summary
 
@@ -8,13 +8,13 @@ RingSentinel is a tool for fraud analysts. Money moves between accounts. Sometim
 
 It is built for the Razorpay AI Buildathon, Track 02 (AI Risk Manager), as a solo project, and it is defense-only. It uses a public synthetic dataset (IBM anti-money-laundering transactions), not real customer data.
 
-The project can load and clean that dataset, label the known laundering rings, split the data by time, turn the transfers into an account graph with hub control and a table of per-account and per-community features, score every transfer with four detectors (including one that uses the graph features), group flagged transfers into candidate rings, and measure everything on a held-out test period, including the rupee cost of false alarms. The measurement code exists but has not been run on the real data yet. The results are packaged into a small snapshot bundle and served by a local API that ranks the flagged rings for review and records each analyst decision (confirm, dismiss or hold) in a tamper-evident log, where every entry carries a fingerprint of the one before it.
+The project can load and clean that dataset, label the known laundering rings, split the data by time, turn the transfers into an account graph with hub control and a table of per-account and per-community features, score every transfer with four detectors (including one that uses the graph features), group flagged transfers into candidate rings, and measure everything on a held-out test period, including the rupee cost of false alarms. The measurement code has been run on the real data; the headline result is that adding graph features to the same model raises test PR-AUC from 0.204 to 0.614 (synthetic data, one seed). The results are packaged into a small snapshot bundle and served by a local API that ranks the flagged rings for review and records each analyst decision (confirm, dismiss or hold) in a tamper-evident log, where every entry carries a fingerprint of the one before it.
 
-A web interface shows the ranked queue, each ring as a graph of transfers, the evaluation metrics, the audit log, a drift page and a replay page. For each flagged ring an AI assistant writes a short plain-language explanation and the best innocent explanation, and a checker confirms every number and account it mentions against the real transfers; if anything fails, a plain rule-based summary is shown instead. The AI never changes a score or takes an action. New in Stage 07: the analyst can confirm, dismiss or hold a ring in the interface. Dismissals nudge the review threshold up a little, inside fixed limits, and the queue re-ranks itself; the drift page warns when the detector's scores move away from what it was validated on; the replay page steps through the test period and shows when each ring became detectable. The deployment does not exist yet.
+A web interface shows the ranked queue, each ring as a graph of transfers, the evaluation metrics, the audit log, a drift page and a replay page. For each flagged ring an AI assistant writes a short plain-language explanation and the best innocent explanation, and a checker confirms every number and account it mentions against the real transfers; if anything fails, a plain rule-based summary is shown instead. The AI never changes a score or takes an action. New in Stage 07: the analyst can confirm, dismiss or hold a ring in the interface. Dismissals nudge the review threshold up a little, inside fixed limits, and the queue re-ranks itself; the drift page warns when the detector's scores move away from what it was validated on; the replay page steps through the test period and shows when each ring became detectable. Stage 09 adds the files to deploy it on free hosting (a static site, a small API, a Postgres decision log), a script that checks the deployed site, and a demo script.
 
 ## 2. Technical summary
 
-- Stack: Python 3.10+ (owner uses 3.13), pandas, numpy, pyarrow, scikit-learn, XGBoost, pydantic, pytest, ruff, scipy, python-igraph, joblib, all pinned in `requirements.txt`. FastAPI, uvicorn, jsonschema and SQLite (Stage 04; httpx2 for tests). Stage 05: Next.js 16 (static export), React 19, TypeScript, d3-force, Vitest and Testing Library (all under `frontend/`). Later: Postgres [planned]. networkx is not used (ring splitting reuses the igraph code).
+- Stack: Python 3.10+ (owner uses 3.13), pandas, numpy, pyarrow, scikit-learn, XGBoost, pydantic, pytest, ruff, scipy, python-igraph, joblib, all pinned in `requirements.txt`. FastAPI, uvicorn, jsonschema and SQLite (Stage 04; httpx2 for tests). Stage 05: Next.js 16 (static export), React 19, TypeScript, d3-force, Vitest and Testing Library (all under `frontend/`). Stage 09: psycopg 3 (Postgres audit log) and `requirements-api.txt` (the slim runtime set for the host). networkx is not used (ring splitting reuses the igraph code).
 - Architecture: a deterministic offline pipeline (ingest, temporal split, graph, features, detectors, ring extraction, evaluation) exports static JSON snapshots; a thin API and a UI sit on top [planned]. See `docs/ARCHITECTURE.md`.
 - Implemented now: (D1) checksum manifest; (D2) chunked CSV reader to a typed event table, pattern parser, label attachment, INR amount, validation; (D4) time-based split with ring assignment; two baselines (velocity rule; tabular XGBoost) scored on the validation split; shared metrics; (D3) label-blind synthetic noise layer; (D5) cumulative past-only transfer graph per window with IDF edge weights, a degree cap tuned on validation, a pruning report and Louvain-split communities; (D6) node and community features; (D7) four detectors scored per transfer (velocity rule, tabular XGBoost, graph-feature XGBoost, Isolation Forest) with a guard that releases the test split once per detector; (D8) ring extraction from the flagged transfers; (D9) transaction-level and ring-level metrics, rupee net-value threshold, cost sweep, ablations (hub control and graph features on/off), robustness (edge dropout) and detection latency, regenerated by `scripts/reproduce.py`.
 - (D12) snapshot exporter: Stage 03 outputs to six schema-validated JSON files tied together by SHA-256 hashes; (D13) FastAPI backend serving them from memory, with a hash-chained SQLite audit log, idempotent actions, token check, CORS and rate limiting.
@@ -22,10 +22,21 @@ A web interface shows the ranked queue, each ring as a graph of transfers, the e
 - (D10, Stage 06) AI layer: per-ring case file and devil's advocate written by an LLM over graph tools, every cited number recomputed by a verifier, template fallback, cache keyed by ring hash, validated JSON query language, merged into the bundle's `ai` field only. The LLM never changes a score.
 - (Stage 07) Bounded analyst feedback (`backend/ringsentinel/review/feedback.py`): net dismissals shift the review threshold in log-odds by a fixed step up to a maximum, with hard ceilings in code; confirmations only cancel dismissals and never lower the threshold below the validated one; holds change nothing. The same shift re-ranks the open rings by an adjusted expected value. The API serves it (`annotate()` in `backend/ringsentinel/review/feedback.py`, `/queue?order=live`, `GET /feedback`).
 - (D11, Stage 07) Drift (`backend/ringsentinel/monitor/drift.py`): population stability index of each equal-width time window of the test period against the validation scores, with warn and alert levels. Replay (`backend/ringsentinel/monitor/replay.py`): per ring the time its flagged transfers first touch the minimum ring size, assembly time, and latency against the true ring where one supplies most transfers.
-- Core logic still to come [planned]: deployment (Stage 09), diagram specs (Stage 09), a validation of the feedback rule.
+- Stage 09: Postgres audit store (`backend/app/audit_pg.py`), liveness route, 503 on an unreachable audit store, `render.yaml`, `frontend/vercel.json`, `scripts/smoke_deployed.py`, `scripts/sync_readme_results.py`, `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`, `docs/DEMO_SCRIPT.md`. Still to come [planned]: a validation of the feedback rule, individual analyst accounts, a real-model evaluation of the AI layer.
 - One setting, `RS_DATASET_VARIANT`, selects HI-Small (default), LI-Small, HI-Medium or LI-Medium; all paths derive from it.
 
 ## 3. Current state
+
+**Stage 09 (M9, release v1.0.0, built in the sandbox; owner's run pending):**
+
+| Item | State |
+| --- | --- |
+| Verified in the sandbox | Backend 733 passed and 8 skipped with `RS_TEST_POSTGRES_URL` set (a local Postgres 16), 721 passed and 20 skipped without it; `ruff check .` clean; `scripts/check_docs.py` OK; frontend 122 Vitest tests pass; the API run from `requirements-api.txt` alone served the real bundle with a Postgres log and passed `scripts/smoke_deployed.py` against the built static site (44 passed, 0 failed, 1 warning: not frozen) |
+| Not verified | Anything on Vercel, Render or Neon; Render's `X-Forwarded-For` hop count (set to 2, inferred); Neon scale-to-zero behaviour; GitHub Actions for the new jobs |
+| Real results | HI-Small test PR-AUC: velocity 0.0014, Isolation Forest 0.0052, tabular XGBoost 0.2040, graph XGBoost 0.6145; ring precision 0.2647 and recall 0.3789 for the graph model; Elliptic graph 0.772 against local 0.768. Tables: `docs/EVALUATION_RESULTS.md` [generated], `docs/RESULTS_TABLE.md` [generated], README |
+| Bundle | 500 of 3,638 test rings exported; case files: 400 template, 99 offline stand-in (shown as such), 1 real Groq call |
+| Does not exist | Live URLs, a recorded demo video, frozen numbers, individual analyst accounts, Postgres backups, validation of the feedback rule |
+
 
 **Stage 08 (M8, built in the sandbox; owner's run pending):** a second dataset path (Elliptic, transaction level), an optional GraphSAGE, API hardening and a secrets and dependency review. Elliptic has never run on the real files (not downloadable from the sandbox): every Elliptic number so far comes from SYNTHETIC files. See the Stage 08 rows added to sections 4 to 13 and `docs/STAGE_08.md`.
 
@@ -189,6 +200,24 @@ Planned (created in the stage named): `docs/DIAGRAM_SPECS.md` [planned, Stage 09
 | `.github/workflows/audit.yml` | weekly pip-audit, npm audit (production), secrets scan | CI |
 | `requirements-gnn.txt` | optional PyTorch pin | owner |
 
+### Stage 09 additions
+
+| Path | What it does | Called by / calls |
+| --- | --- | --- |
+| `backend/app/audit_pg.py` | `PostgresAuditLog`: the audit store on Postgres (one connection per operation, advisory lock on append, `OperationalError` to `AuditUnavailable`) | built by `open_audit_log()` in `backend/app/audit.py`; uses `next_entry` and `verify_rows` from that module |
+| `backend/app/audit.py` (changed) | `backend_of(url)`, `open_audit_log(url)`, `next_entry()`, `verify_rows()`, `AuditUnavailable` | `backend/app/main.py`, `backend/app/config.py`, `backend/app/audit_pg.py` |
+| `backend/app/main.py` (changed) | `API_VERSION` "1.0.0"; handler turning `AuditUnavailable` into 503 + `Retry-After: 5` | uvicorn (`create_app`) |
+| `backend/app/routes.py` (changed) | liveness route `GET /api/v1/live` (no database), `audit_backend` in `GET /api/v1/health` | Render health check, `scripts/smoke_deployed.py` |
+| `frontend/src/components/CaseView.tsx` (changed) | the `isStandIn` helper: a cached answer from the offline stand-in provider is labelled "Offline stand-in, not a language model" | `AiCard` |
+| `scripts/smoke_deployed.py` | `Checker` (injectable `fetch`), `check_api`, `check_web`, `main`; prints PASS/FAIL/WARN/SKIP and exits 1 on any FAIL | the owner after deploying; `.github/workflows/smoke.yml` |
+| `scripts/sync_readme_results.py` | copies result tables from `docs/EVALUATION_RESULTS.md` and `docs/RESULTS_TABLE.md` into the README between the RESULTS markers | `scripts/reproduce.py`, tests |
+| `requirements-api.txt` | slim runtime pins for the host | `render.yaml` |
+| `render.yaml` | Render Blueprint (free web service, health check, env var names; secrets `sync: false`) | Render |
+| `frontend/vercel.json` | security headers for the static site | Vercel |
+| `.github/workflows/ci.yml` (changed), `.github/workflows/smoke.yml` | Postgres service job; manual smoke test | GitHub |
+| `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`, `docs/DEMO_SCRIPT.md`, `docs/STAGE_09.md`, `RELEASE_NOTES_v1.0.0.md` | documentation | readers |
+
+
 ## 5. Runtime flows
 
 Stage 01 pipeline (`python scripts/run_stage01.py`, `main()` in `scripts/run_stage01.py`):
@@ -263,6 +292,14 @@ Replay in the browser: `ReplayView` holds one number, the cursor step. `detected
 
 API requests in Stage 08: `rate_limit` middleware (client from `client_address()`; `authfail` bucket checked first) -> `limit_body_size` -> `security_headers`.
 
+### Stage 09: deployed request path
+
+1. The browser loads the static site from Vercel. The `createSource` function in `frontend/src/lib/source.ts` tries `NEXT_PUBLIC_API_BASE_URL` within `NEXT_PUBLIC_API_TIMEOUT_MS`; on failure it reads `frontend/public/snapshots`, then `frontend/public/demo-snapshots`.
+2. Render's health probe calls the liveness route only; Neon is not woken by probes.
+3. A decision: the frontend POSTs to the action route; the route in `backend/app/routes.py` checks the token, then appends to the audit store. For Postgres, the `append` method of `PostgresAuditLog` opens a connection, takes `pg_advisory_xact_lock(ADVISORY_LOCK_KEY)`, reads the last entry, builds the next one with `next_entry()` and inserts it. If Postgres cannot be reached the store raises `AuditUnavailable`; `backend/app/main.py` answers 503 with `Retry-After: 5`. Routes that need only the bundle keep answering.
+4. `scripts/smoke_deployed.py` exercises steps 1 to 3 from outside.
+
+
 ## 6. Data contracts
 
 D1 `data/raw/MANIFEST.json`: `{"schema_version": 1, "datasets": {<variant>: {"files": {<name>: {"size_bytes": int, "sha256": str}}}}}`.
@@ -326,6 +363,11 @@ D11 (Stage 07) is the pair `drift.json` [generated] and `replay.json` [generated
 - `scores.parquet` [generated]: txId, step, split, label, one score column per detector.
 - `docs/RESULTS_TABLE.md` [generated]: two-dataset table; IBM cells say "not run" until Stage 03 output exists.
 
+### Stage 09
+
+D13 on Postgres: table `audit` with the same columns as the SQLite table (seq BIGINT primary key, ts, ring_id, action, analyst, note, idempotency_key UNIQUE, request_sha256, prev_hash, hash) plus index `audit_ring_seq`; the hash-chain definition is unchanged, so a log can be verified by either store's `verify()`. `GET /api/v1/health` gains `audit_backend` ("sqlite" or "postgres"). `GET /api/v1/live` returns `{"status": "ok"}`. Unreachable audit store: 503 with a `Retry-After` header.
+
+
 ## 7. Configuration
 
 | Variable | Default | If wrong |
@@ -386,6 +428,17 @@ Reserved for later stages and listed in `.env.example`: Kaggle credentials. `con
 | `RS_TRUSTED_PROXY_HOPS` | 0 | too high: forged `X-Forwarded-For` trusted; too low behind a proxy: all clients share one address |
 | `RS_MAX_BODY_BYTES` | 16384 | 1024 to 1000000 |
 | `RS_API_DOCS` | on | `0` or `off` removes the interactive docs |
+
+### Stage 09
+
+- `RS_AUDIT_DB_URL`: now also `postgresql://USER:PASSWORD@HOST/DB?sslmode=require` (or `postgres://`). Any other scheme fails at start with an error that does not echo the URL. A wrong password or host does not fail at start: it surfaces as 503 on the first audit call (smoke check "audit chain verifies").
+- `RS_TRUSTED_PROXY_HOPS`: `render.yaml` sets 2 (unverified). Too low: all clients behind the proxy share one rate-limit bucket. Too high: falls back to the socket peer.
+- `RS_API_DOCS`: `render.yaml` sets 0 (the smoke script checks it with `--expect-docs-off`).
+- `RS_CORS_ORIGINS`: must equal the Vercel address exactly (smoke check "CORS allows the frontend origin").
+- `RS_TEST_POSTGRES_URL`: tests only; the database name must contain "test" and its `audit` table is dropped.
+- `PYTHON_VERSION` (Render): a fully qualified version such as 3.13.5.
+- `NEXT_PUBLIC_API_BASE_URL`: baked into the frontend at build time; change it and the site must be rebuilt (smoke check "frontend build points at this API").
+
 
 ## 8. Test map
 
@@ -455,6 +508,18 @@ Run: `pytest` from the repo root; `npm run check` from `frontend` for the fronte
 | `backend/tests/test_stage08_gnn.py` | GraphSAGE determinism, no label access (skips without torch) | GNN changes |
 | `backend/tests/test_stage08_hardening.py` | lockout, proxy address, body size, headers | API middleware regressions |
 | `backend/tests/test_stage08_secrets_scan.py` | scanner rules, no value printed, history | scanner regressions |
+
+### Stage 09
+
+| Test file | Guards | Failure signals |
+| --- | --- | --- |
+| `backend/tests/test_stage09_audit_pg.py` | URL scheme handling, password never echoed, settings validation, factory, unreachable DB gives `AuditUnavailable`; with `RS_TEST_POSTGRES_URL`: same chain, idempotency, two concurrent writers, verify, tamper detection on Postgres | audit store regression |
+| `backend/tests/test_stage09_api.py` | liveness works with a dead audit store, 503 + `Retry-After`, snapshot-only routes still 200, version | a route started touching the database, or error mapping broke |
+| `backend/tests/test_stage09_smoke.py` | the smoke script passes a healthy deployment and fails each broken one (CORS, stale snapshot, edited snapshot, wrong API address, missing page, dead host, wrong token), never prints the token, write check is opt-in | smoke script regression |
+| `backend/tests/test_stage09_readme_sync.py` | README tables equal the generated files; hand edits are caught; the real README matches | README drifted from results: run `python scripts\sync_readme_results.py` |
+| `backend/tests/test_stage09_deploy.py` | `requirements-api.txt` pins equal `requirements.txt`; the API imports and serves with the modelling stack blocked; `render.yaml` has no secret; frontend snapshot copy equals the committed bundle; snapshots are not gitignored | a deploy file or a pin drifted |
+| `frontend/tests/ai_card.test.tsx` (extended) | the offline stand-in is never called a language model | label regression |
+
 
 ## 9. Debugging playbook
 
@@ -531,6 +596,18 @@ Order to rule out causes: environment (venv active, installs done), working dire
 | All users rate-limited together on a host | proxy hides client address | `RS_TRUSTED_PROXY_HOPS` | inspect `X-Forwarded-For` | set the hop count from the host docs |
 | API 413 or 411 | body too large or chunked | `RS_MAX_BODY_BYTES`, `limit_body_size` | check request size | shorten the note field |
 
+### Stage 09
+
+| Symptom | Likely cause | File and function | Command to confirm | Usual fix |
+| --- | --- | --- | --- | --- |
+| Site read-only, banner says saved snapshot | API asleep, wrong `NEXT_PUBLIC_API_BASE_URL`, or CORS | `frontend/src/lib/source.ts` `createSource` | `python scripts\smoke_deployed.py --api URL --web URL --wait 120` | wait, then fix the variable named in the FAIL line |
+| 503 on decisions | Neon waking, or bad `RS_AUDIT_DB_URL` | `backend/app/audit_pg.py` `_connect` | `GET /api/v1/health` (503 means the audit store) | retry; re-copy the connection string |
+| Smoke: `frontend snapshot matches the API bundle` FAIL | frontend and API built from different bundles | `scripts/sync_frontend_snapshots.py` | smoke output shows both ids | sync, commit, push |
+| Smoke: `snapshot files match the hashes in meta.json` FAIL | a snapshot file edited or half-copied | `data/snapshots/meta.json` `files` | smoke names the files | re-export and re-sync |
+| `test_the_real_readme_matches_...` fails | results regenerated but README not synced | `scripts/sync_readme_results.py` | `python scripts\sync_readme_results.py --check` | run it without `--check`, commit |
+| Render install fails | pin or Python version | `requirements-api.txt`, `PYTHON_VERSION` | Render build log | keep pins equal to `requirements.txt` |
+
+
 ## 10. Known issues and limits
 
 - **Labels versus rings**: labels come from the CSV `Is Laundering` column (5,177 positives); only 3,209 are in a pattern ring (see `docs/DATA.md`).
@@ -577,6 +654,18 @@ Order to rule out causes: environment (venv active, installs done), working dire
 ### Stage 08
 
 No real Elliptic run exists; dataset facts and licence are unverified; the Elliptic hub cap is untuned; no frontend page for Elliptic; ring-level metrics and rupee cost are not applicable to Elliptic; the dev-only npm advisories in the `eslint-config-next` chain remain; the evaluation-pack items from the Stage 07 handover (feedback-rule experiment, robustness tables) are still open.
+
+### Stage 09
+
+- No Stage 09 hosting service has been exercised; every hosting statement is from public documentation or inference. `RS_TRUSTED_PROXY_HOPS=2` is inferred.
+- The committed bundle is not frozen (`evaluation_frozen: false`); the UI shows a "Numbers not frozen" banner and the smoke test warns.
+- Case files in the bundle: 1 of 500 from a real model (Groq), 99 from the offline stand-in, 400 templates. Explanation quality has not been evaluated.
+- Rupee amounts are artefacts of placeholder FX rates (the top ring is about 48 billion INR). Net value at loss capture 1.0 is degenerate (every strong detector earns about the same). Hub control did not improve transaction-level PR-AUC (0.6145 with, 0.6236 without). Drift: 6 of 8 test windows have too few events.
+- Replay timeline: triangle labels overlap when many rings become detectable in one step (cosmetic).
+- The audit log has one shared analyst token and no backup beyond the database host's own tools. The hash chain detects edits, not removal from the end.
+- The Postgres store was tested on a local Postgres 16 only; per-operation connections make each request slower after idle.
+- Licences: IBM data is reported as CDLA-Sharing-1.0 (owner must confirm on Kaggle; the committed bundle is derived from it); Elliptic is CC BY-NC-ND 4.0 (nothing derived from it is committed except the results table). Vercel Hobby is non-commercial use only.
+- IBM citation page numbers and BibTeX are not verified.
 
 ## 11. Decision log
 
@@ -667,6 +756,20 @@ No real Elliptic run exists; dataset facts and licence are unverified; the Ellip
 - Auth-failure lockout counts 401s only; `X-Forwarded-For` ignored by default because clients can forge it.
 - pyarrow raised to 23.0.1 after pip-audit (CVE-2026-25087).
 
+### Stage 09
+
+- **Audit log on Postgres, not on Render's disk.** Free-tier disks are erased on restart; losing the log would silently restart the hash chain. Render's own free Postgres expires after 30 days, so Neon is used.
+- **One connection per operation.** Serverless Postgres drops idle connections; a pool would hand out dead ones. The cost is a slower first request after idle.
+- **Advisory lock on append.** Two API instances must not both read the same last hash and fork the chain.
+- **Liveness route that never touches the database.** A health probe on a database route would keep Neon awake and burn its free compute hours.
+- **Slim `requirements-api.txt`.** The API reads JSON; installing XGBoost and igraph on a 512 MB host is waste and risk. A test blocks those imports to prove they are not needed.
+- **Frontend snapshots are now committed** (they were gitignored until the numbers were frozen) so the deployed site still works while the API sleeps.
+- **Smoke test is standard-library only** and has an injectable `fetch`, so it can run anywhere and be tested without a network. The write check is opt-in because it adds a permanent log entry.
+- **The fake provider's cached output is labelled "Offline stand-in"**, not "Written by a language model (cached)", because the earlier label was misleading in the shipped bundle.
+- **README tables are generated** from the results files, so they cannot differ from what `scripts/reproduce.py` printed.
+- **No freeze performed by the builder.** Freezing the evaluation is the owner's decision; the smoke test warns until it is done.
+
+
 ## 12. Glossary
 
 - **Ring**: a group of accounts moving money in a coordinated way (here, one BEGIN/END block of the patterns file).
@@ -719,6 +822,14 @@ No real Elliptic run exists; dataset facts and licence are unverified; the Ellip
 - **GraphSAGE**: neural network that averages neighbour features; optional detector.
 - **authfail bucket**: per-client count of failed token checks.
 
+### Stage 09
+
+- **Liveness route**: GET /api/v1/live; answers without touching the database or the bundle.
+- **Smoke test**: `scripts/smoke_deployed.py`, a read-mostly check of a deployed API and site.
+- **Offline stand-in**: the "fake" LLM provider, a fixed routine used for tests and offline runs; its output is labelled as such.
+- **Freeze**: marking the bundle `evaluation_frozen: true` with `--frozen`; a promise not to change numbers without rerunning everything.
+- **Advisory lock**: a Postgres lock held for one transaction, used so two API instances cannot both extend the hash chain from the same last entry.
+
 ## 13. How to regenerate every artifact
 
 Windows cmd, repo root, venv active:
@@ -751,3 +862,17 @@ python scripts\run_stage08.py run
 python scripts\run_stage08.py table
 python scripts\secrets_scan.py
 ```
+
+Stage 09 (Windows cmd, repo root):
+
+```
+pip install -r requirements.txt
+python scripts\export_snapshots.py --frozen --git-commit <short sha>
+python scripts\sync_frontend_snapshots.py
+python scripts\sync_readme_results.py
+python scripts\smoke_deployed.py --api https://<api> --web https://<site> --expect-postgres --expect-docs-off --wait 120
+set RS_TEST_POSTGRES_URL=postgresql://USER:PASSWORD@localhost:5432/ringsentinel_test
+pytest
+```
+
+Hosting steps are in `docs/DEPLOYMENT.md`; the three diagrams are regenerated from `docs/DIAGRAM_SPECS.md`.
