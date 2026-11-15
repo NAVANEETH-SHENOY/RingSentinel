@@ -2,6 +2,18 @@
 
 One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 
+## v0.9.0 - Stage 08: Elliptic second dataset, optional GraphSAGE, hardening (pending owner confirmation)
+
+### Added
+- Elliptic loader, split, graph features, detectors, per-step drift and results tables (`backend/ringsentinel/elliptic/`, `scripts/run_stage08.py`); synthetic Elliptic-format generator.
+- Optional plain-PyTorch GraphSAGE (`requirements-gnn.txt`).
+- API hardening: auth-failure lockout, trusted-proxy client address, body-size limit, security headers, docs switch.
+- `scripts/secrets_scan.py`, `.github/workflows/audit.yml`.
+
+### Changed
+- `pyarrow` 22.0.0 to 23.0.1 (CVE-2026-25087).
+- `.gitignore` now ignores kaggle.json and .kaggle/; `.env.example` gains Stage 08 names; rate limiter memory is bounded.
+
 ## v0.8.0 - Stage 07: human in the loop, feedback, drift, replay (pending owner confirmation)
 
 Built on the owner's merged Stage 06 repo (main at f42a7e2, including the Groq provider changes).

@@ -1,6 +1,8 @@
 # Secrets
 .env
 *.pem
+kaggle.json
+.kaggle/
 
 # Python
 .venv/

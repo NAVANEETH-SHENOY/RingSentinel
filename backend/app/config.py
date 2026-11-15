@@ -19,6 +19,15 @@ class AppSettings(BaseModel):
     cors_origins: tuple[str, ...] = (DEFAULT_CORS,)
     rate_limit_read_per_min: int = 120
     rate_limit_write_per_min: int = 20
+    # Stage 08 hardening. Failed token checks (401) fill a separate bucket per client; once it is
+    # full, that client gets 429 until the minute is up (0 turns the bucket off).
+    rate_limit_authfail_per_min: int = 10
+    # Number of reverse proxies in front of the API that append to X-Forwarded-For (0: none, and
+    # the header is ignored, which is the safe default because a client can forge it).
+    trusted_proxy_hops: int = 0
+    # Largest accepted request body in bytes. The only POST body is a small JSON action.
+    max_body_bytes: int = 16_384
+    docs_enabled: bool = True
     # Stage 07: bounded threshold feedback (log-odds units). The hard ceilings live in
     # ringsentinel.review.feedback; the environment can only choose values at or below them.
     feedback_step: float = 0.1
@@ -36,11 +45,27 @@ class AppSettings(BaseModel):
             confirm_weight=self.feedback_confirm_weight,
         )
 
-    @field_validator("rate_limit_read_per_min", "rate_limit_write_per_min")
+    @field_validator(
+        "rate_limit_read_per_min", "rate_limit_write_per_min", "rate_limit_authfail_per_min"
+    )
     @classmethod
     def _non_negative(cls, value: int) -> int:
         if value < 0:
             raise ValueError("rate limits must be 0 (off) or positive")
+        return value
+
+    @field_validator("trusted_proxy_hops")
+    @classmethod
+    def _hops_in_range(cls, value: int) -> int:
+        if not 0 <= value <= 5:
+            raise ValueError("RS_TRUSTED_PROXY_HOPS must be between 0 and 5")
+        return value
+
+    @field_validator("max_body_bytes")
+    @classmethod
+    def _body_limit_in_range(cls, value: int) -> int:
+        if not 1_024 <= value <= 1_000_000:
+            raise ValueError("RS_MAX_BODY_BYTES must be between 1024 and 1000000")
         return value
 
     @field_validator("analyst_token")
@@ -78,9 +103,14 @@ def load_app_settings(load_env_file: bool = True) -> AppSettings:
     for env_name, field in (
         ("RS_RATE_LIMIT_READ_PER_MIN", "rate_limit_read_per_min"),
         ("RS_RATE_LIMIT_WRITE_PER_MIN", "rate_limit_write_per_min"),
+        ("RS_RATE_LIMIT_AUTHFAIL_PER_MIN", "rate_limit_authfail_per_min"),
+        ("RS_TRUSTED_PROXY_HOPS", "trusted_proxy_hops"),
+        ("RS_MAX_BODY_BYTES", "max_body_bytes"),
     ):
         if _env(env_name):
             values[field] = int(_env(env_name))
+    if _env("RS_API_DOCS"):
+        values["docs_enabled"] = _env("RS_API_DOCS").lower() not in {"0", "false", "no", "off"}
     for env_name, field in (
         ("RS_FEEDBACK_STEP", "feedback_step"),
         ("RS_FEEDBACK_MAX_OFFSET", "feedback_max_offset"),
