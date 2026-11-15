@@ -210,6 +210,24 @@ METRICS = {
     },
 }  # fmt: skip
 
+# Drift (Stage 07, data stage D11). `not_built` is the Stage 04 placeholder; a `ready` document
+# carries the windows, the PSI levels and a summary. Added fields are optional so old placeholders
+# stay valid and SCHEMA_VERSION stays "1".
+_DRIFT_WINDOW = {
+    "type": "object",
+    "required": ["index", "start_ts", "end_ts", "n_events", "psi", "level"],
+    "properties": {
+        "index": {"type": "integer", "minimum": 0},
+        "start_ts": {"type": "string"}, "end_ts": {"type": "string"},
+        "n_events": {"type": "integer", "minimum": 0},
+        "psi": _NUM_OR_NULL,
+        "level": {"enum": ["ok", "warn", "alert", "insufficient"]},
+        "mean_score": _NUM_OR_NULL, "n_positives": {"type": "integer", "minimum": 0},
+        "n_flagged": {"type": "integer", "minimum": 0}, "flagged_rate": _NUM_OR_NULL,
+        "precision_at_threshold": _NUM_OR_NULL, "recall_at_threshold": _NUM_OR_NULL,
+    },
+}  # fmt: skip
+
 DRIFT = {
     "type": "object",
     "required": ["schema_version", "status", "built_in_stage", "windows"],
@@ -219,7 +237,60 @@ DRIFT = {
         "status": {"enum": ["not_built", "ready"]},
         "built_in_stage": {"type": "string"},
         "psi_alert_level": _NUM_OR_NULL,
+        "psi_warn_level": _NUM_OR_NULL,
+        "detector": {"type": "string"},
+        "threshold": _NUM_OR_NULL,
+        "reference": {"type": "object"},
+        "bins": {"type": "object"},
         "windows": {"type": "array", "items": {"type": "object"}},
+        "summary": {"type": "object"},
+        "notes": {"type": "array", "items": {"type": "string"}},
+    },
+    "if": {"properties": {"status": {"const": "ready"}}, "required": ["status"]},
+    "then": {
+        "required": [
+            "detector", "psi_warn_level", "psi_alert_level", "reference", "bins", "summary",
+            "notes",
+        ],
+        "properties": {
+            "psi_alert_level": _NUM, "psi_warn_level": _NUM,
+            "windows": {"type": "array", "items": _DRIFT_WINDOW},
+        },
+    },
+}  # fmt: skip
+
+_REPLAY_EVENT = {
+    "type": "object",
+    "required": [
+        "ring_id", "rank", "first_ts", "detected_ts", "partial", "assembly_minutes",
+        "assembly_events", "n_members", "n_transfers", "score",
+    ],
+    "properties": {
+        "ring_id": {"type": "string", "pattern": RING_ID_PATTERN},
+        "rank": {"type": "integer", "minimum": 1},
+        "score": _NUM, "expected_value_inr": _NUM,
+        "n_members": {"type": "integer", "minimum": 1},
+        "n_transfers": {"type": "integer", "minimum": 1},
+        "first_ts": {"type": "string"}, "detected_ts": {"type": "string"},
+        "partial": {"type": "boolean"},
+        "assembly_minutes": _NUM, "assembly_events": {"type": "integer", "minimum": 0},
+        "truth_ring_id": {"type": ["integer", "null"]}, "truth_share": _NUM_OR_NULL,
+        "truth_first_ts": {"type": ["string", "null"]},
+        "latency_minutes": _NUM_OR_NULL, "latency_events": {"type": ["integer", "null"]},
+    },
+}  # fmt: skip
+
+_TIMELINE = {
+    "type": "object",
+    "required": [
+        "start_ts", "end_ts", "n_steps", "step_minutes", "events", "ring_transfers", "detected",
+    ],
+    "properties": {
+        "start_ts": {"type": "string"}, "end_ts": {"type": "string"},
+        "n_steps": {"type": "integer", "minimum": 1}, "step_minutes": _NUM,
+        "events": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "ring_transfers": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "detected": {"type": "array", "items": {"type": "integer", "minimum": 0}},
     },
 }  # fmt: skip
 
@@ -231,7 +302,20 @@ REPLAY = {
         "schema_version": {"const": SCHEMA_VERSION},
         "status": {"enum": ["not_built", "ready"]},
         "built_in_stage": {"type": "string"},
+        "detector": {"type": "string"},
+        "threshold": _NUM_OR_NULL,
+        "min_ring_members": {"type": "integer", "minimum": 1},
+        "timeline": {"type": "object"},
         "events": {"type": "array", "items": {"type": "object"}},
+        "summary": {"type": "object"},
+        "notes": {"type": "array", "items": {"type": "string"}},
+    },
+    "if": {"properties": {"status": {"const": "ready"}}, "required": ["status"]},
+    "then": {
+        "required": ["detector", "min_ring_members", "timeline", "summary", "notes"],
+        "properties": {
+            "timeline": _TIMELINE, "events": {"type": "array", "items": _REPLAY_EVENT},
+        },
     },
 }  # fmt: skip
 

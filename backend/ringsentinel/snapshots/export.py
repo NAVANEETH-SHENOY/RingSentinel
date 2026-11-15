@@ -1,10 +1,12 @@
 """Snapshot exporter (data stage D12): Stage 03 outputs in, a small validated JSON bundle out.
 
 The bundle is deterministic: the same input files and options give byte-identical output. There
-are no timestamps; the git commit is passed in. Drift and replay are not built until Stage 07 and
-the case-file AI layer until Stage 06, so those parts are exported as explicit placeholders.
-From Stage 06 on, `ai_cases.json` (data stage D10) is merged into the cases when it exists; blocks
-that no longer match their case are left out (see `ai_merge.py`).
+are no timestamps; the git commit is passed in. From Stage 06 on, `ai_cases.json` (data stage D10)
+is merged into the cases when it exists; blocks that no longer match their case are left out (see
+`ai_merge.py`). From Stage 07 on, drift (`monitor/drift.py`) and replay (`monitor/replay.py`, data
+stage D11) are built from `scores.parquet`, `events.parquet` and `split.parquet` when those exist;
+otherwise they stay the explicit `not_built` placeholders, so the exporter still works on a
+checkout that only has the Stage 03 JSON outputs.
 """
 
 from __future__ import annotations
@@ -16,6 +18,9 @@ from pathlib import Path
 import pandas as pd
 
 from ringsentinel.config import Settings
+from ringsentinel.monitor.drift import build_drift_document
+from ringsentinel.monitor.drift import not_built as drift_not_built
+from ringsentinel.monitor.replay import build_replay_document
 from ringsentinel.snapshots.ai_merge import AI_SOURCE_NAME, ai_document_hash, apply_ai_blocks
 from ringsentinel.snapshots.bundle import (
     DATA_FILES,
@@ -98,7 +103,7 @@ def _edges_by_ring(rings: list[dict], events_path: Path | None) -> dict[int, lis
 def build_documents(
     settings: Settings, *, git_commit: str = "unknown", frozen: bool = False,
     max_rings: int = DEFAULT_MAX_RINGS, events_path: Path | None = None,
-    ai_doc: dict | None = None,
+    ai_doc: dict | None = None, with_monitor: bool = False,
 ) -> tuple[dict[str, dict], dict[str, str]]:  # fmt: skip
     """Build the six bundle documents in memory. Returns (documents, source file hashes)."""
     if max_rings < 1:
@@ -179,14 +184,20 @@ def build_documents(
             table_path.read_text(encoding="utf-8") if table_path.is_file() else None
         ),
     }  # fmt: skip
-    drift = {
-        "schema_version": SCHEMA_VERSION, "status": "not_built", "built_in_stage": "07",
-        "psi_alert_level": None, "windows": [],
-    }  # fmt: skip
-    replay = {
-        "schema_version": SCHEMA_VERSION, "status": "not_built", "built_in_stage": "07",
-        "events": [],
-    }  # fmt: skip
+    drift = (
+        build_drift_document(settings, detector, rings_doc["threshold"]) if with_monitor else None
+    ) or drift_not_built()
+    replay = None
+    if with_monitor:
+        replay = build_replay_document(
+            settings, [(rid, rank, value, ring) for rank, (rid, value, ring) in enumerate(kept, 1)],
+            detector=detector, threshold=rings_doc["threshold"],
+        )  # fmt: skip
+    if replay is None:
+        replay = {
+            "schema_version": SCHEMA_VERSION, "status": "not_built", "built_in_stage": "07",
+            "events": [],
+        }  # fmt: skip
     docs = {
         "queue.json": queue, "cases.json": {"schema_version": SCHEMA_VERSION, "cases": cases},
         "metrics.json": metrics, "drift.json": drift, "replay.json": replay,
@@ -215,6 +226,7 @@ def write_bundle(docs: dict[str, dict], out_dir: Path) -> None:
 def export_snapshots(
     settings: Settings, out_dir: Path | None = None, *, git_commit: str = "unknown",
     frozen: bool = False, max_rings: int = DEFAULT_MAX_RINGS, with_edges: bool = True,
+    with_monitor: bool = True,
 ) -> Bundle:  # fmt: skip
     """Build, write and re-load (schema, hash and cross-reference check) the bundle."""
     out_dir = Path(out_dir) if out_dir is not None else settings.snapshots_dir
@@ -224,7 +236,7 @@ def export_snapshots(
         ai_doc = json.loads(settings.ai_cases_path.read_text(encoding="utf-8"))
     docs, _ = build_documents(
         settings, git_commit=git_commit, frozen=frozen, max_rings=max_rings,
-        events_path=events_path, ai_doc=ai_doc,
+        events_path=events_path, ai_doc=ai_doc, with_monitor=with_monitor,
     )  # fmt: skip
     write_bundle(clean(docs), out_dir)
     return load_bundle(out_dir)
