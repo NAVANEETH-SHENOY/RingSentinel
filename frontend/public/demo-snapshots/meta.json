@@ -1,14 +1,14 @@
 {
-  "bundle_id": "90554a3e957de4dc80f2cac8b0b81d408e306b3e24170ddbbe6d45d606897eaf",
+  "bundle_id": "20605554c87a082c4bbfe2eee9c4264e32c56c7b5e84e67088ea17bee99172ae",
   "dataset_variant": "DEMO-SYNTHETIC",
   "detector": "demo_detector",
   "evaluation_frozen": false,
   "files": {
-    "cases.json": "9d2d42216e9c644b6f6d7967c19be4f178dff0395d100c19003ef11c62a1e183",
-    "drift.json": "f1ea539d6835b539ee132f401bcff21131988e03fa710ad3286311993e96738a",
+    "cases.json": "249c4745787436a12bdf3ddb9b9479ba58a0162fa98aa461e86c3097126bdda8",
+    "drift.json": "d298c2e779f512ee555a09a23f239d727212427db7fc500d2c5273cc1d1fcfe2",
     "metrics.json": "60b044197ddf1bfcd0f94ef2f8a029a7f1a7881d48c0faa4607709c270f10a01",
     "queue.json": "c61cced27dea751bad583617ea337e8522dfcf01a743a4703c8c84768625a650",
-    "replay.json": "1a3bf36533637db4ba02b1226ad428f562ceab4161e6b9758bac635742b2e0a5"
+    "replay.json": "2ff40d6f5f632ebfb16ed943ac2610b7f5f814173a6a84005ee5131fdf622421"
   },
   "git_commit": "demo",
   "max_rings": 500,
@@ -18,6 +18,7 @@
   "seed": 0,
   "sources": {
     "ablations.json": "c80b78aa872a70b42fa0cf8d6d44c312c58f559b94c28765e8456dd30ebd82a0",
+    "ai_cases.json": "aac859ff6ad6649e314a077ef33f274ff70b0bea1730a8e69c8f0fa2dfb36499",
     "latency.json": "315396cab2f55a8d276ec4958cbb6d61ebbbe2d9cb58d912b7c67abf9314edee",
     "metrics.json": "953c8b5ea851d00a26971f399bc9d26a4e2792476c350a7adfe461ceb83356ba",
     "rings.json": "00f1d42ec6a422766d6bf2ea098f224889f5c3f9f9ebf1305e828603b2e7c570",

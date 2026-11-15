@@ -17,6 +17,36 @@ export interface CostAssumptions {
   note?: string;
 }
 
+export interface LiveFields {
+  adjusted_score: number;
+  adjusted_expected_value_inr: number;
+  above_threshold: boolean;
+  /** null for rings that are decided, held-out or below the effective threshold. */
+  live_rank: number | null;
+}
+
+export interface FeedbackState {
+  base_threshold: number | null;
+  effective_threshold: number | null;
+  offset_logit: number;
+  max_offset_logit: number;
+  step_logit: number;
+  confirm_weight: number;
+  at_bound: boolean;
+  n_confirmed: number;
+  n_dismissed: number;
+  n_held: number;
+  n_pending: number;
+  n_active: number;
+  n_deprioritised: number;
+  n_in_bundle: number;
+  rule: string;
+  validated: boolean;
+  note: string;
+}
+
+export type QueueOrder = "export" | "live";
+
 export interface QueueItem {
   ring_id: string;
   rank: number;
@@ -29,6 +59,8 @@ export interface QueueItem {
   top_features: Feature[];
   /** Present only when the item came from the API; snapshots do not know analyst decisions. */
   status?: RingStatus;
+  /** API only: the score and value after the bounded analyst-feedback shift (Stage 07). */
+  live?: LiveFields;
 }
 
 export interface Queue {
@@ -42,6 +74,9 @@ export interface Queue {
   value_formula: string;
   cost_assumptions: CostAssumptions;
   note?: string;
+  /** API only. */
+  order?: QueueOrder;
+  feedback?: FeedbackState;
   items: QueueItem[];
 }
 
@@ -165,13 +200,104 @@ export interface MetricsDoc {
   results_table_md?: string | null;
 }
 
-export interface Placeholder {
+export type DriftLevel = "ok" | "warn" | "alert" | "insufficient";
+
+export interface DriftWindow {
+  index: number;
+  start_ts: string;
+  end_ts: string;
+  n_events: number;
+  psi: number | null;
+  level: DriftLevel;
+  mean_score?: number | null;
+  n_positives?: number;
+  n_flagged?: number;
+  flagged_rate?: number | null;
+  precision_at_threshold?: number | null;
+  recall_at_threshold?: number | null;
+}
+
+export interface DriftDoc {
   schema_version: string;
+  bundle_id?: string;
   status: "not_built" | "ready";
   built_in_stage: string;
-  windows?: unknown[];
-  events?: unknown[];
-  psi_alert_level?: number | null;
+  detector?: string;
+  threshold?: number | null;
+  psi_warn_level?: number | null;
+  psi_alert_level: number | null;
+  reference?: { split: string; n_events: number };
+  windows: DriftWindow[];
+  summary?: {
+    n_windows: number;
+    n_scored: number;
+    n_alert: number;
+    n_warn: number;
+    alert_windows: number[];
+    max_psi: number | null;
+    first_alert_index: number | null;
+    test_psi: number | null;
+    n_reference: number;
+    n_test: number;
+  };
+  notes?: string[];
+}
+
+export interface ReplayEvent {
+  ring_id: string;
+  rank: number;
+  score: number;
+  expected_value_inr?: number;
+  n_members: number;
+  n_transfers: number;
+  first_ts: string;
+  detected_ts: string;
+  partial: boolean;
+  assembly_minutes: number;
+  assembly_events: number;
+  truth_ring_id?: number | null;
+  truth_share?: number | null;
+  truth_first_ts?: string | null;
+  latency_minutes?: number | null;
+  latency_events?: number | null;
+}
+
+export interface ReplayDoc {
+  schema_version: string;
+  bundle_id?: string;
+  status: "not_built" | "ready";
+  built_in_stage: string;
+  detector?: string;
+  threshold?: number | null;
+  min_ring_members?: number;
+  timeline?: {
+    start_ts: string;
+    end_ts: string;
+    n_steps: number;
+    step_minutes: number;
+    events: number[];
+    ring_transfers: number[];
+    detected: number[];
+  };
+  events: ReplayEvent[];
+  summary?: Record<string, number | null>;
+  notes?: string[];
+}
+
+export type AnalystAction = "confirm" | "dismiss" | "hold";
+
+export interface ActionBody {
+  action: AnalystAction;
+  analyst: string;
+  note: string;
+  idempotency_key: string;
+}
+
+export interface ActionResult {
+  ring_id: string;
+  status: RingStatus;
+  replayed: boolean;
+  entry: AuditEntry;
 }
 
 export interface AuditEntry {

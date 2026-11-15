@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { ActionPanel } from "./ActionPanel";
 import { EmptyState, ErrorState, Loading, OriginNote } from "./DataState";
 import { ForceGraph } from "./ForceGraph";
 import { StatusChip } from "./StatusChip";
@@ -13,7 +14,7 @@ const EDGE_ROWS = 50;
 
 export function CaseView({ ringId }: { ringId: string | null }) {
   const source = useSource();
-  const { state, reload } = useResource(
+  const { state, reload, refresh } = useResource(
     async () => (ringId ? source.case(ringId) : null),
     [source, ringId],
   );
@@ -52,6 +53,13 @@ export function CaseView({ ringId }: { ringId: string | null }) {
         {loaded.origin === "api" && typeof c.n_actions === "number" ? ` · ${c.n_actions} analyst action(s) on record` : ""}
       </p>
       <OriginNote loaded={loaded} />
+
+      <ActionPanel
+        ringId={c.ring_id}
+        status={c.status ?? "pending"}
+        live={loaded.origin === "api"}
+        onDecided={refresh}
+      />
 
       <div className="grid cols-4" style={{ margin: "16px 0 20px" }}>
         <Stat label="Score (uncalibrated)" value={formatScore(c.score)} />

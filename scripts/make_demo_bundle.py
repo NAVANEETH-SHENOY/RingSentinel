@@ -14,9 +14,19 @@ import random
 import sys
 from pathlib import Path
 
+import numpy as np
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
+from ringsentinel.ai.pipeline import ai_document, build_ai_cases  # noqa: E402
+from ringsentinel.monitor.drift import compute_drift  # noqa: E402
+from ringsentinel.monitor.replay import compute_replay  # noqa: E402
+from ringsentinel.snapshots.ai_merge import (  # noqa: E402
+    AI_SOURCE_NAME,
+    ai_document_hash,
+    apply_ai_blocks,
+)
 from ringsentinel.snapshots.bundle import (  # noqa: E402
     DATA_FILES,
     SnapshotError,
@@ -238,6 +248,74 @@ def _metrics() -> dict:
     }
 
 
+def _ns(text: str) -> int:
+    return int(np.datetime64(text, "ns").astype("int64"))
+
+
+def _demo_drift(threshold: float) -> dict:
+    """Real PSI code on invented scores: calm for five windows, then the scores slide upward."""
+    rng = np.random.default_rng(7)
+    reference = rng.beta(1.2, 18.0, 3000)
+    n_test, t0, t1 = 6000, _ns("2022-09-01T00:00:00"), _ns("2022-09-14T00:00:00")
+    ts = np.sort(rng.integers(t0, t1, n_test))
+    position = (ts - t0) / (t1 - t0)
+    shift = np.clip((position - 0.6) / 0.4, 0.0, 1.0)  # 0 for the first 60 percent of the time
+    scores = np.where(
+        rng.random(n_test) < shift,
+        rng.beta(2.6, 9.0, n_test),
+        rng.beta(1.2, 18.0, n_test),
+    )
+    labels = (rng.random(n_test) < np.clip(scores * 0.12, 0.0, 1.0)).astype("int64")
+    return compute_drift(
+        reference, scores, ts, labels, threshold, detector=DETECTOR, n_windows=8, n_bins=10,
+        warn_level=0.10, alert_level=0.25, min_events=500,
+    )  # fmt: skip
+
+
+def _ring_transfers(rec: dict, rid: str, event_id: int) -> tuple[dict, int]:
+    """Spread each linked pair's transfers between its first and last timestamp."""
+    ts, src, dst, ids = [], [], [], []
+    for edge in rec["edges"]:
+        a, b = _ns(edge["first_ts"]), _ns(edge["last_ts"])
+        n = edge["n_transfers"]
+        for k in range(n):
+            ts.append(a + (b - a) * k // max(n - 1, 1))
+            src.append(edge["src"])
+            dst.append(edge["dst"])
+            ids.append(event_id)
+            event_id += 1
+    return {"ts_ns": ts, "src": src, "dst": dst, "event_id": ids}, event_id
+
+
+def _demo_replay(ranked: list, threshold: float) -> dict:
+    """Real replay code on the invented rings. Three rings carry an invented 'true' ring id."""
+    rng = np.random.default_rng(11)
+    t0, t1 = _ns("2022-09-01T00:00:00"), _ns("2022-09-14T00:00:00")
+    test_ts = np.sort(rng.integers(t0, t1, 6000))
+    rings, ring_events, truth_first = [], {}, {}
+    event_id = 1
+    for rank, (rid, value, rec) in enumerate(ranked[:10], start=1):
+        data, event_id = _ring_transfers(rec, rid, event_id)
+        truth = 900 + rank if rank in (1, 3, 6) else -1
+        data["truth_id"] = [truth] * len(data["ts_ns"])
+        if truth >= 0:
+            truth_first[truth] = min(data["ts_ns"]) - (rank * 17 + 40) * 60 * 10**9
+        ring_events[rid] = data
+        rings.append({"ring_id": rid, "rank": rank, "score": rec["score"],
+                      "expected_value_inr": value, "n_members": rec["n_members"],
+                      "n_transfers": rec["n_transfers"]})  # fmt: skip
+    return compute_replay(
+        rings, ring_events, test_ts, truth_first, detector=DETECTOR, threshold=threshold,
+        min_size=3, n_steps=96,
+    )  # fmt: skip
+
+
+def _with_template_ai(cases: dict) -> dict:
+    """Offline template case files for every demo case, built by the real AI code path."""
+    blocks, _ = build_ai_cases(cases, None, None)
+    return ai_document(blocks)
+
+
 def build_demo_documents() -> dict[str, dict]:
     rng = random.Random(20260101)
     records = _ring_records(rng)
@@ -284,20 +362,11 @@ def build_demo_documents() -> dict[str, dict]:
         },  # fmt: skip
         "cases.json": {"schema_version": SCHEMA_VERSION, "cases": cases},
         "metrics.json": _metrics(),
-        "drift.json": {
-            "schema_version": SCHEMA_VERSION,
-            "status": "not_built",
-            "built_in_stage": "07",
-            "psi_alert_level": None,
-            "windows": [],
-        },  # fmt: skip
-        "replay.json": {
-            "schema_version": SCHEMA_VERSION,
-            "status": "not_built",
-            "built_in_stage": "07",
-            "events": [],
-        },  # fmt: skip
+        "drift.json": _demo_drift(0.3),
+        "replay.json": _demo_replay(ranked, 0.3),
     }
+    ai_doc = _with_template_ai(cases)
+    apply_ai_blocks(cases, ai_doc)
     file_hashes = {
         n: sha256_bytes(canonical_text(clean(docs[n])).encode("utf-8")) for n in DATA_FILES
     }
@@ -309,6 +378,7 @@ def build_demo_documents() -> dict[str, dict]:
         "latency.json",
     )
     sources = {n: hashlib.sha256(f"demo:{n}".encode()).hexdigest() for n in source_names}
+    sources[AI_SOURCE_NAME] = ai_document_hash(ai_doc)
     docs["meta.json"] = {
         "schema_version": SCHEMA_VERSION, "bundle_id": bundle_id_from(file_hashes),
         "dataset_variant": "DEMO-SYNTHETIC",

@@ -1,6 +1,6 @@
 # RingSentinel: zero-context project explainer
 
-Written for a reader (human or LLM) who has only the project zip. Current milestone: **Stage 06 (AI layer, `backend/ringsentinel/ai/`, tested with a fake provider only; no live model call yet) sits on Stage 05 (read-only analyst interface in `frontend/`), built and tested on the demo bundle and against a real API process on it; it sits on Stage 04 (snapshot exporter and backend API), tested on hand-made and synthetic data only. It sits on top of Stage 03, which has never been run on the real data, so no real result exists yet and the snapshot bundle is marked `evaluation_frozen: false`. Stage 02 was run on the real data by the builder (the owner's run and tag v0.3.0 were not seen); Stage 01 is confirmed and tagged v0.2.0**. Anything that does not exist yet is marked [planned]. If this file and the code disagree, the code wins; run `python scripts/check_docs.py` to catch stale paths.
+Written for a reader (human or LLM) who has only the project zip. Current milestone: **Stage 07 (human-in-the-loop, bounded threshold feedback, live queue re-ranking, drift with alerts, replay, and the AI panel in the interface) built and tested in the builder's sandbox; it folds in Stage 05 (frontend) and Stage 06 (AI layer), which had not yet been run by the owner. Everything sits on Stage 04 (snapshot exporter and API) and Stage 03 (detectors and evaluation), which have never been run on the real data, so no real result exists yet and the snapshot bundle is marked `evaluation_frozen: false`. Stage 02 was run on the real data by the builder; Stage 01 is confirmed and tagged v0.2.0**. Anything that does not exist yet is marked [planned]. If this file and the code disagree, the code wins; run `python scripts/check_docs.py` to catch stale paths.
 
 ## 1. Plain-language summary
 
@@ -8,7 +8,9 @@ RingSentinel is a tool for fraud analysts. Money moves between accounts. Sometim
 
 It is built for the Razorpay AI Buildathon, Track 02 (AI Risk Manager), as a solo project, and it is defense-only. It uses a public synthetic dataset (IBM anti-money-laundering transactions), not real customer data.
 
-New in Stage 06: for each flagged ring an AI assistant writes a short plain-language explanation and the best innocent explanation, and a checker confirms every number and account it mentions against the real transfers; if anything fails, a plain rule-based summary is shown instead. The AI never changes a score or takes an action. So far the project can load and clean that dataset, label the known laundering rings, split the data by time, turn the transfers into an account graph with hub control and a table of per-account and per-community features, score every transfer with four detectors (including one that uses the graph features), group flagged transfers into candidate rings, and measure everything on a held-out test period, including the rupee cost of false alarms. The measurement code exists but has not been run on the real data yet. The results can now be packaged into a small snapshot bundle and served by a local API that ranks the flagged rings for review and records each analyst decision (confirm, dismiss or hold) in a tamper-evident log, where every entry carries a fingerprint of the one before it. A web interface (Stage 05) shows the ranked queue, each ring as a graph of transfers, the evaluation metrics and the audit log, and keeps working from saved files when the backend is off. It is read-only for now: the buttons to confirm, dismiss or hold, the explanations written by a language model, the drift and replay views, and the deployment do not exist yet.
+The project can load and clean that dataset, label the known laundering rings, split the data by time, turn the transfers into an account graph with hub control and a table of per-account and per-community features, score every transfer with four detectors (including one that uses the graph features), group flagged transfers into candidate rings, and measure everything on a held-out test period, including the rupee cost of false alarms. The measurement code exists but has not been run on the real data yet. The results are packaged into a small snapshot bundle and served by a local API that ranks the flagged rings for review and records each analyst decision (confirm, dismiss or hold) in a tamper-evident log, where every entry carries a fingerprint of the one before it.
+
+A web interface shows the ranked queue, each ring as a graph of transfers, the evaluation metrics, the audit log, a drift page and a replay page. For each flagged ring an AI assistant writes a short plain-language explanation and the best innocent explanation, and a checker confirms every number and account it mentions against the real transfers; if anything fails, a plain rule-based summary is shown instead. The AI never changes a score or takes an action. New in Stage 07: the analyst can confirm, dismiss or hold a ring in the interface. Dismissals nudge the review threshold up a little, inside fixed limits, and the queue re-ranks itself; the drift page warns when the detector's scores move away from what it was validated on; the replay page steps through the test period and shows when each ring became detectable. The deployment does not exist yet.
 
 ## 2. Technical summary
 
@@ -16,22 +18,25 @@ New in Stage 06: for each flagged ring an AI assistant writes a short plain-lang
 - Architecture: a deterministic offline pipeline (ingest, temporal split, graph, features, detectors, ring extraction, evaluation) exports static JSON snapshots; a thin API and a UI sit on top [planned]. See `docs/ARCHITECTURE.md`.
 - Implemented now: (D1) checksum manifest; (D2) chunked CSV reader to a typed event table, pattern parser, label attachment, INR amount, validation; (D4) time-based split with ring assignment; two baselines (velocity rule; tabular XGBoost) scored on the validation split; shared metrics; (D3) label-blind synthetic noise layer; (D5) cumulative past-only transfer graph per window with IDF edge weights, a degree cap tuned on validation, a pruning report and Louvain-split communities; (D6) node and community features; (D7) four detectors scored per transfer (velocity rule, tabular XGBoost, graph-feature XGBoost, Isolation Forest) with a guard that releases the test split once per detector; (D8) ring extraction from the flagged transfers; (D9) transaction-level and ring-level metrics, rupee net-value threshold, cost sweep, ablations (hub control and graph features on/off), robustness (edge dropout) and detection latency, regenerated by `scripts/reproduce.py`.
 - (D12) snapshot exporter: Stage 03 outputs to six schema-validated JSON files tied together by SHA-256 hashes; (D13) FastAPI backend serving them from memory, with a hash-chained SQLite audit log, idempotent actions, token check, CORS and rate limiting.
-- (C15, Stage 05) Next.js interface: queue, case view with a force-directed graph capped at 500 accounts, metrics dashboard, audit page; reads the API when it answers, else the snapshot files, else a built-in demo bundle.
-- (D10, Stage 06) AI layer: per-ring case file and devil's advocate written by an LLM over graph tools, every cited number recomputed by a verifier, template fallback, cache keyed by ring hash, validated JSON query language, merged into the bundle's `ai` field only. The LLM never changes a score. The case view displays it.
-- Core logic still to come [planned]: drift (PSI), replay, threshold feedback, analyst actions in the UI.
+- (C15, Stages 05 and 07) Next.js interface: queue (live order and feedback card), case view with a force-directed graph capped at 500 accounts, decision panel, AI explanation card, metrics dashboard, audit page, drift page, replay page; reads the API when it answers, else the snapshot files, else a built-in demo bundle. Decisions need the API.
+- (D10, Stage 06) AI layer: per-ring case file and devil's advocate written by an LLM over graph tools, every cited number recomputed by a verifier, template fallback, cache keyed by ring hash, validated JSON query language, merged into the bundle's `ai` field only. The LLM never changes a score.
+- (Stage 07) Bounded analyst feedback (`backend/ringsentinel/review/feedback.py`): net dismissals shift the review threshold in log-odds by a fixed step up to a maximum, with hard ceilings in code; confirmations only cancel dismissals and never lower the threshold below the validated one; holds change nothing. The same shift re-ranks the open rings by an adjusted expected value. The API serves it (`annotate()` in `backend/ringsentinel/review/feedback.py`, `/queue?order=live`, `GET /feedback`).
+- (D11, Stage 07) Drift (`backend/ringsentinel/monitor/drift.py`): population stability index of each equal-width time window of the test period against the validation scores, with warn and alert levels. Replay (`backend/ringsentinel/monitor/replay.py`): per ring the time its flagged transfers first touch the minimum ring size, assembly time, and latency against the true ring where one supplies most transfers.
+- Core logic still to come [planned]: deployment (Stage 09), diagram specs (Stage 09), a validation of the feedback rule.
 - One setting, `RS_DATASET_VARIANT`, selects HI-Small (default), LI-Small, HI-Medium or LI-Medium; all paths derive from it.
 
 ## 3. Current state
 
 | Item | State |
 | --- | --- |
-| Milestone | M0 and M1 (Stage 01) done and confirmed on the owner's Windows machine, pushed. M2 / Stage 02 built; builder ran it on the real data; owner's run not seen. M3 / Stage 03 built and tested on synthetic data in the builder's sandbox; owner's run and the real-data run are pending. M4 / Stage 04 built on top of it and tested in the builder's sandbox; owner's run pending. M5 / Stage 05 built on top of it and tested in the builder's sandbox; owner's run pending |
+| Milestone | M0 and M1 (Stage 01) done and confirmed on the owner's Windows machine, pushed. M2 / Stage 02 built; builder ran it on the real data; owner's run not seen. M3 / Stage 03 built and tested on synthetic data in the builder's sandbox; owner's run and the real-data run are pending. M4 / Stage 04 built on top of it and tested in the builder's sandbox; owner's run pending. M5 / Stage 05 and M6 / Stage 06 built in the builder's sandbox (the owner had not run them); M7 / Stage 07 folds both in and is tested in the builder's sandbox; owner's run, merge and tag v0.8.0 pending |
 | Works (tested on synthetic data; Stage 01 and 02 also on the real HI-Small files) | Everything in Stage 01 and Stage 02, plus: tabular features and velocity counts, design matrices, the four detectors, the test-split vault, ring extraction, Jaccard ring match, cost model, per-detector report, cost sweep, latency, ablation, robustness, result tables, `scripts/run_stage03.py`, `scripts/reproduce.py` |
 | Verified on the real files | Stage 01 (owner: 85 tests passed, pipeline run) and Stage 02 (builder's run of every step). Stage 03: nothing; it has not touched the real files |
 | Works, Stage 04 (hand-made and synthetic data only) | Snapshot exporter and loader, JSON schemas, ranking by expected value, case edges, hash-chained audit log with tamper detection, action rules and idempotency, all API endpoints, token check, CORS, rate limiting, `scripts/export_snapshots.py`, `scripts/run_api.py`. A real uvicorn process was started and queried once in the builder's sandbox |
+| Works, Stage 06 (fake provider, synthetic and hand-made data; template and fake run also on the owner's real 500-ring bundle in the builder's sandbox) | Case facts and aliases, graph tools, verifier, investigator and devil's advocate loops, template fallback, cache, query DSL, Groq and Gemini HTTP clients (against a fake transport only), bundle merge, `scripts/run_stage06.py`, `scripts/ai_query.py`. **No live model call has ever been made**, so the real verified share is unknown |
 | Works, Stage 05 | Read-only UI for queue, case graph (500-account cap), metrics, audit, replay placeholder; API-first with snapshot and demo fallback; `scripts/make_demo_bundle.py`, `scripts/sync_frontend_snapshots.py`. Checked in the builder's sandbox: 79 Vitest tests, type check, lint, production build, and a headless Chrome run against a real uvicorn process serving the demo bundle |
-| Works, Stage 06 (fake provider, synthetic and hand-made data; template and fake run also on the owner's real 500-ring bundle in the builder's sandbox) | Case facts and aliases, graph tools, verifier, investigator and devil's advocate loops, template fallback, cache, query DSL, Groq and Gemini HTTP clients (against a fake transport only), bundle merge, `scripts/run_stage06.py`, `scripts/ai_query.py`, the case view's AI panel. **No live model call has ever been made**, so the real verified share is unknown |
-| Does not exist yet | Live LLM results, analyst actions in the UI, drift, replay, threshold feedback, deployment, Postgres, neighbour nodes in the case graph, any Stage 03 result on real data |
+| Works, Stage 07 (synthetic world and demo bundle only) | Threshold feedback and live queue (`/queue?order=live`, `GET /feedback`), the decision panel (idempotent retry, status rules), drift (PSI per window, warn and alert levels), replay (assembly time, latency against the truth, deterministic), the full AI card (source, verifier badge, devil's advocate, contested note), the scripted analyst scenario in both the API and the UI. Checked in the builder's sandbox: backend and frontend test suites, type check, lint, production build, headless Chrome screenshots of the drift, replay and case pages on the demo bundle |
+| Does not exist yet | Live LLM results, any Stage 03 result on real data (so drift and replay have never run on real data), validation of the feedback rule, deployment, Postgres |
 | Headline numbers | None. Stage 03 produces them when `scripts/reproduce.py` is run on the real data (`docs/EVALUATION_RESULTS.md` [generated]). Validation-split Stage 01 baselines exist; Stage 02 reports graph diagnostics only |
 
 ## 4. Repo map
@@ -103,20 +108,20 @@ New in Stage 06: for each flagged ring an AI assistant writes a short plain-lang
 | `frontend/next.config.mjs`, `frontend/tsconfig.json`, `frontend/eslint.config.mjs`, `frontend/vitest.config.mts`, `frontend/vitest.setup.ts` | Static export, TypeScript, lint and test setup | Next, tsc, eslint, vitest | none |
 | `frontend/.env.example`, `frontend/.gitignore` | Frontend env var names; ignores the real bundle copy | Humans, git | none |
 | `frontend/src/app/layout.tsx`, `frontend/src/app/globals.css` | Root layout (wraps pages in `AppShell`) and all styles (palette variables) | Next | `frontend/src/components/AppShell.tsx` |
-| `frontend/src/app/page.tsx`, `frontend/src/app/case/page.tsx`, `frontend/src/app/metrics/page.tsx`, `frontend/src/app/audit/page.tsx`, `frontend/src/app/replay/page.tsx`, `frontend/src/app/not-found.tsx` | Route files; each renders one view (the case page reads `?id=` and wraps in Suspense) | Next | the matching component |
+| `frontend/src/app/page.tsx`, `frontend/src/app/case/page.tsx`, `frontend/src/app/metrics/page.tsx`, `frontend/src/app/audit/page.tsx`, `frontend/src/app/replay/page.tsx`, `frontend/src/app/drift/page.tsx`, `frontend/src/app/not-found.tsx` | Route files; each renders one view (the case page reads `?id=` and wraps in Suspense) | Next | the matching component |
 | `frontend/src/components/AppShell.tsx` | Header, nav, data-source chip, demo / not-frozen / out-of-date banners; provides the data source | `frontend/src/app/layout.tsx` | `SourceProvider`, `useSource` |
-| `frontend/src/components/QueueView.tsx` | Ranked table, search, status filter, paging | `frontend/src/app/page.tsx` | `useSource`, `useResource` |
-| `frontend/src/components/CaseView.tsx`, `frontend/src/components/ForceGraph.tsx` | One ring: stats, SVG graph, signals, AI placeholder, link table, members | case page | `capGraph`, `layoutGraph` |
+| `frontend/src/components/QueueView.tsx` | Ranked table, search, status filter, paging; live or exported order; live columns and the feedback card when the API answers | `frontend/src/app/page.tsx` | `useSource`, `useResource`, `FeedbackCard`, `liveLabel` |
+| `frontend/src/components/CaseView.tsx`, `frontend/src/components/ForceGraph.tsx` | One ring: stats, decision panel, SVG graph, signals, explanation card (`AiCard`, defined in this file), link table, members | case page | `capGraph`, `layoutGraph`, `ActionPanel`, `AiCard` |
 | `frontend/src/components/MetricsView.tsx`, `frontend/src/components/charts.tsx` | Dashboard panels and the SVG line chart and bars | metrics page | `frontend/src/lib/metricsView.ts`, `frontend/src/lib/markdownTable.ts` |
-| `frontend/src/components/AuditView.tsx`, `frontend/src/components/ReplayView.tsx`, `frontend/src/components/DataState.tsx`, `frontend/src/components/StatusChip.tsx` | Audit page (chain check, token, list), replay placeholder, loading, empty and error states, chips | pages | `frontend/src/lib/source.ts` |
-| `frontend/src/lib/source.ts` | `createSource`: API, then snapshot, then demo, with timeouts, schema-version check and a cached cases.json; `DataUnavailableError`, `SchemaVersionError` | all views via context | `frontend/src/lib/http.ts`, `frontend/src/lib/config.ts` |
-| `frontend/src/lib/http.ts`, `frontend/src/lib/config.ts`, `frontend/src/lib/types.ts`, `frontend/src/lib/format.ts`, `frontend/src/lib/token.ts` | Fetch with timeout, env config, bundle and API types, INR and number formatting, per-tab token storage | source, views | none |
-| `frontend/src/lib/graph.ts` | `buildNodes`, `capGraph` (500-account cap), `layoutGraph` (deterministic d3-force) | `frontend/src/components/ForceGraph.tsx` | d3-force |
-| `frontend/src/lib/metricsView.ts`, `frontend/src/lib/markdownTable.ts` | Tolerant extractors for D9 metrics; markdown table parser | `frontend/src/components/MetricsView.tsx` | none |
-| `frontend/src/lib/useResource.ts`, `frontend/src/lib/SourceContext.tsx` | Load-state hook; context holding the source | views | none |
+| `frontend/src/components/AuditView.tsx`, `frontend/src/components/DataState.tsx`, `frontend/src/components/StatusChip.tsx` | Audit page (chain check, token, list), loading, empty and error states, chips | pages | `frontend/src/lib/source.ts` |
+| `frontend/src/lib/source.ts` | `createSource`: API, then snapshot, then demo, with timeouts, schema-version check and a cached cases.json; `queue(order)`, `feedback()`, `act()` (needs the API and the token); `DataUnavailableError`, `SchemaVersionError` | all views via context | `frontend/src/lib/http.ts`, `frontend/src/lib/config.ts` |
+| `frontend/src/lib/http.ts` (`getJson`, `postJson`), `frontend/src/lib/config.ts`, `frontend/src/lib/types.ts`, `frontend/src/lib/format.ts`, `frontend/src/lib/token.ts` | Fetch with timeout, env config, bundle and API types, INR and number formatting, per-tab token storage | source, views | none |
+| `frontend/src/lib/graph.ts` | `buildNodes`, `capGraph` (500-account cap), `layoutGraph` (deterministic d3-force) | ForceGraph.tsx | d3-force |
+| `frontend/src/lib/metricsView.ts`, `frontend/src/lib/markdownTable.ts` | Tolerant extractors for D9 metrics; markdown table parser | MetricsView.tsx | none |
+| `frontend/src/lib/useResource.ts`, `frontend/src/lib/SourceContext.tsx` | Load-state hook (`reload` shows the spinner, `refresh` reloads quietly and keeps the page); context holding the source | views | none |
 | `frontend/public/demo-snapshots` | Committed DEMO bundle (invented data) | `createSource` (last fallback) | none |
 | `frontend/public/snapshots` | Real bundle copy [generated], git-ignored | `createSource` | none |
-| `scripts/make_demo_bundle.py` | Builds and validates the demo bundle (`build_demo_documents()`, `main()`) | owner | `ring_id_for()`, `expected_value_inr()`, `write_bundle()`, `load_bundle()` |
+| `scripts/make_demo_bundle.py` | Builds and validates the demo bundle (`build_demo_documents()`, `main()`); drift, replay and template case files come from the real Stage 06 and 07 code on invented data | owner | `ring_id_for()`, `expected_value_inr()`, `write_bundle()`, `load_bundle()`, `compute_drift()`, `compute_replay()`, `build_ai_cases()` |
 | `scripts/sync_frontend_snapshots.py` | `sync()`: validate a bundle with `load_bundle()`, copy it into the frontend | owner | `load_bundle()` |
 | `.github/workflows/frontend.yml` | CI for the frontend: type check, lint, tests, build | GitHub | npm scripts |
 | `frontend/tests/*.test.ts*` | See section 8 | vitest | the code under test |
@@ -144,7 +149,23 @@ Stage 06 files (what each does; callers and callees in the last two columns):
 | `scripts/run_stage06.py`, `scripts/ai_query.py` | Command lines for Stage 06 | owner | `run_ai()`, `run_query()` |
 | `backend/tests/s06_cases.py` | Hand-made rings and valid model replies | Stage 06 tests | none |
 
-In the frontend, `AiCard` in `frontend/src/components/CaseView.tsx` displays the block (types in `frontend/src/lib/types.ts`).
+Stage 07 files:
+
+| Path | What it does | Called by | Calls |
+| --- | --- | --- | --- |
+| `backend/ringsentinel/review/feedback.py` | `FeedbackConfig` (validated, hard ceilings), `threshold_offset()`, `effective_threshold()`, `adjusted_score()`, `count_decisions()`, `annotate()` (status and live fields per queue item, plus the state), `export_order()` | `backend/app/routes.py` | `expected_value_inr()` |
+| `backend/ringsentinel/monitor/drift.py` | `reference_bins()`, `bin_shares()`, `psi_from_shares()`, `classify()`, `window_edges()` (exact integer edges), `compute_drift()`, `build_drift_document()`, `not_built()` | `build_documents()` | numpy, pandas |
+| `backend/ringsentinel/monitor/replay.py` | `ring_timing()`, `compute_replay()`, `build_replay_document()` | `build_documents()` | `window_edges()` |
+| `backend/ringsentinel/snapshots/export.py` | `build_documents(..., with_monitor=True)` builds drift and replay (placeholders when scores or events are missing) | `export_snapshots()` | the two monitor modules |
+| `backend/app/routes.py` | `GET /queue` (`order=export|live`, status and live fields), `GET /feedback` | the API | `annotate()` |
+| `backend/app/config.py` | `AppSettings.feedback_config()`; `RS_FEEDBACK_*` | `create_app()` | `FeedbackConfig` |
+| `frontend/src/components/ActionPanel.tsx` | Decision form: name, token, note, buttons per status (`allowedActions`), error messages per status code, one idempotency key per attempt | CaseView.tsx | `source.act()`, `newIdempotencyKey` |
+| `frontend/src/components/FeedbackCard.tsx` | Threshold shift, counts, limit notice, rule text | QueueView.tsx | none |
+| `frontend/src/components/DriftView.tsx`, `frontend/src/components/monitorCharts.tsx` | Drift page (status, PSI bars `DriftChart`, window table); `TimelineChart` for the replay | pages | `source.drift()` |
+| `frontend/src/components/ReplayView.tsx` | Replay page: slider and step buttons, detected-so-far table, summary | replay page | `detectedBy`, `eventsBy` |
+| `frontend/src/lib/replayView.ts`, `frontend/src/lib/liveQueue.ts`, `frontend/src/lib/idempotency.ts` | Replay arithmetic (`stepEndMs`, `detectedBy`, `eventsBy`, `formatMinutes`); `liveLabel`, `hasLive`; `newIdempotencyKey` | views | none |
+| `frontend/src/app/drift/page.tsx` | Route file for the drift page | Next | `DriftView` |
+| `backend/tests/s07_world.py` | Synthetic world through Stage 02 and 03 and the export, shared by Stage 07 tests | Stage 07 tests | `write_world()`, `export_snapshots()` |
 
 Planned (created in the stage named): `docs/DIAGRAM_SPECS.md` [planned, Stage 09]. Note the two metric packages: `backend/ringsentinel/evaluation/metrics.py` is Stage 01's (used by the Stage 01 baselines); `backend/ringsentinel/evaluate/metrics.py` and its neighbours are Stage 03's. Stage 03 code does not import the Stage 01 package.
 
@@ -200,7 +221,15 @@ Audit page: `AuditView` calls the open verify endpoint through `useResource`; th
 
 Making the demo or real bundle available: `python scripts\make_demo_bundle.py` rebuilds `frontend/public/demo-snapshots`; `python scripts\sync_frontend_snapshots.py` runs `load_bundle()` on `data/snapshots/` [generated] and copies the six files to `frontend/public/snapshots` [generated].
 
-Case generation by a language model is [planned].
+Case generation by a language model (Stage 06): `run_ai()` in `backend/ringsentinel/stage06.py` loads the bundle, calls `build_ai_cases()` (per ring `explain_case()`: cache, then the investigator and devil's advocate loops, then `verify()`, else `template_case_file()`) and merges the blocks into `cases.json` [generated] with `merge_ai_into_bundle()`.
+
+Taking a decision in the browser (Stage 07): `ActionPanel` (`frontend/src/components/ActionPanel.tsx`) shows only the buttons `allowedActions` permits for the case's status (pending: confirm, dismiss, hold; held: confirm, dismiss; decided: none) and keeps them off until a name and a token of at least 16 characters are entered. A click calls `source.act()` (`createSource` in `frontend/src/lib/source.ts`), which sends `postJson` with the `X-Analyst-Token` header and a key from `newIdempotencyKey`. The same key is reused when the identical decision is retried after a network failure, so a decision that reached the server is not recorded twice (the server answers with `replayed: true`). On success `CaseView` calls `refresh`, which reloads the case without hiding the page, so the confirmation message stays. Status codes 401, 503, 409, 422, 429, 404 and network failure each get a plain-language message.
+
+Live queue and feedback (Stage 07): `GET /queue` calls `_annotated()` in `backend/app/routes.py`: `AuditLog.statuses()` gives the latest status per ring, `annotate()` in `backend/ringsentinel/review/feedback.py` counts confirmed and dismissed rings in the bundle (`count_decisions`), computes the log-odds shift (`threshold_offset`), the shifted threshold (`effective_threshold`) and, per ring, the adjusted score and adjusted expected value (`expected_value_inr` on the adjusted score). Open rings above the shifted threshold with a positive adjusted value get a `live_rank`; others follow; decided rings come last. `order=export` restores the bundle's own order. Nothing is stored: the shift is recomputed from the audit log on every request. `GET /feedback` returns the same state alone.
+
+Drift and replay build (Stage 07): `export_snapshots()` calls `build_documents(..., with_monitor=True)`. `build_drift_document()` reads `scores.parquet` [generated] (validation scores are the reference, test scores the monitored data) and `events.parquet` [generated] (timestamps and labels) and calls `compute_drift()`: `reference_bins()` cuts the reference at quantiles, `window_edges()` makes equal-width time windows with exact integer edges, `psi_from_shares()` scores each window, `classify()` labels it ok, warn, alert or insufficient (fewer than `RS_DRIFT_MIN_EVENTS` events). `build_replay_document()` takes the exported rings' transfers and calls `compute_replay()`: `ring_timing()` walks each ring's transfers in time order and records when they first touch `RS_RING_MIN_SIZE` accounts. If scores or events are missing the placeholders from `not_built()` stay and the bundle is still valid.
+
+Replay in the browser: `ReplayView` holds one number, the cursor step. `detectedBy` lists the rings whose detection time is at or before the end of that step (`stepEndMs`), `eventsBy` counts the test transfers seen. Everything is a pure function of `replay.json` [generated], so the same file always replays the same way.
 
 ## 6. Data contracts
 
@@ -244,16 +273,19 @@ D12 `data/snapshots/` [generated] (the bundle; the formal JSON Schemas are in `b
 - `queue.json` [generated]: detector, split, threshold, threshold_kind, `score_calibrated` (always false), `value_formula`, `cost_assumptions` (review_cost_inr, fp_cost_inr, loss_capture_rate), optional `note`, and `items`: ring_id (`R-` plus 12 hex), rank (1..n), score, expected_value_inr, n_members, n_transfers, amount_inr, oversized, top_features (three of feature and mean_contribution).
 - cases.json [generated]: `cases` keyed by ring_id; each has the queue fields plus members (sorted, up to 500), members_truncated, top_features (five), edges (src, dst, n_transfers, total_inr, first_ts, last_ts; up to 500), edges_available, edges_truncated, and `ai` (status "not_built", built_in_stage "06", investigator, verifier and benign_explanation null).
 - metrics.json [generated]: meta, detectors, cost_sweep (as in D9), ablations, robustness, latency, results_table_md.
-- `drift.json` [generated]: status "not_built", built_in_stage "07", psi_alert_level null, windows []. `replay.json` [generated]: status "not_built", built_in_stage "07", events [].
+- `drift.json` [generated] and `replay.json` [generated]: see D11 below. When the inputs are missing they are `status: "not_built"` placeholders (`built_in_stage` "07", empty `windows` or `events`).
 - `meta.json` [generated]: bundle_id, dataset_variant, seed, git_commit, evaluation_frozen, detector, split, n_rings_total, n_rings_exported, max_rings, `sources` (SHA-256 of each Stage 03 input) and `files` (SHA-256 of each of the five data files). `bundle_id` is the SHA-256 of the sorted "name:hash" lines of `files`; the git commit and the frozen flag do not change it.
 
 D13 audit log, table `audit` in the SQLite file named by `RS_AUDIT_DB_URL`: seq (1, 2, ... without gaps), ts (UTC, microseconds, Z), ring_id, action (confirm, dismiss, hold), analyst, note, idempotency_key (unique), request_sha256 (hash of ring, action, analyst, note), prev_hash (64 zeros for seq 1), hash. `hash` is the SHA-256 of the canonical JSON of all other columns except itself. The API never returns `request_sha256`.
 
 Frontend reading of D12 (Stage 05): the TypeScript types in `frontend/src/lib/types.ts` mirror the schemas; the app accepts only `schema_version` "1". The queue from a snapshot has no `status` field (the API adds it). metrics.json inner keys are read by `frontend/src/lib/metricsView.ts` tolerantly (see section 10).
 
-D10 `data/processed/<variant>/ai_cases.json` [generated]: `{"schema_version": "1", "prompt_version": str, "cases": {<ring_id>: <ai block>}}`. AI block: status (not_built|ready), built_in_stage "06", source (llm|cache|template), input_hash (SHA-256 of ring facts plus prompt version), prompt_version, provider {name, model}, investigator (`CaseFile` with real account ids), verifier {status verified|unverified, issues[], warnings[], checked, attempts}, benign_explanation (`BenignCase` or null), benign_verifier, contested (bool), contested_reason, trace {tool names and counts}, fallback_kind (no_provider|outside_limit|provider_error|no_valid_output|null), fallback_reason. `data/processed/<variant>/ai_report.json` [generated]: by_source, verified_share_of_llm_attempted (null when no LLM case), contested, fallbacks, provider, model, merge {applied, stale, missing}, bundle ids. Inside the bundle the same block is the `ai` field of each case in `cases.json` [generated]; `meta.json` [generated] gains `sources["ai_cases.json"]`.
+D10 `data/processed/<variant>/ai_cases.json` [generated]: `{"schema_version": "1", "prompt_version": str, "cases": {<ring_id>: <ai block>}}`. AI block: status (not_built|ready), built_in_stage "06", source (llm|cache|template), input_hash (SHA-256 of ring facts plus prompt version), prompt_version, provider {name, model}, investigator (`CaseFile` with real account ids), verifier {status verified|unverified, issues[], warnings[], checked, attempts}, benign_explanation (`BenignCase` or null), benign_verifier, contested (bool), contested_reason, trace {tool names and counts}, fallback_kind (no_provider|outside_limit|provider_error|no_valid_output|null), fallback_reason. `data/processed/<variant>/ai_report.json` [generated]: by_source, verified_share_of_llm_attempted (null when no LLM case), contested, fallbacks, provider, model, merge {applied, stale, missing}, bundle ids. Inside the bundle the same block is the `ai` field of each case in cases.json [generated]; `meta.json` [generated] gains `sources["ai_cases.json"]`.
 
-D11 is [planned] (Stage 07).
+D11 (Stage 07) is the pair `drift.json` [generated] and `replay.json` [generated] inside the bundle, same `schema_version` "1" (optional fields were added; the Stage 04 placeholders stay valid).
+- `drift.json` [generated], `status: "ready"`: detector, threshold, `psi_warn_level`, `psi_alert_level`, `reference` ({split "val", n_events}), `bins` ({n_bins, inner_edges, method, epsilon}), `windows` (index, start_ts, end_ts, n_events, psi or null, level ok|warn|alert|insufficient, mean_score, n_positives, n_flagged, flagged_rate, precision_at_threshold, recall_at_threshold), `summary` (n_windows, n_scored, n_alert, n_warn, alert_windows, max_psi, first_alert_index, test_psi, n_reference, n_test) and `notes`. PSI = sum over bins of (test share - reference share) times ln(test share / reference share), with shares floored at 1e-4.
+- `replay.json` [generated], `status: "ready"`: detector, threshold, min_ring_members, `timeline` (start_ts, end_ts, n_steps, step_minutes and three equal-length integer arrays: events, ring_transfers, detected), `events` (per exported ring: ring_id, rank, score, expected_value_inr, n_members, n_transfers, first_ts, detected_ts, partial, assembly_minutes, assembly_events and, only when one true ring supplies at least half of the ring's transfers, truth_ring_id, truth_share, truth_first_ts, latency_minutes, latency_events), `summary` (medians and 90th percentiles of assembly and latency, n_rings, n_partial, n_with_truth, n_test_events) and `notes`. Retrospective: the scores use window-level features, so latencies are a lower bound.
+- API additions (not bundle files): `GET /queue` items gain `status` and `live` (adjusted_score, adjusted_expected_value_inr, above_threshold, live_rank), and the response gains `order` and `feedback`; `GET /feedback` returns base_threshold, effective_threshold, offset_logit, max_offset_logit, step_logit, confirm_weight, at_bound, the counts, `rule`, `validated` (always false) and `note`.
 
 ## 7. Configuration
 
@@ -284,19 +316,23 @@ Stage 04 (API and snapshots):
 | `RS_CORS_ORIGINS` | `http://localhost:3000` | A browser front end on another origin is blocked; `*` is rejected |
 | `RS_RATE_LIMIT_READ_PER_MIN`, `RS_RATE_LIMIT_WRITE_PER_MIN` | 120, 20 | Negative is rejected; 0 turns the limit off; too low gives 429 for normal use |
 
+| `RS_LLM_PROVIDER` | none | Not one of none, fake, groq, gemini: validation error. `none` gives template case files only |
+| `RS_LLM_MODEL` | provider default | Wrong name gives provider errors (HTTP 404/400); every ring then falls back to a template (`provider_error`) |
+| `RS_LLM_TIMEOUT_S`, `RS_LLM_MIN_INTERVAL_S` | 60, 2.5 | Timeout must be positive; interval too low gives 429 from free tiers (retried, then fallback) |
+| `RS_LLM_MAX_TOOL_CALLS`, `RS_LLM_VERIFY_RETRIES` | 5, 2 | Ranges 0 to 10 and 0 to 5 else validation error; too low gives thin or unverified answers |
+| `RS_AI_MAX_LLM_CASES` | 100 | Rings past the limit get templates (`outside_limit`) |
+| `RS_FEEDBACK_STEP`, `RS_FEEDBACK_MAX_OFFSET`, `RS_FEEDBACK_CONFIRM_WEIGHT` | 0.1, 1.5, 1.0 | Read by the API (`load_app_settings()`). Hard ceilings 1.0, 3.0 and 5.0, and negative, non-numeric or NaN values are refused at start, so a typo cannot widen the bound. Too high a step makes a few dismissals raise the threshold at once |
+| `RS_PSI_WARN_LEVEL`, `RS_PSI_ALERT_LEVEL` | 0.10, 0.25 | Need 0 < warn < alert. Read when the bundle is exported; changing them needs a re-export |
+| `RS_DRIFT_WINDOWS`, `RS_DRIFT_BINS`, `RS_DRIFT_MIN_EVENTS` | 8, 10, 500 | Ranges 2 to 60, 3 to 50, at least 1. Too few events per window gives "insufficient" instead of a PSI |
+| `RS_REPLAY_STEPS` | 96 | Range 10 to 500; the resolution of the replay slider |
+| `GROQ_API_KEY`, `GEMINI_API_KEY` | blank | Read from the environment (or `.env` loaded into it) by `make_provider()`; missing key is a clear error naming the variable; never stored in Settings |
+
 Stage 05 (frontend, read at build time and baked into the browser files, so never put a secret in them; set in `frontend/.env.local` [generated], names in `frontend/.env.example`):
 
 | Variable | Default | If wrong |
 | --- | --- | --- |
 | `NEXT_PUBLIC_API_BASE_URL` | blank (snapshot-only mode) | A wrong URL means every API call fails and the UI quietly falls back to the snapshot, with a "Backend unreachable" note. A browser origin not listed in `RS_CORS_ORIGINS` is blocked and looks the same. Changing it needs a restart or rebuild |
 | `NEXT_PUBLIC_API_TIMEOUT_MS` | 4000 | Values outside 200 to 60000 are ignored. Too low makes a slow, waking backend look down; too high delays the fallback |
-
-| `RS_LLM_PROVIDER` | none | Not one of none, fake, groq, gemini: validation error. `none` gives template case files only |
-| `RS_LLM_MODEL` | provider default | Wrong name gives provider errors (HTTP 404/400); every ring then falls back to a template (`provider_error`) |
-| `RS_LLM_TIMEOUT_S`, `RS_LLM_MIN_INTERVAL_S` | 60, 2.5 | Timeout must be positive; interval too low gives 429 from free tiers (retried, then fallback) |
-| `RS_LLM_MAX_TOOL_CALLS`, `RS_LLM_VERIFY_RETRIES` | 5, 2 | Ranges 0 to 10 and 0 to 5 else validation error; too low gives thin or unverified answers |
-| `RS_AI_MAX_LLM_CASES` | 100 | Rings past the limit get templates (`outside_limit`) |
-| `GROQ_API_KEY`, `GEMINI_API_KEY` | blank | Read from the environment (or `.env` loaded into it) by `make_provider()`; a missing key gives a clear error naming the variable; never stored in Settings |
 
 Reserved for later stages and listed in `.env.example`: Kaggle credentials. `config/fx_rates_inr.json` holds the placeholder currency rates; a currency missing from it stops ingest.
 
@@ -341,14 +377,20 @@ Reserved for later stages and listed in `.env.example`: Kaggle credentials. `con
 | `backend/tests/test_stage06_injection.py` | Instructions hidden in data or the question do not change behaviour; feature names sanitised | Prompt injection |
 | `backend/tests/test_stage06_providers.py` | Groq and Gemini request shape through a fake transport, key only in headers and never in errors, retry and pacing | Key leak; bad retry |
 | `backend/tests/test_stage06_bundle.py` | Merge touches only `ai`, queue bytes unchanged, scores unchanged, re-export keeps AI, stale blocks ignored, tamper refused, API serves the block, settings, both scripts | Model output altering anything it must not |
-| `frontend/tests/ai_card.test.tsx` | The Explanation card: verified, template, unverified and contested states; model text shown as plain text | AI text mislabelled or interpreted as markup |
 | `backend/tests/test_stage04_integration.py` | Synthetic world through Stage 02 and 03, export, API session with actions, audit verify, and both `scripts/export_snapshots.py` outcomes | The pieces working alone but not together |
 | `frontend/tests/graph.test.ts` | Node building, the 500-account cap (count, ties, order independence, kept edges, the demo's oversized ring), deterministic layout that fits its view | A graph that freezes the browser or changes between visits |
 | `frontend/tests/source.test.ts` | Config parsing; API, snapshot, demo fallback order; timeouts; schema-version refusal; 404 handling; cached cases; token header | Offline mode broken, stale data shown as live |
-| `frontend/tests/pages.test.tsx` | Every page: loading, empty, error and offline states, filters, paging, case graph and cap, keyboard selection, metrics panels and missing-section messages, audit token flow and chain states, app shell with the backend unreachable, banners | The analyst experience breaking |
+| `frontend/tests/pages.test.tsx` | Queue, case, metrics, audit and the app shell: loading, empty, error and offline states, filters, paging, case graph and cap, keyboard selection, metrics panels and missing-section messages, audit token flow and chain states, app shell with the backend unreachable, banners | The analyst experience breaking |
 | `frontend/tests/lib.test.ts` | Formatting, markdown table parser, metrics extractors, chart colour mapping | Wrong figures on the dashboard |
 | `frontend/tests/palette.test.ts` | WCAG AA contrast for text pairs, light-only | Unreadable text, a dark-mode rule sneaking in |
 | `backend/tests/test_stage05_bundle.py` | The committed demo bundle passes `load_bundle()`, equals a fresh build, is deterministic, has an oversized ring, is marked DEMO; the sync script copies a valid bundle and refuses a tampered one | Demo bundle out of date or invalid; the sync script copying bad data |
+| `backend/tests/test_stage07_feedback.py` | The feedback rule: bounds for every count, hard ceilings, confirmations never lower the threshold, holds neutral, live ordering, decided rings last, config validation | The threshold escaping its bounds; a changed rule going unnoticed |
+| `backend/tests/test_stage07_drift.py` | PSI by hand, binning with ties, exact window edges, quiet on unshifted data, alert on shifted data, too-few-events windows, determinism | A drift alarm that fires on noise or stays silent on a real shift |
+| `backend/tests/test_stage07_replay.py` | Detection time per ring, partial rings, truth latency only when one true ring dominates, timeline counts, determinism | A wrong detection time or a meaningless latency |
+| `backend/tests/test_stage07_export.py` | The bundle with drift and replay: valid, deterministic bytes, bundle id covers both, placeholders when inputs are missing, tamper refused, AI merge keeps them | The exporter producing an invalid or non-reproducible bundle |
+| `backend/tests/test_stage07_api.py` | Live queue and `GET /feedback` through the API, bounds after repeated dismissals, env parsing and ceilings, and the scripted scenario (open queue, open case, act, retry, audit entry, chain verify, replay, drift) | The API and the rule disagreeing; the plan's M7 scenario breaking |
+| `frontend/tests/stage07.test.tsx` | Decision panel (enabling, success, retry key reuse, every error message, closed cases), live queue and feedback card, drift page (alert, warn, stable, not built, too few), replay page (steps, determinism, partial, not built), the scripted scenario in the UI | A decision button that does the wrong thing; a drift alert that is not shown |
+| `frontend/tests/ai_card.test.tsx` | The Explanation card: verified, template, unverified and contested states; model text shown as plain text | AI text mislabelled or interpreted as markup |
 
 Run: `pytest` from the repo root; `npm run check` from `frontend` for the frontend.
 
@@ -393,9 +435,8 @@ Run: `pytest` from the repo root; `npm run check` from `frontend` for the fronte
 | Browser blocked by CORS | Front end origin not listed | `create_app()` | Browser console | Add the origin to `RS_CORS_ORIGINS` |
 | `ValueError: RS_AUDIT_DB_URL must look like sqlite:///...` | Non-SQLite URL | `sqlite_path_from_url()` | Read the message | Use a sqlite URL until Stage 09 |
 | Every ring shows source template, fallback `provider_error` | Missing or wrong key or model, quota, network | `make_provider()`, `ai_report.json` [generated] fallbacks | `python scripts\run_stage06.py --provider groq --limit 1` and read the message | Set the key in `.env`; check `RS_LLM_MODEL` |
-| Verified share is low | Model rounds numbers or cites unseen ones | `verify()` issues in the case's `verifier` block | Open a case in `cases.json` [generated] | Tighten the prompt (bump `PROMPT_VERSION`); try another model |
+| Verified share is low | Model rounds numbers or cites unseen ones | `verify()` issues in the case's `verifier` block | Open a case in cases.json [generated] | Tighten the prompt (bump `PROMPT_VERSION`); try another model |
 | AI blocks vanished after export | Detector output changed, so `input_hash` is stale | `apply_ai_blocks()` | `ai_report.json` [generated] merge.stale | Rerun `scripts\run_stage06.py` |
-| Case page still says "No case file yet" | Bundle has no AI blocks, or the API was not restarted after the merge | `AiCard`; `meta.json` [generated] sources | Look for `ai_cases.json` in `sources` | Run Stage 06, restart the API, re-sync the frontend snapshot |
 | Query rejected with QueryError | Field, op or value outside the DSL | `parse_query()` | Read the message | Rephrase or pass `--dsl` |
 | Feature values change after a rerun | Hub cap or community settings changed, or a different platform | `effective_hub_cap()`, `Settings` | Compare `hub_cap` in `pruning_report.json` [generated] | Fix the settings; features are deterministic for fixed settings |
 | Page says "Could not load data" | No API and no snapshot answered (a static server not serving `public`, or wrong base path) | `createSource` in `frontend/src/lib/source.ts`; the causes are listed on the page | Open `/demo-snapshots/queue.json` in the browser | Serve `frontend/out` [generated] from its root, or run `npm run dev` |
@@ -405,6 +446,13 @@ Run: `pytest` from the repo root; `npm run check` from `frontend` for the fronte
 | "Unsupported snapshot schema_version" | Bundle from a newer exporter | `SchemaVersionError` in `frontend/src/lib/source.ts` | Read `schema_version` in the files | Update the frontend types and reader together |
 | A metrics panel says "not in this bundle, or not a layout ... recognises" | The real Stage 03 key names differ from the documented ones, or the data is absent | `frontend/src/lib/metricsView.ts` (the matching extractor) | Open the raw document at the bottom of the page | Adjust the extractor and its test to the real layout |
 | Case graph shows fewer accounts than the case lists | The 500-account cap, or the bundle truncated members or edges | `capGraph`; the graph summary line | Read the line above the graph | By design; use the link table |
+| Decision buttons stay disabled | No name entered, or the token has fewer than 16 characters | `ActionPanel` (`formOk`) | Read the grey line under the buttons | Enter both |
+| "The server refused this decision" (409) | The ring is already decided, or the idempotency key was reused for a different request | `allowed_actions()` in `backend/app/audit.py` | Open the case; its status chip | Reload the case; decided cases are closed by design |
+| Queue "Live order" column shows "below threshold" for most rings | Many dismissals raised the threshold | `GET /feedback` (`offset_logit`, `effective_threshold`) | Compare with `base_threshold` | By design; switch the order to "As exported", or lower `RS_FEEDBACK_MAX_OFFSET` |
+| Threshold stuck, "at the limit" chip | The shift reached `RS_FEEDBACK_MAX_OFFSET` | `threshold_offset()` in `backend/ringsentinel/review/feedback.py` | `GET /feedback`: `at_bound` | Confirm rings to cancel dismissals, or accept |
+| Drift page says "not computed" | scores or events table was missing at export | `build_drift_document()`; `scripts/export_snapshots.py` prints `drift` and `replay` status | `python scripts\export_snapshots.py` output | Run Stage 03, then export again without `--no-monitor` |
+| Every drift window is an alert on the synthetic or a small dataset | Test scores really differ from validation scores, or windows are small | `compute_drift()`; `notes` in `drift.json` [generated] | Window sizes (`n_events`), `reference.n_events` | Check `RS_DRIFT_WINDOWS` and `RS_DRIFT_MIN_EVENTS`; a real shift is a finding, not a bug |
+| Replay latency column all "n/a" | No ring is dominated by one true ring (needs at least half of its transfers) | `compute_replay()` | `n_with_truth` in `replay.json` [generated] | By design; assembly time is still shown |
 | Audit page empty with "needs the backend" | Snapshot-only mode | `AuditView` | Check `NEXT_PUBLIC_API_BASE_URL` | Set it and start the API |
 | `npm install` or `npm ci` fails | Node older than 22.12, or a blocked registry | `frontend/package.json` (`engines`) | `node -v` | Install Node 22 LTS |
 
@@ -433,21 +481,25 @@ Order to rule out causes: environment (venv active, installs done), working dire
 - **Queue order uses an uncalibrated score** in an expected-value heuristic; it is not the label-based net value of Stage 03.
 - **Audit log detects, not prevents, tampering**; removing the last entries is invisible without an outside copy of the head hash; one shared token and free-text analyst names mean it does not prove who acted.
 - **Rate limits are per process and per client address**; behind a proxy they may be too coarse.
-- **SQLite only**; Postgres and its free-tier limits are a Stage 09 task. Drift, replay, AI case files and threshold feedback are placeholders or absent.
+- **SQLite only**; Postgres and its free-tier limits are a Stage 09 task.
 - Cases hold edges rebuilt from at most 500 transfers per ring.
-- **Stage 06 has made no live model call.** Model names and free-tier limits are unverified; the verified share on real output is unknown.
-- **Verified is not correct**: the verifier checks cited facts, not reasoning; the number scan only checks that a number exists somewhere in the ring's data.
-- Partial edge data (truncated rings): claims are checked against the retained edges only.
-- The AI layer sees transfers only; no device, IP or name data.
-- The demo bundle has no AI blocks, so the AI panel is exercised only by tests and by a real bundle after Stage 06.
 - **Stage 05 never saw real Stage 03 output.** The metrics extractors follow the documented D9 layout, not an observed one; the demo metrics are invented in that same layout.
 - **No neighbour nodes** in the case graph: the bundle holds only the ring's own accounts and edges (plan item "strongest neighbours" is open).
-- **Read-only UI**: no confirm, dismiss or hold buttons until Stage 07.
 - **Offline mode has no analyst decisions** and no audit log.
 - **cases.json is downloaded whole** in offline mode; with real data it could be large.
 - The app was checked in jsdom and in one headless Chrome session on Linux; no Windows, no other browsers, no deployed host. The frontend CI workflow has not run on GitHub.
 - ESLint is pinned at 9.39.5 (the version `eslint-config-next` supports); npm marks it as no longer supported upstream.
 - check_docs has not been run on these docs by the builder.
+- **Stage 06 has made no live model call.** Model names and free-tier limits are unverified; the verified share on real output is unknown.
+- **Verified is not correct**: the verifier checks cited facts, not reasoning; the number scan only checks that a number exists somewhere in the ring's data.
+- Partial edge data (truncated rings): claims are checked against the retained edges only.
+- The AI layer sees transfers only; no device, IP or name data.
+- **Stage 07 drift and replay have never run on real data.** Only the synthetic world and the demo bundle were used; run time, window sizes and the alert levels on the real test period are unknown. The 0.10 and 0.25 levels are a rule of thumb, not a test.
+- **The drift reference is the validation split**, not the training distribution (training scores were not kept and would be in-sample).
+- **Replay is retrospective**: scores use window-level features computed over the whole test window, so a live system could not have flagged rings this early. Latencies are a lower bound. Only exported rings are replayed, and latency against the truth exists only where one true ring supplies at least half of a ring's transfers.
+- **The feedback rule is a heuristic and is not validated.** It is bounded (hard ceilings in code), reversible (recomputed from the audit log) and never touches stored scores, but nobody has measured whether it improves precision. The interface says so.
+- **Decisions use one shared token** and free-text names; the audit log records them but does not prove who acted.
+- The decision flow was tested with a mocked fetch in jsdom and against the real API through the test client; no browser session ran against a real uvicorn process in this stage.
 
 ## 11. Decision log
 
@@ -516,8 +568,18 @@ Order to rule out causes: environment (venv active, installs done), working dire
 | Template fallback is verified but not counted as LLM | The reported verified share stays honest |
 | Merge accepts only the `ai` field and validates before writing | LLM output can never alter a score, rank or queue order |
 | Query is a validated JSON DSL, never code or SQL | The question is untrusted text |
-| `SCHEMA_VERSION` stays "1" | The not-built placeholder is still valid, so the Stage 05 frontend and demo bundle keep working |
 | jsonschema added | The plan asks for a JSON Schema for the bundle; the library is mainstream and pinned |
+| Feedback shifts the threshold in log-odds by a fixed step per net dismissal, bounded, with hard ceilings in code | Transparent and testable; an env typo cannot widen the bound; reversible because it is recomputed from the audit log |
+| Confirmations only cancel dismissals and never lower the threshold | Rings below the validated threshold are not in the bundle, so lowering it surfaces nothing; keeps the shift one-directional and easy to explain |
+| Holds change nothing | "Not sure" is not evidence either way |
+| The live queue is a read-time view; stored scores and the bundle never change | The LLM and the feedback can never alter a detector output; the evaluation stays reproducible |
+| Drift reference = validation scores | Training scores were not kept and would be in-sample; documented deviation from "training distribution" |
+| PSI windows are equal-width in time with exact integer edges | Float edges on nanosecond timestamps moved events across window boundaries |
+| Replay is retrospective and says so | Window-level features look at the whole window; claiming live latency would overstate the system |
+| Truth latency only when one true ring supplies at least half a ring's transfers | A minority share gave negative or meaningless latencies |
+| `refresh` reloads the case without the spinner | A reload that unmounts the page erased the decision confirmation |
+| One idempotency key per decision attempt, reused on retry | A network failure after the server answered must not record the decision twice |
+| Demo drift, replay and AI blocks come from the real code on invented inputs | The interface and the demo cannot drift apart from the real documents |
 
 ## 12. Glossary
 
@@ -556,7 +618,15 @@ Order to rule out causes: environment (venv active, installs done), working dire
 - **Origin (frontend)**: which source answered a request: live API, saved snapshot, or demo bundle.
 - **Demo bundle**: an invented, schema-valid bundle shipped with the frontend; marked DEMO everywhere.
 - **Node cap**: the 500-account limit on the drawn case graph, chosen by transfer volume.
-- **PSI**: population stability index, the drift measure planned for Stage 07 (see `docs/ARCHITECTURE.md`).
+- **PSI**: population stability index; compares the share of scores in each reference-quantile bin between a window and the validation scores. Rule of thumb: below 0.10 stable, above 0.25 a shift (settings here, not a test).
+- **Drift window**: one of the equal-width time slices of the test period that PSI is computed for.
+- **Threshold offset (feedback)**: the log-odds amount the review threshold has been raised by net dismissals, between 0 and the maximum.
+- **Log-odds (logit)**: ln(p / (1 - p)); the scale on which the feedback shift is added.
+- **Adjusted score / adjusted expected value**: the score and queue value after the offset; computed on read, never stored.
+- **Live rank**: position in the feedback-adjusted queue; only open rings above the shifted threshold with a positive value have one.
+- **Replay**: stepping through the test period to see when each flagged ring became detectable; retrospective.
+- **Assembly time / detection latency**: time from a ring's first transfer to the moment its flagged transfers touch the minimum ring size / time from the true ring's first transfer to that moment.
+- **Replayed response**: the server's answer to a repeated request with the same idempotency key; `replayed: true`, nothing new recorded.
 
 ## 13. How to regenerate every artifact
 
@@ -571,10 +641,13 @@ python scripts\ablation_giant_component.py
 python scripts\run_stage03.py
 python scripts\reproduce.py
 python scripts\export_snapshots.py
+python scripts\run_stage06.py --provider fake
+python scripts\make_demo_bundle.py
+python scripts\sync_frontend_snapshots.py
 python scripts\run_api.py
 pytest
 ruff check .
 python scripts\check_docs.py
 ```
 
-Individual steps: `python scripts\run_stage01.py --step ingest --force` (and `split`, `baselines`); `python scripts\run_stage02.py --step noise|tune|features|ablation --window train|val|test`. Stage 03: `python scripts\run_stage03.py --step detect|evaluate|ablate|robustness`, or `python scripts\reproduce.py` for everything plus `docs/EVALUATION_RESULTS.md` [generated] (`--evaluate-only` reuses the scores). Stage 05 (from `frontend`): `npm ci`, `npm run dev`, `npm run check`, `npm run build`; from the repo root `python scripts\make_demo_bundle.py [--check]` rebuilds the demo bundle and `python scripts\sync_frontend_snapshots.py [--src DIR]` copies the real bundle into the frontend. Stage 06: `python scripts\run_stage06.py --provider fake|groq|gemini [--limit N|--all] [--refresh] [--no-apply]` writes `ai_cases.json` [generated] and `ai_report.json` [generated] and merges into the bundle; `python scripts\ai_query.py "question"`. Cached model replies live in `data/processed/<variant>/ai_cache/` [generated]; deleting it forces fresh calls. Stage 04: `python scripts\export_snapshots.py [--git-commit SHA] [--frozen] [--max-rings N] [--no-edges] [--out DIR]` writes `data/snapshots/` [generated]; `python scripts\run_api.py [--port 8000]` serves it (set `RS_ANALYST_TOKEN` first for actions). The audit database is created on first start and is not regenerated: deleting it deletes the log.
+Individual steps: `python scripts\run_stage01.py --step ingest --force` (and `split`, `baselines`); `python scripts\run_stage02.py --step noise|tune|features|ablation --window train|val|test`. Stage 03: `python scripts\run_stage03.py --step detect|evaluate|ablate|robustness`, or `python scripts\reproduce.py` for everything plus `docs/EVALUATION_RESULTS.md` [generated] (`--evaluate-only` reuses the scores). Stage 06: `python scripts\run_stage06.py --provider fake|groq|gemini [--limit N|--all] [--refresh] [--no-apply]` writes `ai_cases.json` [generated] and `ai_report.json` [generated] and merges into the bundle; `python scripts\ai_query.py "question"`. Cached model replies live in `data/processed/<variant>/ai_cache/` [generated]; deleting it forces fresh calls. Stage 05 (from `frontend`): `npm ci`, `npm run dev`, `npm run check`, `npm run build`; from the repo root `python scripts\make_demo_bundle.py [--check]` rebuilds the demo bundle and `python scripts\sync_frontend_snapshots.py [--src DIR]` copies the real bundle into the frontend. Stage 04 and 07: `python scripts\export_snapshots.py [--git-commit SHA] [--frozen] [--max-rings N] [--no-edges] [--no-monitor] [--out DIR]` writes `data/snapshots/` [generated]; `python scripts\run_api.py [--port 8000]` serves it (set `RS_ANALYST_TOKEN` first for actions). The audit database is created on first start and is not regenerated: deleting it deletes the log.

@@ -12,7 +12,7 @@ A light-mode Next.js app in `frontend/` that works entirely from the snapshot bu
 | Case view (`/case/?id=R-...`) | `frontend/src/components/CaseView.tsx`, `frontend/src/components/ForceGraph.tsx` | one case |
 | Metrics (/metrics/) | `frontend/src/components/MetricsView.tsx`, `frontend/src/components/charts.tsx` | metrics |
 | Audit log (/audit/) | `frontend/src/components/AuditView.tsx` | API only |
-| Replay (/replay/) | `frontend/src/components/ReplayView.tsx` | drift and replay placeholders |
+| Replay (replay page) | `frontend/src/components/ReplayView.tsx` | replay (a placeholder until Stage 07 filled it in) |
 
 Routes live in `frontend/src/app/`. The case page uses a query string, not a dynamic route, because a static export cannot know the ring ids in advance and the bundle can change without a rebuild.
 
@@ -45,7 +45,7 @@ cases.json holds every ring with up to 500 members and 500 edges; the browser do
 
 ## The metrics page and its main uncertainty
 
-Stage 03 has never run on real data, so the exact key names inside metrics.json are those documented in `docs/PROJECT_EXPLAINER.md` (D9), not observed. `frontend/src/lib/metricsView.ts` therefore reads them tolerantly: the comparison table is the Stage 03 markdown table (`results_table_md`) parsed as is; the PR curve, cost curve, ablation, robustness and latency panels each say "not in this bundle, or not a layout this version recognises" when their data is missing or shaped differently, and the raw JSON is at the bottom of the page. The demo metrics were written to the same assumed layout, so a green test on them proves the code matches the assumption, not that the assumption matches Stage 03. Send the first real metrics snapshot file back to settle this.
+Stage 03 has never run on real data, so the exact key names inside metrics.json are those documented in `docs/PROJECT_EXPLAINER.md` (D9), not observed. `frontend/src/lib/metricsView.ts` therefore reads them tolerantly: the comparison table is the Stage 03 markdown table (`results_table_md`) parsed as is; the PR curve, cost curve, ablation, robustness and latency panels each say "not in this bundle, or not a layout this version recognises" when their data is missing or shaped differently, and the raw JSON is at the bottom of the page. The demo metrics were written to the same assumed layout, so a green test on them proves the code matches the assumption, not that the assumption matches Stage 03. Send the first real the first real `metrics.json` [generated] back to settle this.
 
 ## Accessibility and style
 
@@ -65,8 +65,8 @@ Checks: `npm run check` (type check, lint, tests). Production files: `npm run bu
 
 ## Known limits
 
-- Read-only: confirm, dismiss and hold buttons are Stage 07. The API already supports them.
-- No neighbours in the graph (see above); no AI case file (Stage 06); replay and drift pages show the not-built state (Stage 07).
+- Read-only when Stage 05 was built; the decision panel arrived in Stage 07 (`docs/STAGE_07.md`).
+- No neighbours in the graph (see above); no AI case file (Stage 06); the replay page showed the not-built state until Stage 07, which also added a drift page.
 - Metrics layouts unverified against real output (see above).
 - The case page downloads all of cases.json in offline mode.
 - Tested in jsdom and in one headless Chrome run against a real API process on the demo bundle; not tested on other browsers, Windows, or deployed hosting.

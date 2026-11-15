@@ -39,6 +39,15 @@ DEFAULT_LLM_MIN_INTERVAL_S = 2.5
 DEFAULT_LLM_MAX_TOOL_CALLS = 5
 DEFAULT_LLM_VERIFY_RETRIES = 2
 DEFAULT_AI_MAX_LLM_CASES = 100
+# Stage 07 defaults (drift monitor and replay). PSI levels follow the usual rule of thumb
+# (below 0.10 stable, 0.10 to 0.25 moderate shift, above 0.25 major shift); it is a convention,
+# not a theorem, so both levels are settings.
+DEFAULT_PSI_WARN_LEVEL = 0.10
+DEFAULT_PSI_ALERT_LEVEL = 0.25
+DEFAULT_DRIFT_WINDOWS = 8
+DEFAULT_DRIFT_BINS = 10
+DEFAULT_DRIFT_MIN_EVENTS = 500
+DEFAULT_REPLAY_STEPS = 96
 
 
 class Settings(BaseModel):
@@ -72,6 +81,13 @@ class Settings(BaseModel):
     llm_max_tool_calls: int = DEFAULT_LLM_MAX_TOOL_CALLS
     llm_verify_retries: int = DEFAULT_LLM_VERIFY_RETRIES
     ai_max_llm_cases: int = DEFAULT_AI_MAX_LLM_CASES
+    # Stage 07: drift monitor (PSI per time window of the test split) and replay timeline.
+    psi_warn_level: float = DEFAULT_PSI_WARN_LEVEL
+    psi_alert_level: float = DEFAULT_PSI_ALERT_LEVEL
+    drift_windows: int = DEFAULT_DRIFT_WINDOWS
+    drift_bins: int = DEFAULT_DRIFT_BINS
+    drift_min_events: int = DEFAULT_DRIFT_MIN_EVENTS
+    replay_steps: int = DEFAULT_REPLAY_STEPS
 
     @field_validator("dataset_variant")
     @classmethod
@@ -114,6 +130,16 @@ class Settings(BaseModel):
             raise ValueError("llm_verify_retries must be between 0 and 5.")
         if self.ai_max_llm_cases < 0:
             raise ValueError("ai_max_llm_cases must not be negative.")
+        if not 0 < self.psi_warn_level < self.psi_alert_level:
+            raise ValueError("psi levels must satisfy 0 < psi_warn_level < psi_alert_level.")
+        if not 2 <= self.drift_windows <= 60:
+            raise ValueError("drift_windows must be between 2 and 60.")
+        if not 3 <= self.drift_bins <= 50:
+            raise ValueError("drift_bins must be between 3 and 50.")
+        if self.drift_min_events < 1:
+            raise ValueError("drift_min_events must be at least 1.")
+        if not 10 <= self.replay_steps <= 500:
+            raise ValueError("replay_steps must be between 10 and 500.")
         return self
 
     @property
@@ -306,6 +332,12 @@ def get_settings(load_env_file: bool = True) -> Settings:
         ("RS_LLM_MAX_TOOL_CALLS", "llm_max_tool_calls", int),
         ("RS_LLM_VERIFY_RETRIES", "llm_verify_retries", int),
         ("RS_AI_MAX_LLM_CASES", "ai_max_llm_cases", int),
+        ("RS_PSI_WARN_LEVEL", "psi_warn_level", float),
+        ("RS_PSI_ALERT_LEVEL", "psi_alert_level", float),
+        ("RS_DRIFT_WINDOWS", "drift_windows", int),
+        ("RS_DRIFT_BINS", "drift_bins", int),
+        ("RS_DRIFT_MIN_EVENTS", "drift_min_events", int),
+        ("RS_REPLAY_STEPS", "replay_steps", int),
     ):
         raw = os.environ.get(env_name, "").strip()
         if raw:

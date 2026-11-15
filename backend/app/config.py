@@ -5,8 +5,9 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from ringsentinel.config import PROJECT_ROOT, get_settings
+from ringsentinel.review.feedback import FeedbackConfig
 
 DEFAULT_CORS = "http://localhost:3000"
 
@@ -18,6 +19,22 @@ class AppSettings(BaseModel):
     cors_origins: tuple[str, ...] = (DEFAULT_CORS,)
     rate_limit_read_per_min: int = 120
     rate_limit_write_per_min: int = 20
+    # Stage 07: bounded threshold feedback (log-odds units). The hard ceilings live in
+    # ringsentinel.review.feedback; the environment can only choose values at or below them.
+    feedback_step: float = 0.1
+    feedback_max_offset: float = 1.5
+    feedback_confirm_weight: float = 1.0
+
+    @model_validator(mode="after")
+    def _feedback_in_range(self) -> AppSettings:
+        self.feedback_config()  # raises ValueError outside the hard ceilings
+        return self
+
+    def feedback_config(self) -> FeedbackConfig:
+        return FeedbackConfig(
+            step=self.feedback_step, max_offset=self.feedback_max_offset,
+            confirm_weight=self.feedback_confirm_weight,
+        )
 
     @field_validator("rate_limit_read_per_min", "rate_limit_write_per_min")
     @classmethod
@@ -64,6 +81,13 @@ def load_app_settings(load_env_file: bool = True) -> AppSettings:
     ):
         if _env(env_name):
             values[field] = int(_env(env_name))
+    for env_name, field in (
+        ("RS_FEEDBACK_STEP", "feedback_step"),
+        ("RS_FEEDBACK_MAX_OFFSET", "feedback_max_offset"),
+        ("RS_FEEDBACK_CONFIRM_WEIGHT", "feedback_confirm_weight"),
+    ):
+        if _env(env_name):
+            values[field] = float(_env(env_name))
     return AppSettings(**values)
 
 

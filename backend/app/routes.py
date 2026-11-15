@@ -7,6 +7,7 @@ from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Path, Query, Request
 from fastapi.responses import JSONResponse
+from ringsentinel.review.feedback import annotate, export_order
 from ringsentinel.snapshots.schemas import RING_ID_PATTERN
 
 from app.audit import AuditError, AuditLog, IdempotencyConflict, InvalidTransition
@@ -57,26 +58,47 @@ def health(store: Store, audit: Audit, settings: Annotated[AppSettings, Depends(
     }  # fmt: skip
 
 
+def _annotated(store: SnapshotStore, audit: AuditLog, settings: AppSettings):
+    """Queue items with analyst status and live re-ranking fields, in live order, plus the state."""
+    header = {k: v for k, v in store.bundle.queue.items() if k != "items"}
+    rows, state = annotate(
+        store.queue_items(), audit.statuses(), header["threshold"], header["cost_assumptions"],
+        settings.feedback_config(),
+    )  # fmt: skip
+    return header, rows, state
+
+
 @router.get("/queue")
 def queue(
     store: Store,
     audit: Audit,
+    settings: Annotated[AppSettings, Depends(get_settings)],
     status: Annotated[Literal["pending", "confirmed", "dismissed", "held"] | None, Query()] = None,
+    order: Annotated[Literal["export", "live"], Query()] = "export",
     limit: Annotated[int, Query(ge=1, le=500)] = 50,
     offset: Annotated[int, Query(ge=0, le=100_000)] = 0,
 ):
-    statuses = audit.statuses()
-    rows = [
-        {**item, "status": statuses.get(item["ring_id"], "pending")}
-        for item in store.queue_items()
-    ]
+    """`order=export` keeps the bundle's rank order (Stage 04 behaviour). `order=live` puts open
+    rings above the effective threshold first, by adjusted expected value (see /feedback)."""
+    header, rows, state = _annotated(store, audit, settings)
+    if order == "export":
+        rows = export_order(rows)
     if status is not None:
         rows = [r for r in rows if r["status"] == status]
-    header = {k: v for k, v in store.bundle.queue.items() if k != "items"}
     return {
-        "bundle_id": store.bundle_id, **header, "total": len(rows),
-        "limit": limit, "offset": offset, "items": rows[offset : offset + limit],
+        "bundle_id": store.bundle_id, **header, "order": order, "feedback": state,
+        "total": len(rows), "limit": limit, "offset": offset,
+        "items": rows[offset : offset + limit],
     }  # fmt: skip
+
+
+@router.get("/feedback")
+def feedback(
+    store: Store, audit: Audit, settings: Annotated[AppSettings, Depends(get_settings)]
+):
+    """The bounded threshold shift derived from the analyst decisions recorded so far."""
+    _, _, state = _annotated(store, audit, settings)
+    return {"bundle_id": store.bundle_id, **state}
 
 
 @router.get("/cases/{ring_id}")

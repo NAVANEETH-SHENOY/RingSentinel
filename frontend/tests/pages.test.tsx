@@ -6,7 +6,6 @@ import { AuditView } from "@/components/AuditView";
 import { CaseView } from "@/components/CaseView";
 import { MetricsView } from "@/components/MetricsView";
 import { QueueView } from "@/components/QueueView";
-import { ReplayView } from "@/components/ReplayView";
 import { createSource } from "@/lib/source";
 import { API_CFG, OFFLINE_CFG, demoDoc, jsonResponse, mockFetch, renderWith, snapshotRoutes } from "./helpers";
 
@@ -95,13 +94,12 @@ describe("Review queue", () => {
 });
 
 describe("Case view", () => {
-  it("renders the graph, signals and the honest AI placeholder", async () => {
+  it("renders the graph, signals and the explanation card", async () => {
     mockFetch(snapshotRoutes());
     renderWith(<CaseView ringId={firstId} />);
     expect(await screen.findByTestId("graph-svg")).toBeInTheDocument();
     expect(screen.getAllByTestId("graph-node").length).toBeGreaterThan(3);
-    expect(screen.getByText(/no case file yet/i)).toBeInTheDocument();
-    expect(screen.getByText(/nothing on this page was written by a language model/i)).toBeInTheDocument();
+    expect(screen.getByTestId("ai-source")).toHaveTextContent(/rule-based summary, no language model/i);
     expect(screen.getByText(/why it was flagged/i)).toBeInTheDocument();
   });
 
@@ -231,15 +229,6 @@ describe("Audit log", () => {
     await userEvent.type(screen.getByLabelText(/analyst token/i), "any-token-1234567890");
     await userEvent.click(screen.getByRole("button", { name: /show entries/i }));
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent(/RS_ANALYST_TOKEN/));
-  });
-});
-
-describe("Replay", () => {
-  it("shows the not-built state from the bundle placeholders", async () => {
-    mockFetch(snapshotRoutes());
-    renderWith(<ReplayView />);
-    expect(await screen.findByText(/not built yet/i)).toBeInTheDocument();
-    expect(screen.getByText(/stage 07/i)).toBeInTheDocument();
   });
 });
 

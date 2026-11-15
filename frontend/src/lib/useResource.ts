@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type ResourceState<T> =
   | { phase: "loading" }
@@ -17,6 +17,8 @@ export function useResource<T>(load: () => Promise<T>, deps: readonly unknown[])
   const [state, setState] = useState<ResourceState<T>>({ phase: "loading" });
   const [tick, setTick] = useState(0);
   const [seenDeps, setSeenDeps] = useState(deps);
+  // A silent refresh keeps showing the current value while it reloads and ignores a failure.
+  const silent = useRef(false);
   if (!sameDeps(seenDeps, deps)) {
     setSeenDeps(deps);
     setState({ phase: "loading" });
@@ -24,12 +26,15 @@ export function useResource<T>(load: () => Promise<T>, deps: readonly unknown[])
 
   useEffect(() => {
     let cancelled = false;
+    const quiet = silent.current;
+    silent.current = false;
     load().then(
       (value) => {
         if (!cancelled) setState({ phase: "ready", value });
       },
       (error: unknown) => {
-        if (!cancelled) setState({ phase: "error", error: error instanceof Error ? error : new Error(String(error)) });
+        if (cancelled || quiet) return;
+        setState({ phase: "error", error: error instanceof Error ? error : new Error(String(error)) });
       },
     );
     return () => {
@@ -43,5 +48,9 @@ export function useResource<T>(load: () => Promise<T>, deps: readonly unknown[])
     setState({ phase: "loading" });
     setTick((t) => t + 1);
   }, []);
-  return { state, reload };
+  const refresh = useCallback(() => {
+    silent.current = true;
+    setTick((t) => t + 1);
+  }, []);
+  return { state, reload, refresh };
 }
