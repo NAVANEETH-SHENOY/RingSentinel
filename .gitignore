@@ -18,7 +18,7 @@ node_modules/
 frontend/.next/
 frontend/out/
 
-# Data: raw and processed stay local. MANIFEST.json (checksums) and snapshots are committed.
+# Data: raw and processed stay local. MANIFEST.json is committed; frozen evaluation snapshots stay local pending redistribution review.
 data/raw/*
 !data/raw/.gitkeep
 !data/raw/MANIFEST.json
@@ -38,3 +38,9 @@ Thumbs.db
 
 # RingSentinel audit database (sensitive analyst data)
 data/audit/
+
+# Frozen evaluation snapshots: retain locally, exclude from public release.
+data/snapshots/*
+!data/snapshots/.gitkeep
+frontend/public/snapshots/*
+!frontend/public/snapshots/.gitkeep

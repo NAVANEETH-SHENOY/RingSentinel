@@ -247,9 +247,9 @@ Deployment steps (Vercel, Render, Neon, all free tier): `docs/DEPLOYMENT.md`; th
 backend/ringsentinel/   pipeline: ingest, split, graph, features, detect, rings, evaluate, ai, snapshots, monitor, elliptic
 backend/app/            API (C11), audit log (C12: audit.py SQLite, audit_pg.py Postgres), rate limits, config
 backend/tests/          pytest suites by stage (test_stage09_* are the release checks)
-frontend/               Next.js static export (C15); public/snapshots = committed real bundle, public/demo-snapshots = invented fallback
+frontend/               Next.js static export (C15); public/snapshots = optional local-only real bundle, public/demo-snapshots = committed invented fallback
 scripts/                one command per stage, reproduce.py, export/sync snapshots, smoke_deployed.py, check_docs.py, secrets_scan.py
-data/snapshots/         the committed bundle (D12); data/raw and data/processed stay local; data/audit is ignored
+data/snapshots/         local-only frozen evaluation bundle (D12; ignored by Git); data/raw and data/processed stay local; data/audit is ignored
 docs/                   ARCHITECTURE, DEPLOYMENT, DIAGRAM_SPECS, DEMO_SCRIPT, EVALUATION, DATA, STAGE_00..09, PROJECT_EXPLAINER
 render.yaml, requirements-api.txt   API deployment    frontend/vercel.json   site headers
 ```
@@ -262,7 +262,7 @@ Full repo map with callers and callees: `docs/PROJECT_EXPLAINER.md`.
 - One run, one seed, no confidence intervals. Differences of a few thousandths are not evidence.
 - Rupee amounts come from placeholder FX rates (`config/fx_rates_inr.json`), so queue amounts such as 48 billion INR for one ring are artefacts of the data and the placeholders, not claims about money. Cost assumptions are planning values.
 - The queue's expected value uses an uncalibrated score. It orders rings; it does not forecast losses.
-- AI layer: 1 of 500 case files came from a real language model, 99 from an offline stand-in (labelled as such in the interface), 400 are rule-based templates. "Verified" means the cited counts and amounts match the graph, not that the interpretation is right. Its quality has not been evaluated on a model-written sample large enough to say anything.
+- AI layer: In the frozen 500-case evaluation bundle (retained locally and not included in the public release), 1 case came from a real language model, 99 from an offline stand-in (labelled as such in the interface), and 400 were rule-based templates. "Verified" means the cited counts and amounts match the graph, not that the interpretation is right. Its quality has not been evaluated on a model-written sample large enough to say anything.
 - Analyst feedback (a bounded threshold shift) is a heuristic and has not been validated.
 - The hash chain detects edits to earlier entries; it does not prevent them and cannot see entries removed from the end unless the head hash is recorded elsewhere. One shared analyst token, no individual accounts.
 - Free-tier hosting sleeps; the first request after idle takes about a minute and the site falls back to saved snapshots meanwhile.

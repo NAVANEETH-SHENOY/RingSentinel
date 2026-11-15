@@ -87,7 +87,7 @@ Caption: the LLM explains evidence; it never changes a score or acts.
 
 ## Frontend (Stage 05)
 
-A static-export Next.js app. In the browser, `createSource` reads the API if `NEXT_PUBLIC_API_BASE_URL` is set and it answers within the timeout; otherwise it reads the six bundle files from `frontend/public/snapshots` [generated], and if those are absent, from the committed demo bundle `frontend/public/demo-snapshots`. The dotted arrow in the diagram above is this fallback. The graph is capped at 500 accounts by a deterministic volume rule (`capGraph`). Details, limits and the open gap (no neighbour nodes in the bundle): `docs/STAGE_05.md`.
+A static-export Next.js app. In the browser, `createSource` reads the API if `NEXT_PUBLIC_API_BASE_URL` is set and it answers within the timeout; otherwise it reads the six bundle files from `frontend/public/snapshots` when a local real bundle is available, and if those are absent, from the committed invented demo bundle `frontend/public/demo-snapshots`. Public releases omit the real evaluation bundle pending redistribution review, so the demo bundle is used as the static fallback. The dotted arrow in the diagram above is this fallback. The graph is capped at 500 accounts by a deterministic volume rule (`capGraph`). Details, limits and the open gap (no neighbour nodes in the bundle): `docs/STAGE_05.md`.
 
 ## API (Stage 04)
 
