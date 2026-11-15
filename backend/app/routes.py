@@ -10,7 +10,13 @@ from fastapi.responses import JSONResponse
 from ringsentinel.review.feedback import annotate, export_order
 from ringsentinel.snapshots.schemas import RING_ID_PATTERN
 
-from app.audit import AuditError, AuditLog, IdempotencyConflict, InvalidTransition
+from app.audit import (
+    AuditError,
+    AuditLog,
+    AuditUnavailable,
+    IdempotencyConflict,
+    InvalidTransition,
+)
 from app.config import AppSettings
 from app.schemas import ActionRequest, ActionResponse, AuditEntry, VerifyResponse
 from app.store import SnapshotStore
@@ -47,6 +53,13 @@ Store = Annotated[SnapshotStore, Depends(get_store)]
 Audit = Annotated[AuditLog, Depends(get_audit)]
 
 
+@router.get("/live")
+def live():
+    """Liveness only: no snapshot or database access. Point a host's health check here, so the
+    probe never wakes a sleeping serverless database (which would burn its free hours)."""
+    return {"status": "ok"}
+
+
 @router.get("/health")
 def health(store: Store, audit: Audit, settings: Annotated[AppSettings, Depends(get_settings)]):
     meta = store.bundle.meta
@@ -55,6 +68,7 @@ def health(store: Store, audit: Audit, settings: Annotated[AppSettings, Depends(
         "evaluation_frozen": meta["evaluation_frozen"], "git_commit": meta["git_commit"],
         "n_rings": meta["n_rings_exported"], "audit_entries": audit.count(),
         "actions_enabled": settings.analyst_token is not None,
+        "audit_backend": audit.backend,
     }  # fmt: skip
 
 
@@ -93,9 +107,7 @@ def queue(
 
 
 @router.get("/feedback")
-def feedback(
-    store: Store, audit: Audit, settings: Annotated[AppSettings, Depends(get_settings)]
-):
+def feedback(store: Store, audit: Audit, settings: Annotated[AppSettings, Depends(get_settings)]):
     """The bounded threshold shift derived from the analyst decisions recorded so far."""
     _, _, state = _annotated(store, audit, settings)
     return {"bundle_id": store.bundle_id, **state}
@@ -116,7 +128,8 @@ def case(ring_id: RingId, store: Store, audit: Audit):
 def metrics(store: Store):
     return {
         "bundle_id": store.bundle_id,
-        "evaluation_frozen": store.bundle.meta["evaluation_frozen"], **store.bundle.metrics,
+        "evaluation_frozen": store.bundle.meta["evaluation_frozen"],
+        **store.bundle.metrics,
     }
 
 
@@ -139,13 +152,13 @@ def take_action(ring_id: RingId, body: ActionRequest, store: Store, audit: Audit
     if not store.has_ring(ring_id):
         raise HTTPException(404, "no such ring in this snapshot")
     try:
-        result = audit.append(
-            ring_id, body.action, body.analyst, body.note, body.idempotency_key
-        )
+        result = audit.append(ring_id, body.action, body.analyst, body.note, body.idempotency_key)
     except IdempotencyConflict as exc:
         raise HTTPException(409, str(exc)) from exc
     except InvalidTransition as exc:
         raise HTTPException(409, str(exc)) from exc
+    except AuditUnavailable:
+        raise  # the app-level handler answers 503 with Retry-After
     except AuditError as exc:  # pragma: no cover - defensive
         raise HTTPException(400, str(exc)) from exc
     entry = {k: result.entry[k] for k in AuditEntry.model_fields}

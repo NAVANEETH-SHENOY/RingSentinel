@@ -29,3 +29,6 @@ jsonschema==4.26.0
 # Stage 08: pyarrow raised 22.0.0 -> 23.0.1 (pip-audit: CVE-2026-25087, fixed in 23.0.1; the project
 # only reads its own parquet files, so it was not exploitable here). PyTorch for the optional
 # GraphSAGE detector is NOT here: see requirements-gnn.txt.
+# Stage 09: Postgres audit log for a deployment whose disk is not persistent (Render free tier).
+# psycopg 3 with the binary extra (bundles libpq). requirements-api.txt repeats the runtime subset.
+psycopg[binary]==3.3.9

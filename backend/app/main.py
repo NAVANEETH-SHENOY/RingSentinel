@@ -11,13 +11,13 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.audit import AuditLog
+from app.audit import AuditUnavailable, open_audit_log
 from app.config import AppSettings, load_app_settings
 from app.ratelimit import RateLimiter
 from app.routes import router
 from app.store import SnapshotStore
 
-API_VERSION = "0.9.0"
+API_VERSION = "1.0.0"
 BODY_METHODS = {"POST", "PUT", "PATCH"}
 SECURITY_HEADERS = {
     "X-Content-Type-Options": "nosniff",
@@ -51,7 +51,7 @@ def create_app(settings: AppSettings | None = None, *, clock=None) -> FastAPI:
     """Build the app. Fails fast if the snapshot bundle is missing, invalid or tampered with."""
     settings = settings or load_app_settings()
     store = SnapshotStore(settings.snapshot_dir)
-    audit = AuditLog(settings.audit_db_url)
+    audit = open_audit_log(settings.audit_db_url)
     limiter_args = {
         "read": settings.rate_limit_read_per_min, "write": settings.rate_limit_write_per_min,
         "authfail": settings.rate_limit_authfail_per_min,
@@ -108,6 +108,12 @@ def create_app(settings: AppSettings | None = None, *, clock=None) -> FastAPI:
         if request.method != "GET" or request.url.path.startswith("/api/v1/audit"):
             response.headers.setdefault("Cache-Control", "no-store")
         return response
+
+    @app.exception_handler(AuditUnavailable)
+    async def audit_unavailable(request: Request, exc: AuditUnavailable):
+        """A hosted Postgres can be asleep or down. Say so (503) instead of a generic 500; the
+        read-only snapshot path in the frontend does not depend on it."""
+        return JSONResponse({"detail": str(exc)}, status_code=503, headers={"Retry-After": "5"})
 
     app.include_router(router)
     return app

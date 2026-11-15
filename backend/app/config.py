@@ -9,6 +9,8 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from ringsentinel.config import PROJECT_ROOT, get_settings
 from ringsentinel.review.feedback import FeedbackConfig
 
+from app.audit import backend_of
+
 DEFAULT_CORS = "http://localhost:3000"
 
 
@@ -41,7 +43,8 @@ class AppSettings(BaseModel):
 
     def feedback_config(self) -> FeedbackConfig:
         return FeedbackConfig(
-            step=self.feedback_step, max_offset=self.feedback_max_offset,
+            step=self.feedback_step,
+            max_offset=self.feedback_max_offset,
             confirm_weight=self.feedback_confirm_weight,
         )
 
@@ -66,6 +69,12 @@ class AppSettings(BaseModel):
     def _body_limit_in_range(cls, value: int) -> int:
         if not 1_024 <= value <= 1_000_000:
             raise ValueError("RS_MAX_BODY_BYTES must be between 1024 and 1000000")
+        return value
+
+    @field_validator("audit_db_url")
+    @classmethod
+    def _audit_url_scheme(cls, value: str) -> str:
+        backend_of(value)  # raises ValueError (without echoing the URL) for an unknown scheme
         return value
 
     @field_validator("analyst_token")
