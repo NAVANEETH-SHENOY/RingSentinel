@@ -2,6 +2,24 @@
 
 One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 
+## v1.0.0 - Stage 09: deployment, final docs, diagram specs, demo (pending owner confirmation)
+
+### Added
+- Postgres audit store (`backend/app/audit_pg.py`): same hash chain, advisory lock on append, one connection per operation; `open_audit_log` and `backend_of` in `backend/app/audit.py`.
+- Liveness route (no database access), `audit_backend` in health, 503 with `Retry-After` when the audit store is unreachable.
+- `render.yaml`, `requirements-api.txt`, `frontend/vercel.json`, `.github/workflows/smoke.yml`, a Postgres job in `ci.yml`.
+- `scripts/smoke_deployed.py` (deployed-site checks) and `scripts/sync_readme_results.py` (README tables generated from results files; called by `scripts/reproduce.py`).
+- `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`, `docs/STAGE_09.md`, `RELEASE_NOTES_v1.0.0.md`; screenshots of the real bundle.
+- Tests: `test_stage09_audit_pg.py`, `test_stage09_api.py`, `test_stage09_smoke.py`, `test_stage09_readme_sync.py`, `test_stage09_deploy.py`; two frontend tests.
+
+### Changed
+- README completed (results, findings, citations, limitations, deployment); `docs/EVALUATION.md`, `docs/ARCHITECTURE.md`, `docs/DATA.md`, `docs/PROJECT_EXPLAINER.md` and `HANDOVER.md` brought up to date.
+- `requirements.txt` adds `psycopg[binary]==3.3.9`; API version 1.0.0; `.env.example` documents the Postgres URL.
+- `frontend/.gitignore` no longer ignores `public/snapshots` (the deployed site needs it).
+
+### Fixed
+- The interface called cached output from the offline stand-in provider "Written by a language model (cached)"; it now says "Offline stand-in, not a language model".
+
 ## v0.9.0 - Stage 08: Elliptic second dataset, optional GraphSAGE, hardening (pending owner confirmation)
 
 ### Added

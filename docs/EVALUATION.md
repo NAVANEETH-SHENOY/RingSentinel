@@ -1,6 +1,6 @@
 # Evaluation protocol (Stage 03)
 
-**Status: the protocol is fixed and implemented. No number in this project is frozen yet.** Stage 03 was built and tested on synthetic data; the sandbox cannot reach the real files. The numbers are produced by the owner running `scripts/reproduce.py`, which writes `docs/EVALUATION_RESULTS.md` [generated] (and `metrics.json` [generated] and the other result files). Until then, nothing here is a result.
+**Status (Stage 09): the protocol is fixed, implemented and has been run on the real HI-Small data (seed 42, Windows) and on Elliptic.** The results are in `docs/EVALUATION_RESULTS.md` [generated] and `docs/RESULTS_TABLE.md` [generated] and are copied into the README by `scripts/sync_readme_results.py`. They are **not yet marked frozen** in the snapshot bundle (`meta.evaluation_frozen` is false): freezing is the owner's act, done with `python scripts\export_snapshots.py --frozen`, and it changes nothing except that flag and the recorded git commit. After freezing, any change to a detector, feature, threshold rule or cost assumption means rerunning `scripts/reproduce.py` and replacing every number, as stated below. Caveats that apply to every number: one seed and one run, no confidence intervals, synthetic data, placeholder FX rates, planning-assumption costs.
 
 After the Stage 03 tag (v0.4.0), changing a detector, a feature, a threshold rule or a cost assumption means rerunning `scripts/reproduce.py` and replacing every number.
 

@@ -23,3 +23,32 @@ jobs:
       - run: ruff check .
       - run: python scripts/check_docs.py
       - run: pytest
+
+  postgres-audit:
+    # The Postgres audit store needs a real server, which GitHub only offers as a service on Linux.
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: rs
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: ringsentinel_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U rs -d ringsentinel_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      RS_TEST_POSTGRES_URL: postgresql://rs:ci-only-password@localhost:5432/ringsentinel_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - run: pytest backend/tests/test_stage09_audit_pg.py backend/tests/test_stage09_api.py -rs

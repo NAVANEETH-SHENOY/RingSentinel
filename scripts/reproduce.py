@@ -4,7 +4,8 @@
     python scripts\\reproduce.py --evaluate-only # reuse scores.parquet, redo everything after it
 
 It keeps the previous metrics.json as metrics.previous.json, reruns, and reports whether the
-new numbers are identical. It then writes docs\\EVALUATION_RESULTS.md from the JSON files.
+new numbers are identical. It then writes docs\\EVALUATION_RESULTS.md from the JSON files and
+copies its tables into the README (scripts\\sync_readme_results.py).
 Same machine and same inputs should give identical numbers; XGBoost results can differ
 slightly between platforms (see docs/EVALUATION.md).
 """
@@ -20,6 +21,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
+import sync_readme_results  # noqa: E402  (sibling script: keeps README tables equal to the run)
 from ringsentinel.config import get_settings  # noqa: E402
 from ringsentinel.stage03 import (  # noqa: E402
     format_full_results,
@@ -66,6 +68,7 @@ def main(argv: list[str] | None = None) -> int:
     text = format_full_results(metrics, ablations, robustness, latency)
     target.write_text(text, encoding="utf-8")
     print(f"Wrote {settings.metrics_path} and {target}")
+    sync_readme_results.main([])  # README tables are copied from the file just written
 
     if had_previous:
         old = json.loads(previous.read_text(encoding="utf-8"))

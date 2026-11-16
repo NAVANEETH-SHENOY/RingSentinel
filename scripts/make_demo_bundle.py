@@ -198,7 +198,7 @@ def _metrics() -> dict:
         "schema_version": SCHEMA_VERSION,
         "meta": {
             "dataset_variant": "DEMO-SYNTHETIC",
-            "seed": 0,
+            "seed": 20260101,
             "note": DEMO_NOTE,
             "cost_assumptions_inr": COST,
         },  # fmt: skip
@@ -382,7 +382,7 @@ def build_demo_documents() -> dict[str, dict]:
     docs["meta.json"] = {
         "schema_version": SCHEMA_VERSION, "bundle_id": bundle_id_from(file_hashes),
         "dataset_variant": "DEMO-SYNTHETIC",
-        "seed": 0,
+        "seed": 20260101,
         "git_commit": "demo",
         "evaluation_frozen": False,
         "detector": DETECTOR, "split": "test", "n_rings_total": len(ranked),

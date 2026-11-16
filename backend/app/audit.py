@@ -52,6 +52,10 @@ class InvalidTransition(AuditError):
     """The ring's current status does not allow this action."""
 
 
+class AuditUnavailable(AuditError):
+    """The audit database cannot be reached right now (Postgres only). Maps to HTTP 503."""
+
+
 @dataclass(frozen=True)
 class AppendResult:
     entry: dict
@@ -79,21 +83,95 @@ def allowed_actions(status: str) -> tuple[str, ...]:
     return ()
 
 
+def backend_of(url: str) -> str:
+    """ "sqlite" or "postgres", from the URL scheme. Anything else is refused with a clear message.
+
+    The URL itself is never echoed in an error: a Postgres URL carries a password.
+    """
+    if url.startswith("sqlite:///"):
+        return "sqlite"
+    if url.startswith(("postgresql://", "postgres://")):
+        return "postgres"
+    raise ValueError(
+        "RS_AUDIT_DB_URL must start with sqlite:/// (a file path) or postgresql:// (a Postgres "
+        "connection string)"
+    )
+
+
 def sqlite_path_from_url(url: str) -> str:
-    """Accept sqlite:///relative-or-absolute/path and sqlite:///:memory:. Nothing else yet."""
+    """Accept sqlite:///relative-or-absolute/path and sqlite:///:memory:. Nothing else."""
     prefix = "sqlite:///"
     if not url.startswith(prefix):
         raise ValueError(
-            "RS_AUDIT_DB_URL must look like sqlite:///path/to/file.sqlite3 (Postgres support "
-            "is planned for the deployment stage)"
+            "RS_AUDIT_DB_URL must look like sqlite:///path/to/file.sqlite3 for the SQLite log "
+            "(a Postgres URL starts with postgresql://)"
         )
-    path = url[len(prefix):]
+    path = url[len(prefix) :]
     if not path:
         raise ValueError("RS_AUDIT_DB_URL has no database path")
     return path
 
 
+def next_entry(
+    last: dict | None,
+    ring_id: str,
+    action: str,
+    analyst: str,
+    note: str,
+    idempotency_key: str,
+    digest: str,
+) -> dict:
+    """The next chained entry after `last` (None for the first), hash included."""
+    entry = {
+        "seq": (last["seq"] + 1) if last else 1,
+        "ts": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
+        "ring_id": ring_id, "action": action, "analyst": analyst, "note": note,
+        "idempotency_key": idempotency_key, "request_sha256": digest,
+        "prev_hash": last["hash"] if last else GENESIS_HASH,
+    }  # fmt: skip
+    entry["hash"] = entry_hash(entry)
+    return entry
+
+
+def verify_rows(rows: list[dict]) -> dict:
+    """Walk rows in seq order. Returns ok, entry count, head hash and the first problem."""
+    prev_hash, expected_seq = GENESIS_HASH, 1
+    for row in rows:
+        problem = None
+        if row["seq"] != expected_seq:
+            problem = f"sequence gap: expected {expected_seq}, found {row['seq']}"
+        elif row["prev_hash"] != prev_hash:
+            problem = "prev_hash does not match the previous entry"
+        elif row["request_sha256"] != request_digest(
+            row["ring_id"], row["action"], row["analyst"], row["note"]
+        ):
+            problem = "request digest does not match the stored fields"
+        elif entry_hash(row) != row["hash"]:
+            problem = "entry hash does not match its content"
+        if problem:
+            return {
+                "ok": False, "entries": len(rows), "head_hash": None,
+                "first_bad_seq": row["seq"], "reason": problem,
+            }  # fmt: skip
+        prev_hash, expected_seq = row["hash"], expected_seq + 1
+    return {
+        "ok": True, "entries": len(rows), "head_hash": prev_hash,
+        "first_bad_seq": None, "reason": None,
+    }  # fmt: skip
+
+
+def open_audit_log(url: str):
+    """Open the audit log named by RS_AUDIT_DB_URL: SQLite file (local) or Postgres (deployed)."""
+    if backend_of(url) == "postgres":
+        from app.audit_pg import PostgresAuditLog  # lazy: SQLite-only setups need no driver
+
+        return PostgresAuditLog(url)
+    return AuditLog(url)
+
+
 class AuditLog:
+    backend = "sqlite"
+
     def __init__(self, url: str):
         path = sqlite_path_from_url(url)
         if path != ":memory:":
@@ -171,14 +249,7 @@ class AuditLog:
                 last = self._db.execute(
                     "SELECT seq, hash FROM audit ORDER BY seq DESC LIMIT 1"
                 ).fetchone()
-                entry = {
-                    "seq": (last["seq"] + 1) if last else 1,
-                    "ts": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
-                    "ring_id": ring_id, "action": action, "analyst": analyst, "note": note,
-                    "idempotency_key": idempotency_key, "request_sha256": digest,
-                    "prev_hash": last["hash"] if last else GENESIS_HASH,
-                }  # fmt: skip
-                entry["hash"] = entry_hash(entry)
+                entry = next_entry(last, ring_id, action, analyst, note, idempotency_key, digest)
                 self._db.execute(
                     "INSERT INTO audit (seq, ts, ring_id, action, analyst, note, idempotency_key,"
                     " request_sha256, prev_hash, hash) VALUES (?,?,?,?,?,?,?,?,?,?)",
@@ -196,26 +267,4 @@ class AuditLog:
         """Walk the whole chain. Returns ok, entry count, head hash and the first problem."""
         with self._lock:
             rows = self._rows("SELECT * FROM audit ORDER BY seq ASC")
-        prev_hash, expected_seq = GENESIS_HASH, 1
-        for row in rows:
-            problem = None
-            if row["seq"] != expected_seq:
-                problem = f"sequence gap: expected {expected_seq}, found {row['seq']}"
-            elif row["prev_hash"] != prev_hash:
-                problem = "prev_hash does not match the previous entry"
-            elif row["request_sha256"] != request_digest(
-                row["ring_id"], row["action"], row["analyst"], row["note"]
-            ):
-                problem = "request digest does not match the stored fields"
-            elif entry_hash(row) != row["hash"]:
-                problem = "entry hash does not match its content"
-            if problem:
-                return {
-                    "ok": False, "entries": len(rows), "head_hash": None,
-                    "first_bad_seq": row["seq"], "reason": problem,
-                }  # fmt: skip
-            prev_hash, expected_seq = row["hash"], expected_seq + 1
-        return {
-            "ok": True, "entries": len(rows), "head_hash": prev_hash,
-            "first_bad_seq": None, "reason": None,
-        }  # fmt: skip
+        return verify_rows(rows)

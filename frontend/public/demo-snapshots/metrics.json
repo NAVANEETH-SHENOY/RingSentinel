@@ -1463,7 +1463,7 @@
     },
     "dataset_variant": "DEMO-SYNTHETIC",
     "note": "DEMO: every number in this bundle is invented for interface development.",
-    "seed": 0
+    "seed": 20260101
   },
   "results_table_md": "DEMO (invented numbers)\n\n| detector | test PR-AUC | ring F1 (tau 0.5) | net value |\n| --- | --- | --- | --- |\n| velocity | 0.0020 | 0.006 | ₹2,000 |\n| xgb_tabular | 0.0310 | 0.093 | ₹31,000 |\n| xgb_graph | 0.0470 | 0.141 | ₹47,000 |\n| iforest | 0.0040 | 0.012 | ₹4,000 |\n",
   "robustness": {

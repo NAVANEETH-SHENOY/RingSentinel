@@ -1,0 +1,28 @@
+name: smoke-deployed
+
+# Manual only: checks a deployed site. It never runs on push, and it never records a decision
+# (no --write-check). The analyst token is optional and is read from a repository secret.
+on:
+  workflow_dispatch:
+    inputs:
+      api:
+        description: "API address, for example https://ringsentinel-api.onrender.com"
+        required: true
+      web:
+        description: "Frontend address, for example https://your-project.vercel.app"
+        required: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Smoke test (standard library only; waits up to 2 minutes for a sleeping API)
+        env:
+          RS_SMOKE_TOKEN: ${{ secrets.RS_ANALYST_TOKEN }}
+        run: |
+          if [ -n "$RS_SMOKE_TOKEN" ]; then TOKEN_ARGS="--token $RS_SMOKE_TOKEN"; else TOKEN_ARGS=""; fi
+          python scripts/smoke_deployed.py --api "${{ inputs.api }}" --web "${{ inputs.web }}" --expect-postgres --expect-docs-off --wait 120 $TOKEN_ARGS
