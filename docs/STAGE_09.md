@@ -1,6 +1,6 @@
 # Stage 09: deploy, final docs, diagram specs, demo (M9)
 
-Tag: v1.0.0 (after you run the tests, deploy, and run the smoke test). Branch: `stage-09-release`. Built on your merged Stage 08 repository.
+Tag: v1.0.0 (created after local validation and release checks). Deployment and deployed smoke testing are optional and were not performed for this release. Branch: `stage-09-release`. Built on your merged Stage 08 repository.
 
 ## What was built
 
@@ -15,7 +15,7 @@ Tag: v1.0.0 (after you run the tests, deploy, and run the smoke test). Branch: `
 | README results tables generated from the results files | `scripts/sync_readme_results.py`, called by `scripts/reproduce.py` |
 | CI job with a real Postgres | `.github/workflows/ci.yml` |
 | Frontend snapshot folder is now committed | `frontend/.gitignore` |
-| Docs | `README.md` (complete), `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`, `docs/DEMO_SCRIPT.md`, `docs/EVALUATION.md`, `docs/ARCHITECTURE.md`, `docs/PROJECT_EXPLAINER.md`, `RELEASE_NOTES_v1.0.0.md`, `HANDOVER.md`, `CHANGELOG.md`, five new screenshots of the real bundle and two of case pages |
+| Docs | `README.md` (complete), `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`, `docs/EVALUATION.md`, `docs/ARCHITECTURE.md`, `docs/PROJECT_EXPLAINER.md`, `RELEASE_NOTES_v1.0.0.md`, `HANDOVER.md`, `CHANGELOG.md`, five new screenshots of the real bundle and two of case pages |
 
 ## Decisions and deviations (flagged, not silent)
 

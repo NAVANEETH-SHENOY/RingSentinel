@@ -9,7 +9,7 @@ One entry per tag. Format: Keep a Changelog style, Conventional Commit prefixes.
 - Liveness route (no database access), `audit_backend` in health, 503 with `Retry-After` when the audit store is unreachable.
 - `render.yaml`, `requirements-api.txt`, `frontend/vercel.json`, `.github/workflows/smoke.yml`, a Postgres job in `ci.yml`.
 - `scripts/smoke_deployed.py` (deployed-site checks) and `scripts/sync_readme_results.py` (README tables generated from results files; called by `scripts/reproduce.py`).
-- `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`, `docs/DEMO_SCRIPT.md`, `docs/STAGE_09.md`, `RELEASE_NOTES_v1.0.0.md`; screenshots of the real bundle.
+- `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`, `docs/STAGE_09.md`, `RELEASE_NOTES_v1.0.0.md`; screenshots of the real bundle.
 - Tests: `test_stage09_audit_pg.py`, `test_stage09_api.py`, `test_stage09_smoke.py`, `test_stage09_readme_sync.py`, `test_stage09_deploy.py`; two frontend tests.
 
 ### Changed

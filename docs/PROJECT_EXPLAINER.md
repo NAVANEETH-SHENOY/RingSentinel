@@ -22,7 +22,7 @@ A web interface shows the ranked queue, each ring as a graph of transfers, the e
 - (D10, Stage 06) AI layer: per-ring case file and devil's advocate written by an LLM over graph tools, every cited number recomputed by a verifier, template fallback, cache keyed by ring hash, validated JSON query language, merged into the bundle's `ai` field only. The LLM never changes a score.
 - (Stage 07) Bounded analyst feedback (`backend/ringsentinel/review/feedback.py`): net dismissals shift the review threshold in log-odds by a fixed step up to a maximum, with hard ceilings in code; confirmations only cancel dismissals and never lower the threshold below the validated one; holds change nothing. The same shift re-ranks the open rings by an adjusted expected value. The API serves it (`annotate()` in `backend/ringsentinel/review/feedback.py`, `/queue?order=live`, `GET /feedback`).
 - (D11, Stage 07) Drift (`backend/ringsentinel/monitor/drift.py`): population stability index of each equal-width time window of the test period against the validation scores, with warn and alert levels. Replay (`backend/ringsentinel/monitor/replay.py`): per ring the time its flagged transfers first touch the minimum ring size, assembly time, and latency against the true ring where one supplies most transfers.
-- Stage 09: Postgres audit store (`backend/app/audit_pg.py`), liveness route, 503 on an unreachable audit store, `render.yaml`, `frontend/vercel.json`, `scripts/smoke_deployed.py`, `scripts/sync_readme_results.py`, `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`, `docs/DEMO_SCRIPT.md`. Still to come [planned]: a validation of the feedback rule, individual analyst accounts, a real-model evaluation of the AI layer.
+- Stage 09: Postgres audit store (`backend/app/audit_pg.py`), liveness route, 503 on an unreachable audit store, `render.yaml`, `frontend/vercel.json`, `scripts/smoke_deployed.py`, `scripts/sync_readme_results.py`, `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`. Still to come [planned]: a validation of the feedback rule, individual analyst accounts, a real-model evaluation of the AI layer.
 - One setting, `RS_DATASET_VARIANT`, selects HI-Small (default), LI-Small, HI-Medium or LI-Medium; all paths derive from it.
 
 ## 3. Current state
@@ -215,7 +215,7 @@ Planned (created in the stage named): `docs/DIAGRAM_SPECS.md` [planned, Stage 09
 | `render.yaml` | Render Blueprint (free web service, health check, env var names; secrets `sync: false`) | Render |
 | `frontend/vercel.json` | security headers for the static site | Vercel |
 | `.github/workflows/ci.yml` (changed), `.github/workflows/smoke.yml` | Postgres service job; manual smoke test | GitHub |
-| `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`, `docs/DEMO_SCRIPT.md`, `docs/STAGE_09.md`, `RELEASE_NOTES_v1.0.0.md` | documentation | readers |
+| `docs/DEPLOYMENT.md`, `docs/DIAGRAM_SPECS.md`, `docs/STAGE_09.md`, `RELEASE_NOTES_v1.0.0.md` | documentation | readers |
 
 
 ## 5. Runtime flows

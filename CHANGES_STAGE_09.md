@@ -12,7 +12,6 @@ Stage 09 (M9, release v1.0.0). Unzip over your repository root; same relative pa
 - `backend/tests/test_stage09_deploy.py`
 - `backend/tests/test_stage09_readme_sync.py`
 - `backend/tests/test_stage09_smoke.py`
-- `docs/DEMO_SCRIPT.md`
 - `docs/DEPLOYMENT.md`
 - `docs/DIAGRAM_SPECS.md`
 - `docs/STAGE_09.md`

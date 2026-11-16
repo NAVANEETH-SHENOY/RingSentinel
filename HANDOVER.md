@@ -17,10 +17,10 @@ Technical: `backend/app/audit_pg.py` (Postgres store; advisory lock; per-operati
 
 1. Unzip the Stage 09 zip over your repo; run the setup block below and `pytest`; paste the output back if anything fails.
 2. Confirm the IBM licence line on the Kaggle page (the committed bundle is derived data; CDLA-Sharing-1.0 is reported) and fill the citation details marked "verify" in `docs/DATA.md`.
-3. Freeze: `python scripts\export_snapshots.py --frozen --git-commit <short sha>`, then `python scripts\sync_frontend_snapshots.py`. Commit `data\snapshots` and `frontend\public\snapshots`.
+3. Freeze local evaluation snapshots when needed: `python scripts\export_snapshots.py --frozen --git-commit <short sha>`, then `python scripts\sync_frontend_snapshots.py`. Keep `data\snapshots` and `frontend\public\snapshots` local-only; do not commit them. The public release uses the synthetic fallback in `frontend\public\demo-snapshots`.
 4. Create the Neon project, the Render Blueprint and the Vercel project exactly as in `docs/DEPLOYMENT.md`; then run the smoke test. Fix every FAIL.
 5. Check `RS_TRUSTED_PROXY_HOPS` (inferred value 2) as described in `docs/DEPLOYMENT.md`.
-6. Add the live URLs to the README status line; retake screenshots if you want the unfrozen banner gone; record the demo with `docs/DEMO_SCRIPT.md`.
+6. Add the live URLs to the README status line; retake screenshots if you want the unfrozen banner gone.
 7. Merge, tag v1.0.0, push.
 
 ### Open items and risks
@@ -32,7 +32,7 @@ Technical: `backend/app/audit_pg.py` (Postgres store; advisory lock; per-operati
 
 ### Ready-to-paste "continue from here" prompt
 
-> I am continuing RingSentinel (Razorpay AI Buildathon, Track 02, defense-only), solo, Windows cmd terminal (git in Git Bash). Stage 09 / v1.0.0 is built: Postgres audit store (`backend/app/audit_pg.py`), deployment files (`render.yaml`, `requirements-api.txt`, `frontend/vercel.json`), `scripts/smoke_deployed.py`, generated README tables, final docs, `docs/DEMO_SCRIPT.md`. Read `HANDOVER.md`, `docs/STAGE_09.md` and `docs/PROJECT_EXPLAINER.md` first. Rules: incremental zips with only new or changed files plus CHANGES_STAGE_NN.md; say "passed" only for tests actually run, otherwise "NOT EXECUTED"; flag deviations; never fabricate; no Co-Authored-By line and no links in commit messages or PR descriptions. I have done: [fill in: tests run / deployed / smoke result / frozen / tagged]. Today I want: [fill in].
+> I am continuing RingSentinel (Razorpay AI Buildathon, Track 02, defense-only), solo, Windows cmd terminal (git in Git Bash). Stage 09 / v1.0.0 is built: Postgres audit store (`backend/app/audit_pg.py`), deployment files (`render.yaml`, `requirements-api.txt`, `frontend/vercel.json`), `scripts/smoke_deployed.py`, generated README tables, final docs. Read `HANDOVER.md`, `docs/STAGE_09.md` and `docs/PROJECT_EXPLAINER.md` first. Rules: incremental zips with only new or changed files plus CHANGES_STAGE_NN.md; say "passed" only for tests actually run, otherwise "NOT EXECUTED"; flag deviations; never fabricate; no Co-Authored-By line and no links in commit messages or PR descriptions. I have done: [fill in: tests run / deployed / smoke result / frozen / tagged]. Today I want: [fill in].
 
 ---
 
