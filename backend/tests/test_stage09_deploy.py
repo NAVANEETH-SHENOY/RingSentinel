@@ -47,8 +47,13 @@ from app.config import AppSettings
 from app.main import create_app
 import tempfile, pathlib
 tmp = pathlib.Path(tempfile.mkdtemp())
-settings = AppSettings(snapshot_dir=pathlib.Path({str(ROOT / "data" / "snapshots")!r}),
-    audit_db_url="sqlite:///" + (tmp / "a.sqlite3").as_posix(), docs_enabled=False)
+settings = AppSettings(
+    snapshot_dir=pathlib.Path(
+        {str(ROOT / "frontend" / "public" / "demo-snapshots")!r}
+    ),
+    audit_db_url="sqlite:///" + (tmp / "a.sqlite3").as_posix(),
+    docs_enabled=False,
+)
 client = TestClient(create_app(settings))
 assert client.get("/api/v1/live").json() == {{"status": "ok"}}
 assert client.get("/api/v1/queue").status_code == 200
@@ -102,11 +107,17 @@ def test_the_frontend_snapshot_copy_is_the_committed_bundle():
         assert hashlib.sha256((front / name).read_bytes()).hexdigest() == digest, name
 
 
-def test_the_gitignore_does_not_hide_the_deployed_bundle():
+def test_the_gitignore_keeps_real_snapshots_local_and_public_demo_available():
     ignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
     assert "data/audit/" in ignore and ".env" in ignore.splitlines()
-    assert not re.search(r"^/?data/snapshots", ignore, re.M)
-    assert not re.search(r"^/?frontend/public/snapshots", ignore, re.M)
+
+    # Real evaluation snapshots must stay local-only.
+    assert re.search(r"^/?data/snapshots/", ignore, re.M)
+    assert re.search(r"^/?frontend/public/snapshots/", ignore, re.M)
+
+    # The synthetic public fallback must remain available in Git.
+    assert not re.search(r"^/?frontend/public/demo-snapshots(?:/|$)", ignore, re.M)
+
     front = (ROOT / "frontend" / ".gitignore").read_text(encoding="utf-8")
     live = [ln.strip() for ln in front.splitlines() if ln.strip() and not ln.startswith("#")]
-    assert not [ln for ln in live if "snapshots" in ln], "the deployed site needs these committed"
+    assert not [ln for ln in live if "snapshots" in ln]
