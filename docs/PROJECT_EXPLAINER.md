@@ -603,7 +603,7 @@ Order to rule out causes: environment (venv active, installs done), working dire
 | Site read-only, banner says saved snapshot | API asleep, wrong `NEXT_PUBLIC_API_BASE_URL`, or CORS | `frontend/src/lib/source.ts` `createSource` | `python scripts\smoke_deployed.py --api URL --web URL --wait 120` | wait, then fix the variable named in the FAIL line |
 | 503 on decisions | Neon waking, or bad `RS_AUDIT_DB_URL` | `backend/app/audit_pg.py` `_connect` | `GET /api/v1/health` (503 means the audit store) | retry; re-copy the connection string |
 | Smoke: `frontend snapshot matches the API bundle` FAIL | frontend and API built from different bundles | `scripts/sync_frontend_snapshots.py` | smoke output shows both ids | sync, commit, push |
-| Smoke: `snapshot files match the hashes in meta.json` FAIL | a snapshot file edited or half-copied | `data/snapshots/meta.json` `files` | smoke names the files | re-export and re-sync |
+| Smoke: `snapshot files match the hashes in meta.json` FAIL | a snapshot file edited or half-copied | local snapshot metadata `files` list | smoke names the files | re-export and re-sync |
 | `test_the_real_readme_matches_...` fails | results regenerated but README not synced | `scripts/sync_readme_results.py` | `python scripts\sync_readme_results.py --check` | run it without `--check`, commit |
 | Render install fails | pin or Python version | `requirements-api.txt`, `PYTHON_VERSION` | Render build log | keep pins equal to `requirements.txt` |
 

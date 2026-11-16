@@ -20,7 +20,7 @@ Render's own free Postgres is **not** used: it expires after 30 days. SQLite on 
 
 ## Before you deploy (one time, on your machine)
 
-1. **Freeze the evaluation** (this is your decision, not the tool's): once you are happy with the numbers, run `python scripts\export_snapshots.py --frozen --git-commit <short sha>`. The numbers do not change; the bundle id does not change (it hashes the five data files only); `data/snapshots/meta.json` records `evaluation_frozen: true`. The smoke test warns until you do this.
+1. **Freeze the evaluation** (this is your decision, not the tool's): once you are happy with the numbers, run `python scripts\export_snapshots.py --frozen --git-commit <short sha>`. The numbers do not change; the bundle id does not change (it hashes the five data files only). Local snapshot metadata records `evaluation_frozen: true`. The smoke test warns until you do this.
 2. `python scripts\sync_frontend_snapshots.py` copies the bundle to `frontend\public\snapshots` so the site works while the API sleeps.
 3. Commit both folders: `data\snapshots` and `frontend\public\snapshots` (they are not ignored). `data\audit` and `.env` stay ignored.
 4. `python scripts\secrets_scan.py` must report nothing. If you ever pasted a real key into a file or a chat, revoke it first (the Stage 08 note asks you to revoke the Groq key that was in a shared zip).
